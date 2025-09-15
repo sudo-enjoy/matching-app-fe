@@ -62,6 +62,10 @@
   letter-spacing: 0.5px;
 }
 
+#phoneNumber {
+  padding-left: 44px;
+}
+
 .auth-form input,
 .auth-form textarea {
   width: 100%;
@@ -87,19 +91,29 @@
   box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
 }
 
-/* Phone Input Styles */
+/* Phone Input Styles - Override react-phone-input-2 defaults */
 .phone-input-container {
   margin-bottom: 8px;
+  position: relative;
+}
+
+.phone-input-container .react-tel-input {
+  position: relative !important;
+  width: 100% !important;
 }
 
 .phone-input-container .react-tel-input .form-control {
-  width: 100%;
-  padding: 16px 20px 16px 60px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 16px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
+  width: 100% !important;
+  padding: 16px 20px 16px 85px !important;
+  border: 2px solid rgba(102, 126, 234, 0.2) !important;
+  border-radius: 16px !important;
+  font-size: 16px !important;
+  transition: all 0.3s ease !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  height: 56px !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  border-left: 2px solid rgba(102, 126, 234, 0.2) !important;
 }
 
 .phone-input-container .react-tel-input .form-control:focus {
@@ -114,9 +128,132 @@
 }
 
 .phone-input-container .react-tel-input .flag-dropdown {
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 16px 0 0 16px;
-  background: rgba(255, 255, 255, 0.9);
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 75px !important;
+  height: 56px !important;
+  border: 2px solid rgba(102, 126, 234, 0.2) !important;
+  border-radius: 16px 0 0 16px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-right: none !important;
+  z-index: 2 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+}
+
+.phone-input-container .react-tel-input .flag-dropdown:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.phone-input-container .react-tel-input .flag-dropdown.open {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.phone-input-container .react-tel-input .selected-flag {
+  width: 75px !important;
+  height: 56px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 8px !important;
+  position: relative !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.phone-input-container .react-tel-input .selected-flag .flag {
+  margin-right: 4px !important;
+  width: 20px !important;
+  height: auto !important;
+}
+
+.phone-input-container .react-tel-input .selected-flag .arrow {
+  border-left: 3px solid transparent !important;
+  border-right: 3px solid transparent !important;
+  border-top: 4px solid #999 !important;
+  margin-left: 4px !important;
+  margin-top: 0 !important;
+}
+
+/* Country code text styling */
+.phone-input-container .react-tel-input .selected-flag .country-name {
+  display: none !important;
+}
+
+/* Ensure dial code is not shown in flag dropdown */
+.phone-input-container .react-tel-input .selected-flag .dial-code {
+  display: none !important;
+}
+
+/* Additional overrides to prevent overlap */
+.phone-input-container .react-tel-input {
+  display: block !important;
+}
+
+.phone-input-container .react-tel-input .form-control {
+  padding-left: 85px !important;
+  text-indent: 0 !important;
+}
+
+/* Prevent any default library styling from interfering */
+.phone-input-container .react-tel-input .form-control::placeholder {
+  padding-left: 0 !important;
+  text-indent: 0 !important;
+}
+
+.phone-input-container .react-tel-input .country-list {
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: white;
+  margin-top: 2px;
+  z-index: 10;
+}
+
+.phone-input-container .react-tel-input .country-list .country {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.phone-input-container .react-tel-input .country-list .country:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.phone-input-container .react-tel-input .country-list .country.highlight {
+  background: rgba(102, 126, 234, 0.2);
+}
+
+/* Error state for phone input */
+.phone-input-container .react-tel-input .form-control.error {
+  border-color: #ff4757;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+}
+
+.phone-input-container .react-tel-input .form-control.error + .flag-dropdown,
+.phone-input-container .react-tel-input .flag-dropdown.error {
+  border-color: #ff4757;
+}
+
+/* Focus state coordination */
+.phone-input-container .react-tel-input .form-control:focus + .flag-dropdown,
+.phone-input-container .react-tel-input .flag-dropdown:focus + .form-control {
+  border-color: #667eea;
+}
+
+/* Ensure proper layering */
+.phone-input-container .react-tel-input .flag-dropdown {
+  z-index: 2;
+}
+
+.phone-input-container .react-tel-input .form-control {
+  z-index: 1;
+  position: relative;
 }
 
 /* Step Indicator */
@@ -230,7 +367,7 @@
 }
 
 .radio-label input:checked + .radio-custom::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -287,7 +424,7 @@
 
 .auth-divider::before,
 .auth-divider::after {
-  content: '';
+  content: "";
   flex: 1;
   height: 1px;
   background: rgba(102, 126, 234, 0.2);
@@ -363,9 +500,16 @@
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
 }
 
 /* Resend Section */
@@ -427,7 +571,7 @@
 }
 
 .verification-tips li::before {
-  content: '•';
+  content: "•";
   color: #667eea;
   position: absolute;
   left: 0;
@@ -458,27 +602,46 @@
     padding: 32px 24px;
     margin: 16px;
   }
-  
+
   .auth-header h1 {
     font-size: 24px;
   }
-  
+
   .auth-logo {
     font-size: 48px;
   }
-  
+
   .gender-options {
     flex-direction: column;
   }
-  
+
   .code-input-group {
     gap: 8px;
   }
-  
+
   .code-input {
     width: 42px;
     height: 50px;
     font-size: 20px;
+  }
+
+  /* Mobile Phone Input Adjustments */
+  .phone-input-container .react-tel-input .form-control {
+    padding: 14px 16px 14px 70px !important;
+    height: 52px !important;
+    font-size: 16px !important;
+  }
+
+  .phone-input-container .react-tel-input .flag-dropdown {
+    height: 52px !important;
+    width: 65px !important;
+    padding: 0 !important;
+  }
+
+  .phone-input-container .react-tel-input .selected-flag {
+    width: 65px !important;
+    height: 52px !important;
+    padding: 0 6px !important;
   }
 }
 
@@ -486,17 +649,17 @@
   .auth-card {
     padding: 24px 20px;
   }
-  
+
   .step-indicator {
     gap: 12px;
   }
-  
+
   .step span {
     width: 32px;
     height: 32px;
     font-size: 14px;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }

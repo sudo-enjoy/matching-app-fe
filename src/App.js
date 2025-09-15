@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './contexts/AuthContext';
-import { useLocation } from './contexts/LocationContext';
-import SplashScreen from './components/common/SplashScreen';
-import Register from './components/auth/Register';
-import Login from './components/auth/Login';
-import SMSVerification from './components/auth/SMSVerification';
-import MapView from './components/map/MapView';
-import Profile from './components/profile/Profile';
-import './styles/App.css';
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./contexts/AuthContext";
+import { useLocation } from "./contexts/LocationContext";
+import SplashScreen from "./components/common/SplashScreen";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import SMSVerification from "./components/auth/SMSVerification";
+import MapView from "./components/map/MapView";
+import Profile from "./components/profile/Profile";
+import "./styles/App.css";
 
 function App() {
   const { user, loading: authLoading } = useAuth();
@@ -40,29 +40,29 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route 
-          path="/" 
-          element={user ? <Navigate to="/map" /> : <Navigate to="/login" />} 
+        <Route
+          path="/"
+          element={user ? <Navigate to="/map" /> : <Navigate to="/login" />}
         />
-        <Route 
-          path="/register" 
-          element={!user ? <Register /> : <Navigate to="/map" />} 
+        <Route
+          path="/register"
+          element={!user ? <Register /> : <Navigate to="/map" />}
         />
-        <Route 
-          path="/login" 
-          element={!user ? <Login /> : <Navigate to="/map" />} 
+        <Route
+          path="/login"
+          element={!user ? <Login /> : <Navigate to="/map" />}
         />
-        <Route 
-          path="/verify-sms" 
-          element={!user ? <SMSVerification /> : <Navigate to="/map" />} 
+        <Route
+          path="/verify-sms"
+          element={!user ? <SMSVerification /> : <Navigate to="/map" />}
         />
-        <Route 
-          path="/map" 
-          element={user ? <MapView /> : <Navigate to="/login" />} 
+        <Route
+          path="/map"
+          element={user ? <MapView /> : <Navigate to="/login" />}
         />
-        <Route 
-          path="/profile" 
-          element={user ? <Profile /> : <Navigate to="/login" />} 
+        <Route
+          path="/profile"
+          element={user ? <Profile /> : <Navigate to="/login" />}
         />
       </Routes>
     </div>

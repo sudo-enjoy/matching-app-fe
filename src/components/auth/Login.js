@@ -90,6 +90,13 @@ const Login = () => {
                 placeholder: 'Enter your phone number'
               }}
               containerClass="phone-input-container"
+              buttonClass="flag-dropdown"
+              dropdownClass="country-list"
+              searchClass="search-box"
+              enableSearch={true}
+              disableSearchIcon={true}
+              countryCodeEditable={false}
+              specialLabel=""
             />
             {error && <span className="error-message">{error}</span>}
           </motion.div>

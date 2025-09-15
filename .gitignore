@@ -3,3 +3,5 @@
 /build
 /coverage
 .env
+.env.local
+start.bat

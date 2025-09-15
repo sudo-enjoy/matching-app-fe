@@ -177,9 +177,17 @@ const Register = () => {
                   inputProps={{
                     name: 'phoneNumber',
                     id: 'phoneNumber',
-                    className: errors.phoneNumber ? 'error' : ''
+                    className: errors.phoneNumber ? 'error' : '',
+                    placeholder: 'Enter your phone number'
                   }}
                   containerClass="phone-input-container"
+                  buttonClass="flag-dropdown"
+                  dropdownClass="country-list"
+                  searchClass="search-box"
+                  enableSearch={true}
+                  disableSearchIcon={true}
+                  countryCodeEditable={false}
+                  specialLabel=""
                 />
                 {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}
               </motion.div>
