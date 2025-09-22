@@ -97,6 +97,7 @@ const Login = () => {
             searchPlaceholder="Search countries..."
             countryCodeEditable={false}
             preferredCountries={['us', 'gb', 'ca', 'au']}
+            disableSearchIcon={true}
           />
             {error && <span className="error-message">{error}</span>}
           </motion.div>

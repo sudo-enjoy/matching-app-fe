@@ -185,6 +185,7 @@ const Register = () => {
                   enableSearch={true}
                   countryCodeEditable={false}
                   preferredCountries={['us', 'gb', 'ca', 'au']}
+                  disableSearchIcon={true}
                 />
                 {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}
               </motion.div>
