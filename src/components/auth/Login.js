@@ -79,18 +79,25 @@ const Login = () => {
             transition={{ delay: 0.2, duration: 0.4 }}
           >
             <label htmlFor="phoneNumber">Phone Number</label>
-            <PhoneInput
-              country={'us'}
-              value={phoneNumber}
-              onChange={handlePhoneChange}
-              inputProps={{
-                name: 'phoneNumber',
-                id: 'phoneNumber',
-                className: error ? 'error' : '',
-                placeholder: 'Enter your phone number'
-              }}
-              containerClass="phone-input-container"
-            />
+          <PhoneInput
+            country={'us'}
+            value={phoneNumber}
+            onChange={handlePhoneChange}
+            inputProps={{
+              name: 'phoneNumber',
+              id: 'phoneNumber',
+              className: error ? 'error' : '',
+              placeholder: 'Enter your phone number'
+            }}
+            containerClass="phone-input-container"
+            buttonClass="flag-dropdown"
+            dropdownClass="countrylistview countrylist countrylistview_xs"
+            searchClass="search-box"
+            enableSearch={true}
+            searchPlaceholder="Search countries..."
+            countryCodeEditable={false}
+            preferredCountries={['us', 'gb', 'ca', 'au']}
+          />
             {error && <span className="error-message">{error}</span>}
           </motion.div>
 
@@ -115,14 +122,14 @@ const Login = () => {
           </motion.button>
         </form>
 
-        <motion.div 
+        {/* <motion.div 
           className="auth-divider"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.4 }}
         >
           <span>or</span>
-        </motion.div>
+        </motion.div> */}
 
         <motion.div 
           className="auth-footer"

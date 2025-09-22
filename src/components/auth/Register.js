@@ -10,14 +10,14 @@ import '../../styles/Auth.css';
 const Register = () => {
   const navigate = useNavigate();
   const { register, loading } = useAuth();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     phoneNumber: '',
     gender: '',
     address: ''
   });
-  
+
   const [errors, setErrors] = useState({});
   const [step, setStep] = useState(1);
 
@@ -38,36 +38,36 @@ const Register = () => {
 
   const validateStep1 = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     } else if (formData.name.trim().length < 2) {
       newErrors.name = 'Name must be at least 2 characters';
     }
-    
+
     if (!formData.phoneNumber) {
       newErrors.phoneNumber = 'Phone number is required';
     } else if (formData.phoneNumber.length < 10) {
       newErrors.phoneNumber = 'Please enter a valid phone number';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const validateStep2 = () => {
     const newErrors = {};
-    
+
     if (!formData.gender) {
       newErrors.gender = 'Please select your gender';
     }
-    
+
     if (!formData.address.trim()) {
       newErrors.address = 'Address is required';
     } else if (formData.address.trim().length < 5) {
       newErrors.address = 'Please enter a complete address';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -84,9 +84,9 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateStep2()) return;
-    
+
     try {
       const result = await register(formData);
       if (result.success) {
@@ -99,8 +99,8 @@ const Register = () => {
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.6, ease: "easeOut" }
     }
@@ -113,14 +113,14 @@ const Register = () => {
 
   return (
     <div className="auth-container">
-      <motion.div 
+      <motion.div
         className="auth-card"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <div className="auth-header">
-          <motion.div 
+          <motion.div
             className="auth-logo"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, delay: 0.3 }}
@@ -167,7 +167,6 @@ const Register = () => {
                 />
                 {errors.name && <span className="error-message">{errors.name}</span>}
               </motion.div>
-
               <motion.div className="form-group" variants={inputVariants}>
                 <label htmlFor="phoneNumber">Phone Number</label>
                 <PhoneInput
@@ -177,9 +176,15 @@ const Register = () => {
                   inputProps={{
                     name: 'phoneNumber',
                     id: 'phoneNumber',
-                    className: errors.phoneNumber ? 'error' : ''
+                    className: errors.phoneNumber ? 'error' : '',
+                    placeholder: 'Enter your phone number'
                   }}
                   containerClass="phone-input-container"
+                  buttonClass="flag-dropdown"
+                  dropdownClass="countrylistview countrylist countrylistview_xs"
+                  enableSearch={true}
+                  countryCodeEditable={false}
+                  preferredCountries={['us', 'gb', 'ca', 'au']}
                 />
                 {errors.phoneNumber && <span className="error-message">{errors.phoneNumber}</span>}
               </motion.div>
@@ -206,35 +211,39 @@ const Register = () => {
               transition={{ duration: 0.3 }}
             >
               <motion.div className="form-group" variants={inputVariants}>
-                <label>Gender</label>
-                <div className="gender-options">
-                  {['male', 'female', 'other'].map((gender) => (
-                    <label key={gender} className="radio-label">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={gender}
-                        checked={formData.gender === gender}
-                        onChange={handleInputChange}
-                      />
-                      <span className="radio-custom"></span>
-                      {gender.charAt(0).toUpperCase() + gender.slice(1)}
-                    </label>
-                  ))}
-                </div>
+                <label htmlFor="gender">
+                  <span style={{ marginRight: '6px' }}>👤</span>
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  className={errors.gender ? 'error' : ''}
+                >
+                  <option value="" disabled>Select Gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
                 {errors.gender && <span className="error-message">{errors.gender}</span>}
               </motion.div>
 
               <motion.div className="form-group" variants={inputVariants}>
-                <label htmlFor="address">Address</label>
-                <textarea
+                <label htmlFor="address">
+                  <span style={{ marginRight: '6px' }}>📍</span>
+                  Address
+                </label>
+                <input
+                  type="text"
                   id="address"
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
                   placeholder="Enter your address"
                   className={errors.address ? 'error' : ''}
-                  rows="3"
+                  maxLength="100"
                   whileFocus="focus"
                   whileBlur="blur"
                 />
@@ -242,7 +251,7 @@ const Register = () => {
               </motion.div>
 
               <div className="form-actions">
-                <motion.button
+                {/* <motion.button
                   type="button"
                   onClick={handleBack}
                   className="btn btn-secondary"
@@ -250,7 +259,7 @@ const Register = () => {
                   whileTap={{ scale: 0.98 }}
                 >
                   Back
-                </motion.button>
+                </motion.button> */}
                 <motion.button
                   type="submit"
                   className="btn btn-primary"
