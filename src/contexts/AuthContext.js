@@ -121,6 +121,13 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify({ ...user, ...userData }));
   };
 
+  const setUserDirectly = (userData) => {
+    setUser(userData);
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -130,6 +137,7 @@ export const AuthProvider = ({ children }) => {
     verifySMS,
     logout,
     updateUser,
+    setUserDirectly,
     isAuthenticated: !!user
   };
 

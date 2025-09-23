@@ -9,7 +9,7 @@ import '../../styles/Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, loading } = useAuth();
+  const { login, loading, setUserDirectly } = useAuth();
   
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
@@ -45,12 +45,14 @@ const Login = () => {
 
     const mockToken = 'dev-token-' + Date.now();
     localStorage.setItem('authToken', mockToken);
-    localStorage.setItem('user', JSON.stringify(mockUser));
+
+    // Update AuthContext state directly
+    setUserDirectly(mockUser);
 
     toast.success('Development mode: Logged in successfully!');
 
-    // Force reload to ensure AuthContext picks up the new user
-    window.location.href = '/map';
+    // Navigate to map page
+    navigate('/map');
 
     /* Original code - uncomment for production
     try {

@@ -14,7 +14,7 @@ import '../../styles/MapView.css';
 const MapView = () => {
   const mapRef = useRef(null);
   const { user, logout } = useAuth();
-  const { currentLocation, getNearbyUsers, nearbyUsers } = useLocation();
+  const { currentLocation, getNearbyUsers, getAllUsers, nearbyUsers, seedUsers } = useLocation();
   const { connected, onlineUsers, matchRequests, updateLocation } = useSocket();
   
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -24,44 +24,32 @@ const MapView = () => {
   const [showMeeting, setShowMeeting] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
   const [userPanelExpanded, setUserPanelExpanded] = useState(false);
-  const [currentAddress, setCurrentAddress] = useState(null);
-  const [addressLoading, setAddressLoading] = useState(false);
 
   useEffect(() => {
     const initializeMap = async () => {
       try {
         await GoogleMapsService.initialize();
-
+        
         if (mapRef.current && currentLocation) {
-          // Small delay to ensure DOM is ready
-          setTimeout(() => {
-            GoogleMapsService.createMap(mapRef.current, {
-              center: { lat: currentLocation.lat, lng: currentLocation.lng },
-              zoom: 15
-            });
-
-            GoogleMapsService.createUserMarker({
-              id: user.id,
-              name: user.name,
-              location: {
-                coordinates: [currentLocation.lng, currentLocation.lat]
-              },
-              profilePhoto: user.profilePhoto,
-              bio: user.bio,
-              matchCount: user.matchCount,
-              actualMeetCount: user.actualMeetCount
-            }, true);
-
-            setMapLoaded(true);
-            loadNearbyUsers();
-
-            // Force map resize after initialization
-            setTimeout(() => {
-              if (GoogleMapsService.map) {
-                window.google.maps.event.trigger(GoogleMapsService.map, 'resize');
-              }
-            }, 100);
-          }, 100);
+          GoogleMapsService.createMap(mapRef.current, {
+            center: { lat: currentLocation.lat, lng: currentLocation.lng },
+            zoom: 15
+          });
+          
+          GoogleMapsService.createUserMarker({
+            id: user.id,
+            name: user.name,
+            location: {
+              coordinates: [currentLocation.lng, currentLocation.lat]
+            },
+            profilePhoto: user.profilePhoto,
+            bio: user.bio,
+            matchCount: user.matchCount,
+            actualMeetCount: user.actualMeetCount
+          }, true);
+          
+          setMapLoaded(true);
+          loadAllUsers();
         }
       } catch (error) {
         console.error('Failed to initialize map:', error);
@@ -84,28 +72,6 @@ const MapView = () => {
       updateMapMarkers();
     }
   }, [onlineUsers, nearbyUsers, mapLoaded]);
-
-  useEffect(() => {
-    const fetchCurrentAddress = async () => {
-      if (currentLocation && mapLoaded) {
-        setAddressLoading(true);
-        try {
-          const address = await GoogleMapsService.reverseGeocode(
-            currentLocation.lat,
-            currentLocation.lng
-          );
-          setCurrentAddress(address);
-        } catch (error) {
-          console.error('Failed to fetch address:', error);
-          setCurrentAddress(null);
-        } finally {
-          setAddressLoading(false);
-        }
-      }
-    };
-
-    fetchCurrentAddress();
-  }, [currentLocation, mapLoaded]);
 
   useEffect(() => {
     const handleMatchRequest = (event) => {
@@ -132,6 +98,18 @@ const MapView = () => {
       window.removeEventListener('showMatch', handleShowMatch);
     };
   }, []);
+
+  const loadAllUsers = async () => {
+    try {
+      const users = await getAllUsers();
+      // After loading all users, update the markers
+      if (users && users.length > 0) {
+        updateMapMarkers();
+      }
+    } catch (error) {
+      console.error('Failed to load all users:', error);
+    }
+  };
 
   const loadNearbyUsers = async () => {
     try {
@@ -176,8 +154,16 @@ const MapView = () => {
         lat: currentLocation.lat,
         lng: currentLocation.lng
       }, 15);
-      loadNearbyUsers();
+      loadAllUsers();
     }
+  };
+
+  const handleSeedUsers = async () => {
+    await seedUsers();
+    // After seeding, load all users to show them on the map
+    setTimeout(() => {
+      loadAllUsers();
+    }, 1000);
   };
 
   const handleMatchRequestClose = () => {
@@ -232,36 +218,7 @@ const MapView = () => {
             </span>
           </div>
         </div>
-
-        <div className="header-center">
-          <div className="location-display">
-            {addressLoading ? (
-              <div className="address-loading">
-                <div className="address-spinner"></div>
-                <span>Getting address...</span>
-              </div>
-            ) : currentAddress ? (
-              <div className="address-info">
-                <div className="address-main">
-                  📍 {currentAddress.street || currentAddress.city || 'Unknown location'}
-                </div>
-                <div className="address-details">
-                  {currentAddress.city && currentAddress.state &&
-                    `${currentAddress.city}, ${currentAddress.state}`
-                  }
-                </div>
-                <div className="location-coords">
-                  {currentLocation.lat.toFixed(4)}, {currentLocation.lng.toFixed(4)}
-                </div>
-              </div>
-            ) : (
-              <div className="location-coords-only">
-                📍 {currentLocation.lat.toFixed(4)}, {currentLocation.lng.toFixed(4)}
-              </div>
-            )}
-          </div>
-        </div>
-
+        
         <div className="header-right">
           <motion.button
             className="refresh-btn"
@@ -351,16 +308,6 @@ const MapView = () => {
           />
         )}
       </AnimatePresence>
-{/* 
-      {!connected && (
-        <motion.div
-          className="connection-warning"
-          initial={{ y: -100 }}
-          animate={{ y: 0 }}
-        >
-          ⚠️ Connection lost. Trying to reconnect...
-        </motion.div>
-      )} */}
     </div>
   );
 };

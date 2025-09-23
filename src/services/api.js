@@ -41,12 +41,14 @@ export const authAPI = {
 };
 
 export const userAPI = {
-  getNearbyUsers: (lat, lng, radius) => 
+  getAllUsers: () => api.get('/users/all'),
+  getNearbyUsers: (lat, lng, radius) =>
     api.get(`/users/nearby?lat=${lat}&lng=${lng}&radius=${radius}`),
   updateLocation: (lat, lng) => api.post('/users/update-location', { lat, lng }),
   getUserProfile: (userId) => api.get(`/users/profile/${userId}`),
   updateProfile: (profileData) => api.put('/users/profile', profileData),
   setOnlineStatus: (isOnline) => api.post('/users/status', { isOnline }),
+  seedUsers: () => api.post('/seed-users'),
 };
 
 export const matchingAPI = {

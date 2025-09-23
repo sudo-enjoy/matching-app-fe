@@ -59,8 +59,8 @@ const Profile = () => {
         <div className="profile-header">
           <div className="profile-avatar-section">
             <div className="avatar-container">
-              <img 
-                src={formData.profilePhoto || '/default-avatar.png'} 
+              <img
+                src={user?.profilePhoto || formData.profilePhoto || '/default-avatar.png'}
                 alt="Profile"
                 className="profile-avatar-large"
               />
