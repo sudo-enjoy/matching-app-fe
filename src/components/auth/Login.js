@@ -21,17 +21,38 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!phoneNumber) {
       setError('Phone number is required');
       return;
     }
-    
+
     if (phoneNumber.length < 10) {
       setError('Please enter a valid phone number');
       return;
     }
-    
+
+    // Development mode: Create mock user and go directly to map
+    const mockUser = {
+      id: 'dev-user-' + Date.now(),
+      name: 'Test User',
+      phoneNumber: phoneNumber,
+      gender: 'male',
+      interests: 'Testing the app',
+      profilePhoto: null,
+      createdAt: new Date().toISOString()
+    };
+
+    const mockToken = 'dev-token-' + Date.now();
+    localStorage.setItem('authToken', mockToken);
+    localStorage.setItem('user', JSON.stringify(mockUser));
+
+    toast.success('Development mode: Logged in successfully!');
+
+    // Force reload to ensure AuthContext picks up the new user
+    window.location.href = '/map';
+
+    /* Original code - uncomment for production
     try {
       const result = await login(phoneNumber);
       if (result.success) {
@@ -40,6 +61,7 @@ const Login = () => {
     } catch (error) {
       toast.error('Login failed. Please try again.');
     }
+    */
   };
 
   const containerVariants = {

@@ -5,6 +5,7 @@
   flex-direction: column;
   background: #f8f9fa;
   overflow: hidden;
+  position: relative;
 }
 
 .map-header {
@@ -17,12 +18,21 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 100;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  gap: 16px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 16px;
+  flex: 1;
+}
+
+.header-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .menu-btn {
@@ -30,9 +40,14 @@
   border: none;
   cursor: pointer;
   padding: 0;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   overflow: hidden;
   transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-btn:hover {
@@ -40,11 +55,39 @@
 }
 
 .profile-avatar {
-  width: 40px;
-  height: 40px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #667eea;
+  object-position: center;
+  border: 3px solid #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: block;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+/* Default avatar styling for map header */
+.profile-avatar[src*="default-avatar"],
+.profile-avatar[src="/default-avatar.png"],
+.profile-avatar:not([src]) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  position: relative;
+}
+
+.profile-avatar[src*="default-avatar"]::after,
+.profile-avatar[src="/default-avatar.png"]::after,
+.profile-avatar:not([src])::after {
+  content: '👨';
+  font-size: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .location-info h2 {
@@ -75,6 +118,77 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.location-display {
+  background: rgba(102, 126, 234, 0.1);
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  text-align: center;
+  min-width: 280px;
+  max-width: 400px;
+  backdrop-filter: blur(5px);
+}
+
+.address-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #667eea;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.address-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+  border-top: 2px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.address-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.address-main {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.3;
+}
+
+.address-details {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.location-coords {
+  font-size: 10px;
+  color: #667eea;
+  font-weight: 600;
+  font-family: monospace;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 2px 6px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.location-coords-only {
+  font-size: 12px;
+  color: #667eea;
+  font-weight: 600;
+  font-family: monospace;
 }
 
 .refresh-btn,
@@ -106,11 +220,17 @@
   flex: 1;
   position: relative;
   overflow: hidden;
+  min-height: 0;
 }
 
 .google-map {
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .user-panel-toggle {

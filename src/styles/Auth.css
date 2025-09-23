@@ -3,8 +3,9 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: 40px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow-y: auto;
 }
 
 .auth-card {
@@ -14,65 +15,119 @@
   padding: 40px;
   width: 100%;
   max-width: 480px;
+  min-height: 550px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .auth-logo {
-  font-size: 64px;
-  margin-bottom: 16px;
+  font-size: 48px;
+  margin-bottom: 12px;
   display: inline-block;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .auth-header h1 {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #333;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   letter-spacing: -0.5px;
 }
 
 .auth-header p {
   color: #666;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .auth-form {
-  margin-bottom: 24px;
-}
-
-.auth-form .form-group {
   margin-bottom: 20px;
 }
 
+.auth-form .form-group {
+  margin-bottom: 16px;
+}
+
 .auth-form label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #2d3748;
+  font-size: 13px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  padding-left: 2px;
 }
 
-#phoneNumber {
-  padding-left: 44px;
+.auth-form label span {
+  filter: none;
+  -webkit-text-fill-color: initial;
+  font-size: 16px;
+  animation: bounce 2s infinite;
 }
 
-.auth-form input,
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.auth-form select {
+  width: 100%;
+  padding: 14px 20px;
+  border: 2.5px solid transparent;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%23667eea" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
+                    linear-gradient(white, white) padding-box,
+                    linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: right 18px center, 0 0, 0 0;
+  background-size: 14px 9px, 100% 100%, 100% 100%;
+  padding-right: 48px;
+  color: #4a5568;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.08),
+              0 1px 3px rgba(0, 0, 0, 0.02),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
 .auth-form textarea {
   width: 100%;
-  padding: 16px 20px;
+  padding: 8px 12px;
   border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 16px;
-  font-size: 16px;
+  border-radius: 12px;
+  font-size: 15px;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.9);
 }
@@ -82,44 +137,128 @@
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.auth-form select:focus {
+  outline: none;
+  border-color: transparent;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15),
+              0 10px 25px rgba(102, 126, 234, 0.15),
+              0 2px 5px rgba(0, 0, 0, 0.03),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
   transform: translateY(-2px);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%23764ba2" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
+                    linear-gradient(white, white) padding-box,
+                    linear-gradient(135deg, #764ba2 0%, #667eea 100%) border-box;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: right 18px center, 0 0, 0 0;
+  background-size: 14px 9px, 100% 100%, 100% 100%;
 }
 
 .auth-form input.error,
-.auth-form textarea.error {
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+.auth-form textarea.error,
+.auth-form select.error {
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%) border-box;
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1),
+              0 4px 15px rgba(255, 71, 87, 0.08);
+  animation: shake 0.4s ease-in-out;
 }
 
-/* Phone Input Styles - Override react-phone-input-2 defaults */
+/* Select hover effect */
+.auth-form select:hover:not(:focus) {
+  border-color: transparent;
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.12),
+              0 2px 5px rgba(0, 0, 0, 0.03),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%23764ba2" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(250, 251, 252, 1) 100%) padding-box,
+                    linear-gradient(135deg, #764ba2 0%, #667eea 100%) border-box;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: right 18px center, 0 0, 0 0;
+  background-size: 14px 9px, 100% 100%, 100% 100%;
+}
+
+/* Select option styles */
+.auth-form select option {
+  padding: 10px;
+  background: white;
+  color: #333;
+  font-weight: 400;
+}
+
+.auth-form select option[value=""] {
+  color: #a0aec0;
+  font-style: italic;
+  font-weight: 400;
+  background: linear-gradient(to right, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+}
+
+.auth-form select option:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.auth-form select option:checked {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 500;
+}
+
+/* Premium select animation */
+.auth-form select {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-form select:not([value=""]):not(:placeholder-shown) {
+  color: #1a202c;
+  font-weight: 600;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%232d3748" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
+                    linear-gradient(to bottom, rgba(252, 253, 255, 1) 0%, rgba(248, 250, 252, 1) 100%) padding-box,
+                    linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: right 18px center, 0 0, 0 0;
+  background-size: 14px 9px, 100% 100%, 100% 100%;
+}
+
+/* Animated gradient border on select */
+@keyframes gradientShift {
+  0% {
+    background-position: right 18px center, 0% 50%, 0% 50%;
+  }
+  50% {
+    background-position: right 18px center, 100% 50%, 100% 50%;
+  }
+  100% {
+    background-position: right 18px center, 0% 50%, 0% 50%;
+  }
+}
+
+.auth-form select:focus {
+  animation: gradientShift 3s ease infinite;
+  background-size: 14px 9px, 200% 200%, 200% 200%;
+}
+
+/* Phone Input Styles */
 .phone-input-container {
   margin-bottom: 8px;
-  position: relative;
-}
-
-.phone-input-container .react-tel-input {
-  position: relative !important;
-  width: 100% !important;
 }
 
 .phone-input-container .react-tel-input .form-control {
-  width: 100% !important;
-  padding: 16px 20px 16px 85px !important;
-  border: 2px solid rgba(102, 126, 234, 0.2) !important;
-  border-radius: 16px !important;
-  font-size: 16px !important;
-  transition: all 0.3s ease !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  height: 56px !important;
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  border-left: 2px solid rgba(102, 126, 234, 0.2) !important;
+  width: 100%;
+  padding: 10px 14px 10px 85px;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  height: 44px;
 }
 
 .phone-input-container .react-tel-input .form-control:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  transform: translateY(-2px);
 }
 
 .phone-input-container .react-tel-input .form-control.error {
@@ -128,132 +267,277 @@
 }
 
 .phone-input-container .react-tel-input .flag-dropdown {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 75px !important;
-  height: 56px !important;
-  border: 2px solid rgba(102, 126, 234, 0.2) !important;
-  border-radius: 16px 0 0 16px !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  border-right: none !important;
-  z-index: 2 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
-  margin: 0 !important;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px 0 0 12px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  backdrop-filter: blur(10px);
+  height: 44px;
+  min-width: 75px;
 }
 
 .phone-input-container .react-tel-input .flag-dropdown:hover {
-  background: rgba(102, 126, 234, 0.05);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
 }
 
 .phone-input-container .react-tel-input .flag-dropdown.open {
-  border-color: #667eea;
-  background: rgba(102, 126, 234, 0.1);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
 }
 
 .phone-input-container .react-tel-input .selected-flag {
-  width: 75px !important;
-  height: 56px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 8px !important;
-  position: relative !important;
-  background: transparent !important;
-  border: none !important;
+  padding: 0 8px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .phone-input-container .react-tel-input .selected-flag .flag {
-  margin-right: 4px !important;
-  width: 20px !important;
-  height: auto !important;
+  margin-right: 8px;
+  transform: scale(1.2);
 }
 
 .phone-input-container .react-tel-input .selected-flag .arrow {
-  border-left: 3px solid transparent !important;
-  border-right: 3px solid transparent !important;
-  border-top: 4px solid #999 !important;
-  margin-left: 4px !important;
-  margin-top: 0 !important;
+  border-top-color: #667eea;
+  margin-left: 4px;
 }
 
-/* Country code text styling */
-.phone-input-container .react-tel-input .selected-flag .country-name {
-  display: none !important;
-}
-
-/* Ensure dial code is not shown in flag dropdown */
-.phone-input-container .react-tel-input .selected-flag .dial-code {
-  display: none !important;
-}
-
-/* Additional overrides to prevent overlap */
-.phone-input-container .react-tel-input {
-  display: block !important;
-}
-
-.phone-input-container .react-tel-input .form-control {
-  padding-left: 85px !important;
-  text-indent: 0 !important;
-}
-
-/* Prevent any default library styling from interfering */
-.phone-input-container .react-tel-input .form-control::placeholder {
-  padding-left: 0 !important;
-  text-indent: 0 !important;
+.phone-input-container .react-tel-input .selected-flag .arrow.up {
+  border-bottom-color: #667eea;
 }
 
 .phone-input-container .react-tel-input .country-list {
-  border: 2px solid #667eea;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  background: white;
-  margin-top: 2px;
-  z-index: 10;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15),
+              0 8px 25px rgba(0, 0, 0, 0.08),
+              0 4px 10px rgba(0, 0, 0, 0.04);
+  border: 3px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  margin-top: 12px;
+  width: 340px;
+  max-height: 320px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 1000;
 }
 
+/* Redesigned search box with premium styling */
+.phone-input-container .react-tel-input .search-box {
+  position: relative;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.phone-input-container .react-tel-input .search-box::before {
+  content: '🔍' !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  width: 36px !important;
+  height: 36px !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+  margin-right: 0 !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: searchGlow 3s ease-in-out infinite;
+}
+
+@keyframes searchGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 25px rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+}
+
+/* Add country list scrollbar styling */
+.phone-input-container .react-tel-input .country-list {
+  overflow-y: auto;
+}
+
+.phone-input-container .react-tel-input .country-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.phone-input-container .react-tel-input .country-list::-webkit-scrollbar-track {
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.phone-input-container .react-tel-input .country-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.phone-input-container .react-tel-input .country-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+}
+
+/* Hide default search emoji to use our custom icon */
+.phone-input-container .react-tel-input .search-emoji {
+  display: none !important;
+}
+
+.phone-input-container .react-tel-input .search {
+  padding-left: 12px !important;
+  background: rgba(249, 250, 251, 0.8);
+  border: 1px solid rgba(102, 126, 234, 0.15);
+  border-radius: 8px;
+  font-size: 14px;
+  height: 36px;
+  background-image: none !important;
+}
+
+/* Premium search input styling */
+.phone-input-container .react-tel-input .search {
+  flex: 1;
+  padding: 12px 16px !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  font-weight: 500;
+  color: #2d3748 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.phone-input-container .react-tel-input .search:focus {
+  outline: none !important;
+  background: white !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.phone-input-container .react-tel-input .search::placeholder {
+  color: rgba(45, 55, 72, 0.6) !important;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Country list items with premium styling */
 .phone-input-container .react-tel-input .country-list .country {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 16px 20px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid rgba(102, 126, 234, 0.08);
+  background: linear-gradient(90deg, transparent 0%, rgba(102, 126, 234, 0.01) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-input-container .react-tel-input .country-list .country::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.phone-input-container .react-tel-input .country-list .country:last-child {
+  border-bottom: none;
+  border-radius: 0 0 20px 20px;
+}
+
+.phone-input-container .react-tel-input .country-list .country .flag {
+  transform: scale(1.4);
+  margin-right: 2px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15)) saturate(1.2);
+  border-radius: 2px;
+}
+
+.phone-input-container .react-tel-input .country-list .country .country-name {
+  flex: 1;
+  font-weight: 600;
+  color: #1a202c;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .phone-input-container .react-tel-input .country-list .country:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
+  padding-left: 24px;
+  transform: translateX(4px) translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  border-radius: 0 12px 12px 0;
+}
+
+.phone-input-container .react-tel-input .country-list .country:hover::before {
+  left: 100%;
+}
+
+.phone-input-container .react-tel-input .country-list .country:hover .flag {
+  transform: scale(1.5);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2)) saturate(1.3) brightness(1.1);
+}
+
+.phone-input-container .react-tel-input .country-list .country:hover .country-name {
+  color: #667eea;
+  font-weight: 700;
 }
 
 .phone-input-container .react-tel-input .country-list .country.highlight {
-  background: rgba(102, 126, 234, 0.2);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.18) 0%, rgba(118, 75, 162, 0.18) 100%);
+  border-left: 4px solid #667eea;
+  padding-left: 16px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 3px rgba(102, 126, 234, 0.1), 0 2px 8px rgba(102, 126, 234, 0.12);
+  transform: translateX(2px);
 }
 
-/* Error state for phone input */
-.phone-input-container .react-tel-input .form-control.error {
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+.phone-input-container .react-tel-input .country-list .country.highlight .country-name {
+  color: #667eea;
 }
 
-.phone-input-container .react-tel-input .form-control.error + .flag-dropdown,
-.phone-input-container .react-tel-input .flag-dropdown.error {
-  border-color: #ff4757;
+.phone-input-container .react-tel-input .country-list .country.highlight .flag {
+  transform: scale(1.5);
+  filter: drop-shadow(0 2px 6px rgba(102, 126, 234, 0.3)) saturate(1.4);
 }
 
-/* Focus state coordination */
-.phone-input-container .react-tel-input .form-control:focus + .flag-dropdown,
-.phone-input-container .react-tel-input .flag-dropdown:focus + .form-control {
-  border-color: #667eea;
+.phone-input-container .react-tel-input .country-list .country .dial-code {
+  color: white;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  min-width: 60px;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure proper layering */
-.phone-input-container .react-tel-input .flag-dropdown {
-  z-index: 2;
-}
-
-.phone-input-container .react-tel-input .form-control {
-  z-index: 1;
-  position: relative;
+.phone-input-container .react-tel-input .selected-flag .selected-dial-code {
+  color: #667eea;
+  font-weight: 700;
+  font-size: 15px;
+  margin-left: 4px;
 }
 
 /* Step Indicator */
@@ -261,7 +545,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   gap: 16px;
 }
 
@@ -276,11 +560,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   font-weight: 600;
-  font-size: 16px;
+  font-size: 15px;
   transition: all 0.3s ease;
   background: rgba(102, 126, 234, 0.1);
   color: #999;
@@ -312,40 +596,99 @@
   border-radius: 1px;
 }
 
-/* Gender Selection */
+/* Gender Selection - Enhanced UI/UX */
 .gender-options {
   display: flex;
-  gap: 16px;
-  margin-top: 8px;
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%;
+  animation: fadeInUp 0.3s ease;
+}
+
+.gender-options.loading {
+  pointer-events: none;
+  opacity: 0.7;
 }
 
 .radio-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   cursor: pointer;
-  padding: 12px 16px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  padding: 16px 20px;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex: 1;
   text-align: center;
-  justify-content: center;
-  background: rgba(102, 126, 234, 0.05);
-  border: 2px solid transparent;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.06) 100%);
+  border: 2px solid rgba(102, 126, 234, 0.15);
+  font-weight: 500;
+  font-size: 15px;
+  color: #4a5568;
+  position: relative;
+  overflow: hidden;
+  min-height: 56px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+}
+
+.radio-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
 }
 
 .radio-label:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
 }
 
-.radio-label input:checked + .radio-custom + span {
-  color: #667eea;
-  font-weight: 600;
+.radio-label:hover::before {
+  left: 100%;
 }
 
+.radio-label:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+.radio-label input:checked + .radio-custom + span,
 .radio-label input:checked ~ span {
-  color: #667eea;
+  color: #ffffff;
   font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.radio-label input:checked {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: white;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+}
+
+.radio-label.checked {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: white;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  transform: translateY(-3px);
+}
+
+.radio-label.checked::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.radio-label.checked:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  transform: translateY(-3px);
 }
 
 .radio-label input {
@@ -353,36 +696,91 @@
 }
 
 .radio-custom {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ddd;
+  width: 22px;
+  height: 22px;
+  border: 2px solid currentColor;
   border-radius: 50%;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+  flex-shrink: 0;
 }
 
 .radio-label input:checked + .radio-custom {
-  border-color: #667eea;
-  background: #667eea;
+  border-color: white;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 .radio-label input:checked + .radio-custom::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
+  transform: translate(-50%, -50%) scale(1);
+  width: 10px;
+  height: 10px;
   background: white;
   border-radius: 50%;
+  animation: radioCheck 0.3s ease;
+}
+
+@keyframes radioCheck {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gender Icon Styles */
+.gender-icon {
+  font-size: 18px;
+  margin-right: 4px;
+  transition: transform 0.3s ease;
+}
+
+.radio-label:hover .gender-icon {
+  transform: scale(1.1);
+}
+
+.radio-label.checked .gender-icon {
+  transform: scale(1.2);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Accessibility Focus States */
+.radio-label:focus-within {
+  outline: 3px solid rgba(102, 126, 234, 0.4);
+  outline-offset: 2px;
+}
+
+.radio-label input:focus + .radio-custom {
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
 }
 
 /* Form Actions */
 .form-actions {
   display: flex;
   gap: 16px;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .form-actions .btn {
@@ -392,8 +790,8 @@
 /* Auth Footer */
 .auth-footer {
   text-align: center;
-  margin-top: 24px;
-  padding-top: 24px;
+  margin-top: 20px;
+  padding-top: 10px;
   border-top: 1px solid rgba(102, 126, 234, 0.1);
 }
 
@@ -424,7 +822,7 @@
 
 .auth-divider::before,
 .auth-divider::after {
-  content: "";
+  content: '';
   flex: 1;
   height: 1px;
   background: rgba(102, 126, 234, 0.2);
@@ -500,16 +898,9 @@
 }
 
 @keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-4px);
-  }
-  75% {
-    transform: translateX(4px);
-  }
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
 }
 
 /* Resend Section */
@@ -571,7 +962,7 @@
 }
 
 .verification-tips li::before {
-  content: "•";
+  content: '•';
   color: #667eea;
   position: absolute;
   left: 0;
@@ -598,69 +989,196 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+  .auth-container {
+    padding: 24px;
+  }
+
   .auth-card {
-    padding: 32px 24px;
-    margin: 16px;
+    padding: 30px;
+    min-height: 500px;
   }
 
   .auth-header h1 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .auth-logo {
-    font-size: 48px;
+    font-size: 40px;
   }
-
+  
   .gender-options {
     flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
   }
 
+  .radio-label {
+    padding: 14px 18px;
+    min-height: 52px;
+    font-size: 14px;
+    border-radius: 14px;
+  }
+
+  .radio-custom {
+    width: 20px;
+    height: 20px;
+  }
+
+  .radio-label input:checked + .radio-custom::after {
+    width: 8px;
+    height: 8px;
+  }
+
+  .gender-icon {
+    font-size: 16px;
+  }
+  
   .code-input-group {
     gap: 8px;
   }
-
+  
   .code-input {
     width: 42px;
     height: 50px;
     font-size: 20px;
   }
-
-  /* Mobile Phone Input Adjustments */
-  .phone-input-container .react-tel-input .form-control {
-    padding: 14px 16px 14px 70px !important;
-    height: 52px !important;
-    font-size: 16px !important;
-  }
-
-  .phone-input-container .react-tel-input .flag-dropdown {
-    height: 52px !important;
-    width: 65px !important;
-    padding: 0 !important;
-  }
-
-  .phone-input-container .react-tel-input .selected-flag {
-    width: 65px !important;
-    height: 52px !important;
-    padding: 0 6px !important;
-  }
 }
 
 @media (max-width: 480px) {
+  .auth-container {
+    padding: 20px;
+  }
+
   .auth-card {
-    padding: 24px 20px;
+    padding: 24px;
+    min-height: 480px;
   }
 
   .step-indicator {
-    gap: 12px;
+    gap: 10px;
   }
 
   .step span {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
   }
 
   .form-actions {
     flex-direction: column;
+  }
+
+  .countrylistview {
+    width: 260px !important;
+    height: 150px;
+  }
+
+  /* Enhanced mobile gender options */
+  .gender-options {
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .radio-label {
+    padding: 12px 16px;
+    min-height: 48px;
+    font-size: 13px;
+    border-radius: 12px;
+    gap: 8px;
+  }
+
+  .radio-custom {
+    width: 18px;
+    height: 18px;
+  }
+
+  .radio-label input:checked + .radio-custom::after {
+    width: 7px;
+    height: 7px;
+  }
+
+  .gender-icon {
+    font-size: 15px;
+  }
+
+  .radio-label:hover {
+    transform: translateY(-1px);
+  }
+
+  .radio-label.checked {
+    transform: translateY(-2px);
+  }
+}
+
+
+@media (max-width: 375px) {
+  .countrylistview_xs {
+    width: 220px !important;
+    height: 150px;
+  }
+
+  /* Ultra-small screens gender options */
+  .gender-options {
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .radio-label {
+    padding: 10px 14px;
+    min-height: 44px;
+    font-size: 12px;
+    border-radius: 10px;
+    gap: 6px;
+  }
+
+  .radio-custom {
+    width: 16px;
+    height: 16px;
+  }
+
+  .radio-label input:checked + .radio-custom::after {
+    width: 6px;
+    height: 6px;
+  }
+
+  .gender-icon {
+    font-size: 14px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .radio-label {
+    border-width: 3px;
+    border-color: #000;
+    background: #fff;
+    color: #000;
+  }
+
+  .radio-label.checked {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+
+  .radio-custom {
+    border-width: 3px;
+    border-color: currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .gender-options,
+  .radio-label,
+  .radio-custom,
+  .gender-icon {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .radio-label:hover,
+  .radio-label.checked {
+    transform: none !important;
   }
 }

@@ -105,11 +105,16 @@ export const LocationProvider = ({ children }) => {
   }, [watchId]);
 
   const updateLocationOnServer = async (lat, lng) => {
+    // Development mode: Skip server update
+    console.log('Development mode: Would update location to', { lat, lng });
+
+    /* Original code - uncomment for production
     try {
       await userAPI.updateLocation(lat, lng);
     } catch (error) {
       console.error('Failed to update location on server:', error);
     }
+    */
   };
 
   const getNearbyUsers = async (radius = 10000) => {
@@ -120,14 +125,73 @@ export const LocationProvider = ({ children }) => {
 
     try {
       setLoading(true);
+
+      // Development mode: Return mock nearby users
+      const mockUsers = [
+        {
+          id: 'user-1',
+          name: 'Alex Johnson',
+          location: {
+            coordinates: [
+              currentLocation.lng + (Math.random() - 0.5) * 0.01,
+              currentLocation.lat + (Math.random() - 0.5) * 0.01
+            ]
+          },
+          profilePhoto: null,
+          bio: 'Love hiking and coffee',
+          distance: Math.floor(Math.random() * 1000) + 100,
+          isOnline: true,
+          gender: 'male',
+          interests: 'Hiking, Coffee, Music'
+        },
+        {
+          id: 'user-2',
+          name: 'Sarah Wilson',
+          location: {
+            coordinates: [
+              currentLocation.lng + (Math.random() - 0.5) * 0.01,
+              currentLocation.lat + (Math.random() - 0.5) * 0.01
+            ]
+          },
+          profilePhoto: null,
+          bio: 'Photographer and traveler',
+          distance: Math.floor(Math.random() * 1000) + 100,
+          isOnline: true,
+          gender: 'female',
+          interests: 'Photography, Travel, Art'
+        },
+        {
+          id: 'user-3',
+          name: 'Mike Chen',
+          location: {
+            coordinates: [
+              currentLocation.lng + (Math.random() - 0.5) * 0.01,
+              currentLocation.lat + (Math.random() - 0.5) * 0.01
+            ]
+          },
+          profilePhoto: null,
+          bio: 'Foodie and tech enthusiast',
+          distance: Math.floor(Math.random() * 1000) + 100,
+          isOnline: false,
+          gender: 'male',
+          interests: 'Food, Technology, Gaming'
+        }
+      ];
+
+      setNearbyUsers(mockUsers);
+      toast.success('Development mode: Loaded mock nearby users');
+      return mockUsers;
+
+      /* Original code - uncomment for production
       const response = await userAPI.getNearbyUsers(
-        currentLocation.lat, 
-        currentLocation.lng, 
+        currentLocation.lat,
+        currentLocation.lng,
         radius
       );
-      
+
       setNearbyUsers(response.data.users);
       return response.data.users;
+      */
     } catch (error) {
       console.error('Error fetching nearby users:', error);
       toast.error('Failed to load nearby users');

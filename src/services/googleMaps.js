@@ -5,7 +5,7 @@ class GoogleMapsService {
     this.loader = new Loader({
       apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
       version: 'weekly',
-      libraries: ['places', 'geometry']
+      libraries: ['places', 'geometry', 'geocoding']
     });
     this.google = null;
     this.map = null;
@@ -13,6 +13,7 @@ class GoogleMapsService {
     this.infoWindows = new Map();
     this.directionsService = null;
     this.directionsRenderer = null;
+    this.geocoder = null;
   }
 
   async initialize() {
@@ -27,6 +28,7 @@ class GoogleMapsService {
           strokeOpacity: 0.8
         }
       });
+      this.geocoder = new this.google.maps.Geocoder();
       return this.google;
     } catch (error) {
       console.error('Failed to load Google Maps:', error);
@@ -85,17 +87,45 @@ class GoogleMapsService {
       lng: user.location.coordinates[0]
     };
 
-    const icon = {
-      url: isCurrentUser ? '/icons/current-user-pin.png' : '/icons/user-pin.png',
-      scaledSize: new this.google.maps.Size(40, 40),
-      anchor: new this.google.maps.Point(20, 40)
+    // Google Maps pin path (similar to default marker shape)
+    const pinPath = 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z';
+
+    // Determine colors based on user type and status
+    let fillColor, strokeColor;
+    if (isCurrentUser) {
+      fillColor = '#4285F4'; // Blue for current user
+      strokeColor = '#1967D2';
+    } else {
+      const isOnline = user.isOnline !== false;
+      fillColor = isOnline ? '#34A853' : '#EA4335'; // Green for online, Red for offline
+      strokeColor = isOnline ? '#188038' : '#C5221F';
+    }
+
+    const markerOptions = {
+      position,
+      map: this.map,
+      title: user.name,
+      icon: {
+        path: pinPath,
+        fillColor: fillColor,
+        fillOpacity: 1,
+        strokeColor: strokeColor,
+        strokeWeight: 1,
+        scale: 1.5,
+        anchor: new this.google.maps.Point(12, 24),
+        labelOrigin: new this.google.maps.Point(12, 10)
+      },
+      label: {
+        text: isCurrentUser ? 'ME' : (user.name ? user.name.charAt(0).toUpperCase() : '?'),
+        color: '#ffffff',
+        fontSize: '11px',
+        fontWeight: 'bold'
+      },
+      zIndex: isCurrentUser ? 1000 : 100,
+      animation: isCurrentUser ? this.google.maps.Animation.DROP : null
     };
 
-    const marker = this.createMarker(position, {
-      icon,
-      title: user.name,
-      zIndex: isCurrentUser ? 1000 : 100
-    });
+    const marker = new this.google.maps.Marker(markerOptions);
 
     const infoWindow = new this.google.maps.InfoWindow({
       content: this.createInfoWindowContent(user, isCurrentUser)
@@ -217,15 +247,27 @@ class GoogleMapsService {
   }
 
   createMeetingPointMarker(position, meetingInfo) {
+    const pinPath = 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z';
+
     const icon = {
-      url: '/icons/meeting-point.png',
-      scaledSize: new this.google.maps.Size(50, 50),
-      anchor: new this.google.maps.Point(25, 50)
+      path: pinPath,
+      fillColor: '#FFD700',
+      fillOpacity: 1,
+      strokeColor: '#FFA500',
+      strokeWeight: 1,
+      scale: 1.8,
+      anchor: new this.google.maps.Point(12, 24),
+      labelOrigin: new this.google.maps.Point(12, 10)
     };
 
     const marker = this.createMarker(position, {
       icon,
       title: 'Meeting Point',
+      label: {
+        text: '🤝',
+        fontSize: '12px'
+      },
+      animation: this.google.maps.Animation.DROP,
       zIndex: 500
     });
 
@@ -305,6 +347,52 @@ class GoogleMapsService {
     if (this.map) {
       this.map.addListener('idle', callback);
     }
+  }
+
+  async reverseGeocode(lat, lng) {
+    if (!this.geocoder) {
+      throw new Error('Geocoder not initialized');
+    }
+
+    return new Promise((resolve, reject) => {
+      this.geocoder.geocode(
+        { location: { lat, lng } },
+        (results, status) => {
+          if (status === 'OK' && results && results.length > 0) {
+            const result = results[0];
+            const address = {
+              formatted: result.formatted_address,
+              street: '',
+              city: '',
+              state: '',
+              country: '',
+              postal_code: ''
+            };
+
+            // Parse components for more detailed address info
+            result.address_components.forEach(component => {
+              const types = component.types;
+              if (types.includes('street_number') || types.includes('route')) {
+                address.street += component.long_name + ' ';
+              } else if (types.includes('locality') || types.includes('administrative_area_level_2')) {
+                address.city = component.long_name;
+              } else if (types.includes('administrative_area_level_1')) {
+                address.state = component.short_name;
+              } else if (types.includes('country')) {
+                address.country = component.long_name;
+              } else if (types.includes('postal_code')) {
+                address.postal_code = component.long_name;
+              }
+            });
+
+            address.street = address.street.trim();
+            resolve(address);
+          } else {
+            reject(new Error(`Geocoding failed: ${status}`));
+          }
+        }
+      );
+    });
   }
 }
 

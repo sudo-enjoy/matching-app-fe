@@ -82,13 +82,35 @@ const SMSVerification = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const verificationCode = code.join('');
     if (verificationCode.length !== 6) {
       setError('Please enter the complete 6-digit code');
       return;
     }
-    
+
+    // Development mode: Accept any 6-digit code and create mock user
+    if (verificationCode) {
+      const mockUser = {
+        id: 'dev-user-123',
+        name: 'Test User',
+        phoneNumber: pendingVerification?.phoneNumber || '+1234567890',
+        gender: 'male',
+        interests: 'Testing the app',
+        profilePhoto: null,
+        createdAt: new Date().toISOString()
+      };
+
+      const mockToken = 'dev-token-' + Date.now();
+      localStorage.setItem('authToken', mockToken);
+      localStorage.setItem('user', JSON.stringify(mockUser));
+
+      toast.success('Development mode: Logged in successfully!');
+      window.location.href = '/map';
+      return;
+    }
+
+    /* Original code - uncomment for production
     try {
       const result = await verifySMS(verificationCode);
       if (result.success) {
@@ -102,6 +124,7 @@ const SMSVerification = () => {
     } catch (error) {
       setError('Verification failed. Please try again.');
     }
+    */
   };
 
   const handleResend = async () => {
