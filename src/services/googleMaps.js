@@ -79,23 +79,62 @@ class GoogleMapsService {
     return marker;
   }
 
-  createUserMarker(user, isCurrentUser = false) {
+  createUserMarker(user, isCurrentUser = false, isWithinRadius = false) {
     const position = {
       lat: user.location.coordinates[1],
       lng: user.location.coordinates[0]
     };
 
-    const icon = {
-      url: isCurrentUser ? '/icons/current-user-pin.png' : '/icons/user-pin.png',
-      scaledSize: new this.google.maps.Size(40, 40),
-      anchor: new this.google.maps.Point(20, 40)
+    let markerOptions = {
+      title: user.name,
+      zIndex: isCurrentUser ? 1000 : (isWithinRadius ? 200 : 100)
     };
 
-    const marker = this.createMarker(position, {
-      icon,
-      title: user.name,
-      zIndex: isCurrentUser ? 1000 : 100
-    });
+    if (isCurrentUser) {
+      // Use a distinctive blue circle for current user
+      markerOptions.icon = {
+        path: this.google.maps.SymbolPath.CIRCLE,
+        scale: 12,
+        fillColor: '#4285F4',
+        fillOpacity: 1,
+        strokeColor: '#ffffff',
+        strokeWeight: 3,
+        strokeOpacity: 1
+      };
+    } else if (isWithinRadius) {
+      // Use distinctive green markers for users within 100km radius
+      markerOptions.icon = {
+        path: this.google.maps.SymbolPath.CIRCLE,
+        scale: 10,
+        fillColor: '#34C759',
+        fillOpacity: 1,
+        strokeColor: '#ffffff',
+        strokeWeight: 3,
+        strokeOpacity: 1
+      };
+    } else {
+      // Use default red marker for other users or custom icon if available
+      try {
+        markerOptions.icon = {
+          url: '/icons/user-pin.png',
+          scaledSize: new this.google.maps.Size(40, 40),
+          anchor: new this.google.maps.Point(20, 40)
+        };
+      } catch (e) {
+        // Fallback to default marker if custom icon fails
+        markerOptions.icon = {
+          path: this.google.maps.SymbolPath.CIRCLE,
+          scale: 8,
+          fillColor: '#EA4335',
+          fillOpacity: 1,
+          strokeColor: '#ffffff',
+          strokeWeight: 2,
+          strokeOpacity: 1
+        };
+      }
+    }
+
+    const marker = this.createMarker(position, markerOptions);
 
     const infoWindow = new this.google.maps.InfoWindow({
       content: this.createInfoWindowContent(user, isCurrentUser)
@@ -166,16 +205,70 @@ class GoogleMapsService {
   removeUserMarker(userId) {
     const marker = this.markers.get(userId);
     const infoWindow = this.infoWindows.get(userId);
-    
+
     if (marker) {
       marker.setMap(null);
       this.markers.delete(userId);
     }
-    
+
     if (infoWindow) {
       infoWindow.close();
       this.infoWindows.delete(userId);
     }
+  }
+
+  clearAllUserMarkers() {
+    this.markers.forEach((marker, userId) => {
+      if (!userId.includes('current-user')) {
+        marker.setMap(null);
+      }
+    });
+    this.infoWindows.forEach((infoWindow, userId) => {
+      if (!userId.includes('current-user')) {
+        infoWindow.close();
+      }
+    });
+    // Keep only current user marker
+    const currentUserMarker = this.markers.get('current-user');
+    const currentUserWindow = this.infoWindows.get('current-user');
+    this.markers.clear();
+    this.infoWindows.clear();
+    if (currentUserMarker) {
+      this.markers.set('current-user', currentUserMarker);
+    }
+    if (currentUserWindow) {
+      this.infoWindows.set('current-user', currentUserWindow);
+    }
+  }
+
+  fitMapToShowAllUsers(users, currentLocation) {
+    if (!this.map || !this.google || users.length === 0) return;
+
+    const bounds = new this.google.maps.LatLngBounds();
+
+    // Include current location
+    if (currentLocation) {
+      bounds.extend(new this.google.maps.LatLng(currentLocation.lat, currentLocation.lng));
+    }
+
+    // Include all user locations
+    users.forEach(user => {
+      if (user.location && user.location.coordinates) {
+        bounds.extend(new this.google.maps.LatLng(
+          user.location.coordinates[1],
+          user.location.coordinates[0]
+        ));
+      }
+    });
+
+    this.map.fitBounds(bounds);
+
+    // Add some padding and ensure minimum zoom level
+    setTimeout(() => {
+      if (this.map.getZoom() > 15) {
+        this.map.setZoom(15);
+      }
+    }, 100);
   }
 
   closeAllInfoWindows() {
@@ -283,6 +376,23 @@ class GoogleMapsService {
       this.map.setCenter(position);
       this.map.setZoom(zoom);
     }
+  }
+
+  updateCurrentUserLocation(userId, newLocation) {
+    // Remove existing marker for current user
+    this.removeUserMarker(userId);
+
+    // Create new marker at updated location
+    const user = {
+      id: userId,
+      name: "You",
+      location: {
+        coordinates: [newLocation.lng, newLocation.lat]
+      }
+    };
+
+    this.createUserMarker(user, true);
+    this.centerOnLocation(newLocation, 15);
   }
 
   fitBounds(bounds) {

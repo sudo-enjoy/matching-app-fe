@@ -43,7 +43,6 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
       currentLocation.lat, currentLocation.lng,
       user.location.coordinates[1], user.location.coordinates[0]
     );
-    
     if (distance < 1000) {
       return `${Math.round(distance)}m away`;
     }
@@ -150,7 +149,7 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
         <div className="users-list">
           <AnimatePresence>
             {sortedUsers.length === 0 ? (
-              <motion.div 
+              <motion.div
                 className="empty-state"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

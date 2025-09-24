@@ -22,14 +22,22 @@ export const LocationProvider = ({ children }) => {
   const requestLocationPermission = useCallback(async () => {
     if (!navigator.geolocation) {
       toast.error('Geolocation is not supported by this browser');
-      return false;
+      // Use fallback location (San Francisco)
+      const fallbackLocation = {
+        lat: 40.7749,
+        lng: -74.4194,
+        accuracy: 1000
+      };
+      setCurrentLocation(fallbackLocation);
+      setLocationPermission('fallback');
+      return true;
     }
 
     try {
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 5000, // Reduced timeout
           maximumAge: 300000
         });
       });
@@ -42,26 +50,34 @@ export const LocationProvider = ({ children }) => {
 
       setCurrentLocation(location);
       setLocationPermission('granted');
-      
+
       await updateLocationOnServer(location.lat, location.lng);
       return true;
     } catch (error) {
       console.error('Location permission error:', error);
       setLocationPermission('denied');
-      
+
+      // Use fallback location when permission is denied or timeout occurs
+      const fallbackLocation = {
+        lat: 40.7749, // San Francisco coordinates
+        lng: -74.4194,
+        accuracy: 1000
+      };
+      setCurrentLocation(fallbackLocation);
+
       if (error.code === 1) {
-        toast.error('Location permission denied. Please enable location access in your browser settings.');
+        toast.warning('Location permission denied. Using default location. Grant permission for better experience.');
       } else if (error.code === 2) {
-        toast.error('Location unavailable. Please check your GPS settings.');
+        toast.warning('Location unavailable. Using default location.');
       } else {
-        toast.error('Location request timeout. Please try again.');
+        toast.warning('Location request timeout. Using default location.');
       }
-      
-      return false;
+
+      return true; // Return true so map can still display
     }
   }, []);
 
-  const startLocationTracking = useCallback(() => {
+  const startLocationTracking = () => {
     if (!navigator.geolocation || locationPermission !== 'granted') {
       return;
     }
@@ -75,9 +91,9 @@ export const LocationProvider = ({ children }) => {
         };
 
         setCurrentLocation(prevLocation => {
-          if (!prevLocation || 
-              Math.abs(prevLocation.lat - location.lat) > 0.0001 ||
-              Math.abs(prevLocation.lng - location.lng) > 0.0001) {
+          if (!prevLocation ||
+            Math.abs(prevLocation.lat - location.lat) > 0.0001 ||
+            Math.abs(prevLocation.lng - location.lng) > 0.0001) {
             updateLocationOnServer(location.lat, location.lng);
             return location;
           }
@@ -95,14 +111,14 @@ export const LocationProvider = ({ children }) => {
     );
 
     setWatchId(id);
-  }, [locationPermission]);
+  };
 
-  const stopLocationTracking = useCallback(() => {
+  const stopLocationTracking = () => {
     if (watchId) {
       navigator.geolocation.clearWatch(watchId);
       setWatchId(null);
     }
-  }, [watchId]);
+  };
 
   const updateLocationOnServer = async (lat, lng) => {
     try {
@@ -112,21 +128,37 @@ export const LocationProvider = ({ children }) => {
     }
   };
 
-  const getNearbyUsers = async (radius = 10000) => {
+  const getAllUsers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await userAPI.getAllUsers();
+      const users = response.data?.users || [];
+      setNearbyUsers(users);
+      // toast.success(`Loaded ${users.length} users`);
+      return users;
+    } catch (error) {
+      console.error('Error fetching all users:', error);
+      toast.error('Failed to load users');
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const getNearbyUsers = async (radius = 100000) => {
     if (!currentLocation) {
       toast.error('Location not available');
       return;
     }
-
     try {
       setLoading(true);
       const response = await userAPI.getNearbyUsers(
-        currentLocation.lat, 
-        currentLocation.lng, 
+        currentLocation.lat,
+        currentLocation.lng,
         radius
       );
-      
       setNearbyUsers(response.data.users);
+      toast.success(`Loaded ${response.data.users.length} users`);
       return response.data.users;
     } catch (error) {
       console.error('Error fetching nearby users:', error);
@@ -137,17 +169,31 @@ export const LocationProvider = ({ children }) => {
     }
   };
 
+  const seedUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await userAPI.seedUsers();
+      toast.success('Test users created successfully!');
+      return response.data;
+    } catch (error) {
+      console.error('Error seeding users:', error);
+      toast.error('Failed to create test users');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371e3;
-    const φ1 = lat1 * Math.PI/180;
-    const φ2 = lat2 * Math.PI/180;
-    const Δφ = (lat2-lat1) * Math.PI/180;
-    const Δλ = (lng2-lng1) * Math.PI/180;
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lng2 - lng1) * Math.PI / 180;
 
-    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ/2) * Math.sin(Δλ/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) *
+      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     return R * c;
   };
@@ -163,7 +209,7 @@ export const LocationProvider = ({ children }) => {
       destination.lat,
       destination.lng
     );
-
+    console.log(currentLocation)
     const walkingTime = Math.ceil(distance / 83.33);
 
     return {
@@ -175,12 +221,44 @@ export const LocationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (locationPermission === 'granted') {
-      startLocationTracking();
-    }
+    if (locationPermission === 'granted' && navigator.geolocation) {
+      const id = navigator.geolocation.watchPosition(
+        (position) => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            accuracy: position.coords.accuracy
+          };
 
-    return () => stopLocationTracking();
-  }, [locationPermission, startLocationTracking, stopLocationTracking]);
+          setCurrentLocation(prevLocation => {
+            if (!prevLocation ||
+              Math.abs(prevLocation.lat - location.lat) > 0.0001 ||
+              Math.abs(prevLocation.lng - location.lng) > 0.0001) {
+              updateLocationOnServer(location.lat, location.lng);
+              return location;
+            }
+            return prevLocation;
+          });
+        },
+        (error) => {
+          console.error('Location tracking error:', error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 30000,
+          maximumAge: 60000
+        }
+      );
+
+      setWatchId(id);
+
+      return () => {
+        if (id) {
+          navigator.geolocation.clearWatch(id);
+        }
+      };
+    }
+  }, [locationPermission]);
 
   const value = {
     currentLocation,
@@ -190,7 +268,9 @@ export const LocationProvider = ({ children }) => {
     requestLocationPermission,
     startLocationTracking,
     stopLocationTracking,
+    getAllUsers,
     getNearbyUsers,
+    seedUsers,
     calculateDistance,
     getDirections,
     updateLocationOnServer
