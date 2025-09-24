@@ -24,7 +24,9 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    // Only logout on 401 for auth-related endpoints, not all API calls
+    if (error.response?.status === 401 &&
+      (error.config?.url?.includes('/auth/') || error.config?.url?.includes('/users/profile'))) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       window.location.href = '/login';
@@ -41,20 +43,21 @@ export const authAPI = {
 };
 
 export const userAPI = {
-  getNearbyUsers: (lat, lng, radius) => 
-    api.get(`/users/nearby?lat=${lat}&lng=${lng}&radius=${radius}`),
+  getAllUsers: () => api.get('/users/all'),
+  getNearbyUsers: (lat, lng, radius) => api.get(`/users/nearby?lat=${lat}&lng=${lng}&radius=${radius}`),
   updateLocation: (lat, lng) => api.post('/users/update-location', { lat, lng }),
   getUserProfile: (userId) => api.get(`/users/profile/${userId}`),
   updateProfile: (profileData) => api.put('/users/profile', profileData),
   setOnlineStatus: (isOnline) => api.post('/users/status', { isOnline }),
+  seedUsers: () => api.post('/seed-users'),
 };
 
 export const matchingAPI = {
-  sendMatchRequest: (targetUserId, meetingReason) => 
+  sendMatchRequest: (targetUserId, meetingReason) =>
     api.post('/matching/request', { targetUserId, meetingReason }),
-  respondToMatch: (matchId, response) => 
+  respondToMatch: (matchId, response) =>
     api.post('/matching/respond', { matchId, response }),
-  getMatchHistory: (page = 1, limit = 10, status) => 
+  getMatchHistory: (page = 1, limit = 10, status) =>
     api.get(`/matching/history?page=${page}&limit=${limit}${status ? `&status=${status}` : ''}`),
   confirmMeeting: (meetingId) => api.post('/matching/confirm-meeting', { meetingId }),
 };

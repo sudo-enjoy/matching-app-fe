@@ -17,21 +17,52 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [pendingVerification, setPendingVerification] = useState(null);
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    const userData = localStorage.getItem('user');
-    
-    if (token && userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('user');
-      }
+  const validateToken = async (token) => {
+    try {
+      // Make a simple request to validate the token
+      const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/users/profile`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.ok;
+    } catch (error) {
+      // If backend is not running, assume token is valid
+      return true;
     }
-    
-    setLoading(false);
+  };
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const token = localStorage.getItem('authToken');
+      const userData = localStorage.getItem('user');
+
+      if (token && userData) {
+        try {
+          const parsedUser = JSON.parse(userData);
+
+          // Validate token if backend is running
+          const isValidToken = await validateToken(token);
+
+          if (isValidToken) {
+            setUser(parsedUser);
+          } else {
+            // Token is invalid, clear storage
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+        }
+      }
+
+      setLoading(false);
+    };
+
+    initializeAuth();
   }, []);
 
   const register = async (userData) => {
@@ -121,6 +152,13 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('user', JSON.stringify({ ...user, ...userData }));
   };
 
+  const setUserDirectly = (userData) => {
+    setUser(userData);
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(userData));
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -130,6 +168,7 @@ export const AuthProvider = ({ children }) => {
     verifySMS,
     logout,
     updateUser,
+    setUserDirectly,
     isAuthenticated: !!user
   };
 

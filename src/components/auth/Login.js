@@ -9,7 +9,7 @@ import '../../styles/Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, loading } = useAuth();
+  const { login, loading, setUserDirectly } = useAuth();
   
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
@@ -32,6 +32,29 @@ const Login = () => {
       return;
     }
     
+    // Development mode: Create mock user and go directly to map
+    const mockUser = {
+      id: 'dev-user-' + Date.now(),
+      name: 'Test User',
+      phoneNumber: phoneNumber,
+      gender: 'male',
+      interests: 'Testing the app',
+      profilePhoto: null,
+      createdAt: new Date().toISOString()
+    };
+
+    const mockToken = 'dev-token-' + Date.now();
+    localStorage.setItem('authToken', mockToken);
+
+    // Update AuthContext state directly
+    setUserDirectly(mockUser);
+
+    toast.success('Development mode: Logged in successfully!');
+
+    // Navigate to map page
+    navigate('/map');
+
+    /* Original production code:
     try {
       const result = await login(phoneNumber);
       if (result.success) {
@@ -40,6 +63,7 @@ const Login = () => {
     } catch (error) {
       toast.error('Login failed. Please try again.');
     }
+    */
   };
 
   const containerVariants = {

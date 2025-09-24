@@ -25,7 +25,16 @@ export const SocketProvider = ({ children }) => {
     if (isAuthenticated && user) {
       const token = localStorage.getItem('authToken');
       
-      const newSocket = io(process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000', {
+      const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+
+      try {
+        new URL(socketUrl);
+      } catch (error) {
+        console.error('Invalid socket URL:', socketUrl);
+        return;
+      }
+
+      const newSocket = io(socketUrl, {
         auth: { token },
         transports: ['websocket', 'polling']
       });
@@ -46,14 +55,18 @@ export const SocketProvider = ({ children }) => {
       });
 
       newSocket.on('userOnline', (data) => {
-        setOnlineUsers(prev => new Map(prev.set(data.userId, {
-          id: data.userId,
-          name: data.name,
-          location: data.location,
-          profilePhoto: data.profilePhoto,
-          isOnline: true,
-          lastSeen: new Date()
-        })));
+        setOnlineUsers(prev => {
+          const updated = new Map(prev);
+          updated.set(data.userId, {
+            id: data.userId,
+            name: data.name,
+            location: data.location,
+            profilePhoto: data.profilePhoto,
+            isOnline: true,
+            lastSeen: new Date()
+          });
+          return updated;
+        });
       });
 
       newSocket.on('userOffline', (data) => {
@@ -149,7 +162,7 @@ export const SocketProvider = ({ children }) => {
         setCurrentMatches([]);
       }
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user?.id]);
 
   const updateLocation = (lat, lng) => {
     if (socket && connected) {
