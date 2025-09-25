@@ -8,16 +8,16 @@ import MeetingPointsService from '../../services/meetingPointsService';
 import '../../styles/Modal.css';
 
 const MEETING_REASONS = [
-  { value: 'coffee', label: '☕ Coffee & Chat', emoji: '☕' },
-  { value: 'lunch', label: '🍽️ Grab Lunch', emoji: '🍽️' },
-  { value: 'walk', label: '🚶 Take a Walk', emoji: '🚶' },
-  { value: 'drink', label: '🍺 Have a Drink', emoji: '🍺' },
-  { value: 'workout', label: '💪 Workout Together', emoji: '💪' },
-  { value: 'explore', label: '🗺️ Explore Area', emoji: '🗺️' },
-  { value: 'study', label: '📚 Study Session', emoji: '📚' },
-  { value: 'networking', label: '🤝 Networking', emoji: '🤝' },
-  { value: 'hobby', label: '🎨 Share Hobbies', emoji: '🎨' },
-  { value: 'other', label: '📝 Other', emoji: '📝' }
+  { value: 'coffee', label: '☕ コーヒー＆チャット', emoji: '☕' },
+  { value: 'lunch', label: '🍽️ ランチを一緒に', emoji: '🍽️' },
+  { value: 'walk', label: '🚶 散歩', emoji: '🚶' },
+  { value: 'drink', label: '🍺 飲み物', emoji: '🍺' },
+  { value: 'workout', label: '💪 一緒にワークアウト', emoji: '💪' },
+  { value: 'explore', label: '🗺️ エリア探索', emoji: '🗺️' },
+  { value: 'study', label: '📚 勉強会', emoji: '📚' },
+  { value: 'networking', label: '🤝 ネットワーキング', emoji: '🤝' },
+  { value: 'hobby', label: '🎨 趣味を共有', emoji: '🎨' },
+  { value: 'other', label: '📝 その他', emoji: '📝' }
 ];
 
 const MatchRequestModal = ({ targetUser, onClose }) => {
@@ -46,7 +46,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       const point = event.detail;
       setSelectedMeetingPoint(point);
       setShowOnMap(false);
-      toast.success(`Selected: ${point.name}`);
+      toast.success(`選択しました: ${point.name}`);
     };
 
     window.addEventListener('meetingPointSelected', handleMarkerSelection);
@@ -65,14 +65,14 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
   const fetchMeetingPoints = async () => {
     if (!targetUser?.location || !currentLocation) {
       console.log('Missing location data');
-      toast.warning('Location data not available for meeting point suggestions');
+      toast.warning('待ち合わせ場所の提案に位置データが利用できません');
 
       // Generate basic fallback points even without full location data
       const basicPoints = [
         {
           id: 'basic-1',
-          name: 'Central Meeting Point',
-          address: 'Convenient location for meeting',
+          name: '中央待ち合わせ場所',
+          address: '便利な待ち合わせ場所',
           location: { lat: 0, lng: 0 },
           distanceToUser: '0.5',
           distanceToTarget: '0.5',
@@ -82,8 +82,8 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
         },
         {
           id: 'basic-2',
-          name: 'Public Meeting Spot',
-          address: 'Safe and accessible location',
+          name: '公共待ち合わせスポット',
+          address: '安全でアクセスしやすい場所',
           location: { lat: 0.001, lng: 0.001 },
           distanceToUser: '0.7',
           distanceToTarget: '0.7',
@@ -93,8 +93,8 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
         },
         {
           id: 'basic-3',
-          name: 'Community Center',
-          address: 'Central community location',
+          name: 'コミュニティセンター',
+          address: '中央コミュニティ施設',
           location: { lat: -0.001, lng: 0.001 },
           distanceToUser: '0.6',
           distanceToTarget: '0.6',
@@ -203,7 +203,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     // Show on map immediately
     MeetingPointsService.clearMeetingMarkers();
     MeetingPointsService.selectMeetingPoint(point);
-    toast.success(`Meeting point selected: ${point.name}`);
+    toast.success(`待ち合わせ場所を選択しました: ${point.name}`);
 
     // Close modal after a short delay to show the selection
     setTimeout(() => {
@@ -233,7 +233,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       (point) => {
         setSelectedMeetingPoint(point);
         setShowOnMap(false);
-        toast.success(`Selected: ${point.name}`);
+        toast.success(`選択しました: ${point.name}`);
       },
       userLocation,
       targetLocation
@@ -241,7 +241,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
     // Close modal to see the map
     onClose();
-    toast.info('Meeting points displayed on map. Click a marker to select.');
+    toast.info('待ち合わせ地点がマップに表示されました。マーカーをクリックして選択してください。');
   };
 
   const handleBackToReasons = () => {
@@ -256,12 +256,12 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     e.preventDefault();
 
     if (!selectedReason) {
-      toast.error('Please select a reason for meeting');
+      toast.error('待ち合わせの理由を選択してください');
       return;
     }
 
     if (step === 2 && !selectedMeetingPoint && meetingPoints.length > 0) {
-      toast.error('Please select a meeting point');
+      toast.error('待ち合わせ場所を選択してください');
       return;
     }
 
@@ -269,7 +269,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   MEETING_REASONS.find(r => r.value === selectedReason)?.label || selectedReason;
 
     if (selectedReason === 'other' && !customReason.trim()) {
-      toast.error('Please describe your reason for meeting');
+      toast.error('待ち合わせの理由を記述してください');
       return;
     }
 
@@ -293,7 +293,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       );
 
       if (response.data) {
-        toast.success(`Match request sent to ${targetUser.name}!`);
+        toast.success(`${targetUser.name}にマッチリクエストを送信しました！`);
 
         // If a meeting point was selected, keep it on the map
         if (selectedMeetingPoint) {
@@ -304,7 +304,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       }
     } catch (error) {
       console.error('Match request error:', error);
-      const message = error.response?.data?.error || 'Failed to send match request';
+      const message = error.response?.data?.error || 'マッチリクエストの送信に失敗しました';
       toast.error(message);
     } finally {
       setLoading(false);
@@ -355,7 +355,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h2>Send Match Request</h2>
+          <h2>マッチリクエストを送信</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -370,7 +370,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
             <div className="user-details">
               <h3>{targetUser?.name}</h3>
               <p>
-                {step === 1 ? 'Select a meeting activity' : 'Choose a meeting location'}
+                {step === 1 ? '待ち合わせの活動を選択' : '待ち合わせ場所を選択'}
               </p>
             </div>
           </div>
@@ -379,12 +379,12 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
           <div className="modal-progress-steps">
             <div className={`progress-step ${step >= 1 ? 'active' : ''}`}>
               <span className="step-number">1</span>
-              <span className="step-label">Choose Activity</span>
+              <span className="step-label">活動を選択</span>
             </div>
             <div className="progress-line" />
             <div className={`progress-step ${step >= 2 ? 'active' : ''}`}>
               <span className="step-number">2</span>
-              <span className="step-label">Select Location</span>
+              <span className="step-label">場所を選択</span>
             </div>
           </div>
 
@@ -399,7 +399,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   exit={{ opacity: 0, x: 20 }}
                   className="form-section"
                 >
-                  <label>What would you like to do together?</label>
+                  <label>一緒に何をしたいですか？</label>
                   <div className="meeting-reasons">
                     {MEETING_REASONS.map((reason, index) => (
                       <motion.div
@@ -433,12 +433,12 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                       exit={{ opacity: 0, height: 0 }}
                       className="custom-reason-input"
                     >
-                      <label htmlFor="customReason">Describe what you'd like to do:</label>
+                      <label htmlFor="customReason">やりたいことを説明してください：</label>
                       <textarea
                         id="customReason"
                         value={customReason}
                         onChange={(e) => setCustomReason(e.target.value)}
-                        placeholder="Tell them what you have in mind..."
+                        placeholder="あなたが考えていることを教えてください..."
                         maxLength={200}
                         rows="3"
                       />
@@ -460,14 +460,14 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   className="form-section meeting-points-section"
                 >
                   <div className="meeting-points-header">
-                    <label>Select a Meeting Point</label>
+                    <label>待ち合わせ場所を選択</label>
                     <div className="header-actions">
                       <button
                         type="button"
                         className="back-btn"
                         onClick={handleBackToReasons}
                       >
-                        ← Back
+                        ← 戻る
                       </button>
                       <button
                         type="button"

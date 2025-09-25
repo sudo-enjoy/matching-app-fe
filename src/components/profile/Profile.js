@@ -28,11 +28,11 @@ const Profile = () => {
     try {
       const response = await userAPI.updateProfile(formData);
       updateUser(response.data.user);
-      toast.success('Profile updated successfully!');
+      toast.success('プロフィールが正常に更新されました！');
       setEditing(false);
     } catch (error) {
       console.error('Profile update error:', error);
-      toast.error('Failed to update profile');
+      toast.error('プロフィールの更新に失敗しました');
     } finally {
       setLoading(false);
     }
@@ -74,11 +74,11 @@ const Profile = () => {
               <div className="profile-stats">
                 <div className="stat">
                   <span className="stat-number">{user?.matchCount || 0}</span>
-                  <span className="stat-label">Matches</span>
+                  <span className="stat-label">マッチ</span>
                 </div>
                 <div className="stat">
                   <span className="stat-number">{user?.actualMeetCount || 0}</span>
-                  <span className="stat-label">Meetings</span>
+                  <span className="stat-label">出会い</span>
                 </div>
               </div>
             )}
@@ -91,14 +91,14 @@ const Profile = () => {
                   onClick={handleCancel}
                   className="btn btn-secondary"
                 >
-                  Cancel
+                  キャンセル
                 </button>
                 <button 
                   onClick={handleSubmit}
                   className="btn btn-primary"
                   disabled={loading}
                 >
-                  {loading ? 'Saving...' : 'Save Changes'}
+                  {loading ? '保存中...' : '変更を保存'}
                 </button>
               </div>
             ) : (
@@ -106,7 +106,7 @@ const Profile = () => {
                 onClick={() => setEditing(true)}
                 className="btn btn-outline"
               >
-                ✏️ Edit Profile
+                ✏️ プロフィール編集
               </button>
             )}
           </div>
@@ -114,7 +114,7 @@ const Profile = () => {
 
         <form onSubmit={handleSubmit} className="profile-form">
           <div className="form-section">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">名前</label>
             {editing ? (
               <input
                 type="text"
@@ -122,7 +122,7 @@ const Profile = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Your full name"
+                placeholder="フルネームを入力してください"
               />
             ) : (
               <div className="profile-field-display">{user?.name}</div>
@@ -130,20 +130,20 @@ const Profile = () => {
           </div>
 
           <div className="form-section">
-            <label htmlFor="bio">Bio</label>
+            <label htmlFor="bio">自己紹介</label>
             {editing ? (
               <textarea
                 id="bio"
                 name="bio"
                 value={formData.bio}
                 onChange={handleInputChange}
-                placeholder="Tell others about yourself..."
+                placeholder="自分について教えてください..."
                 rows="4"
                 maxLength="500"
               />
             ) : (
               <div className="profile-field-display">
-                {user?.bio || 'No bio added yet'}
+                {user?.bio || 'まだ自己紹介が追加されていません'}
               </div>
             )}
             {editing && (
@@ -152,14 +152,14 @@ const Profile = () => {
           </div>
 
           <div className="form-section">
-            <label htmlFor="address">Address</label>
+            <label htmlFor="address">住所</label>
             {editing ? (
               <textarea
                 id="address"
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                placeholder="Your address"
+                placeholder="住所を入力してください"
                 rows="2"
               />
             ) : (
@@ -168,17 +168,17 @@ const Profile = () => {
           </div>
 
           <div className="form-section">
-            <label>Gender</label>
+            <label>性別</label>
             <div className="profile-field-display">
               {user?.gender?.charAt(0).toUpperCase() + user?.gender?.slice(1)}
             </div>
           </div>
 
           <div className="form-section">
-            <label>Phone Number</label>
+            <label>電話番号</label>
             <div className="profile-field-display">
               {user?.phoneNumber}
-              <span className="verified-badge">✅ Verified</span>
+              <span className="verified-badge">✅ 認証済み</span>
             </div>
           </div>
         </form>
@@ -188,7 +188,7 @@ const Profile = () => {
             onClick={logout}
             className="btn btn-danger"
           >
-            🚪 Sign Out
+            🚪 サインアウト
           </button>
         </div>
       </motion.div>

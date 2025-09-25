@@ -44,23 +44,23 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
       user.location.coordinates[1], user.location.coordinates[0]
     );
     if (distance < 1000) {
-      return `${Math.round(distance)}m away`;
+      return `${Math.round(distance)}m離れています`;
     }
-    return `${(distance / 1000).toFixed(1)}km away`;
+    return `${(distance / 1000).toFixed(1)}km離れています`;
   };
 
   const getTimeAgo = (lastSeen) => {
-    if (!lastSeen) return 'Unknown';
-    
+    if (!lastSeen) return '不明';
+
     const now = new Date();
     const seen = new Date(lastSeen);
     const diffMs = now - seen;
     const diffMins = Math.floor(diffMs / 60000);
-    
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
-    return `${Math.floor(diffMins / 1440)}d ago`;
+
+    if (diffMins < 1) return 'たった今';
+    if (diffMins < 60) return `${diffMins}分前`;
+    if (diffMins < 1440) return `${Math.floor(diffMins / 60)}時間前`;
+    return `${Math.floor(diffMins / 1440)}日前`;
   };
 
   const handleUserClick = (user) => {
@@ -115,33 +115,33 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="user-panel-header">
-          <h3>Nearby People ({sortedUsers.length})</h3>
+          <h3>近くの人々 ({sortedUsers.length})</h3>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
         <div className="user-panel-filters">
           <div className="filter-group">
-            <label>Gender:</label>
+            <label>性別:</label>
             <select 
               value={filterGender} 
               onChange={(e) => setFilterGender(e.target.value)}
             >
-              <option value="all">All</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+              <option value="all">すべて</option>
+              <option value="male">男性</option>
+              <option value="female">女性</option>
+              <option value="other">その他</option>
             </select>
           </div>
           
           <div className="filter-group">
-            <label>Sort by:</label>
+            <label>並び替え:</label>
             <select 
               value={sortBy} 
               onChange={(e) => setSortBy(e.target.value)}
             >
-              <option value="distance">Distance</option>
-              <option value="matches">Match Count</option>
-              <option value="name">Name</option>
+              <option value="distance">距離</option>
+              <option value="matches">マッチ数</option>
+              <option value="name">名前</option>
             </select>
           </div>
         </div>
@@ -155,8 +155,8 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
                 animate={{ opacity: 1 }}
               >
                 <div className="empty-icon">👥</div>
-                <h4>No users found</h4>
-                <p>Try adjusting your filters or check back later</p>
+                <h4>ユーザーが見つかりません</h4>
+                <p>フィルターを調整するか、後でもう一度確認してください</p>
               </motion.div>
             ) : (
               sortedUsers.map((user, index) => (
@@ -187,20 +187,20 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
                       <span className="user-gender">{user.gender}</span>
                     </div>
                     
-                    <p className="user-bio">{user.bio || 'No bio available'}</p>
+                    <p className="user-bio">{user.bio || '自己紹介がありません'}</p>
                     
                     <div className="user-stats">
                       <span className="distance">{formatDistance(user)}</span>
-                      <span className="matches">{user.matchCount || 0} matches</span>
-                      <span className="meetings">{user.actualMeetCount || 0} meets</span>
+                      <span className="matches">{user.matchCount || 0} マッチ</span>
+                      <span className="meetings">{user.actualMeetCount || 0} 出会い</span>
                     </div>
                     
                     <div className="user-activity">
                       {user.isOnline ? (
-                        <span className="online-status">🟢 Online now</span>
+                        <span className="online-status">🟢 オンライン中</span>
                       ) : (
                         <span className="offline-status">
-                          Last seen {getTimeAgo(user.lastSeen)}
+                          最後に見た時間 {getTimeAgo(user.lastSeen)}
                         </span>
                       )}
                     </div>
@@ -229,15 +229,15 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
           <div className="legend">
             <div className="legend-item">
               <span className="legend-icon">🟢</span>
-              <span>Online</span>
+              <span>オンライン</span>
             </div>
             <div className="legend-item">
               <span className="legend-icon">⚫</span>
-              <span>Offline</span>
+              <span>オフライン</span>
             </div>
             <div className="legend-item">
               <span className="legend-icon">💌</span>
-              <span>Send Match Request</span>
+              <span>マッチリクエストを送信</span>
             </div>
           </div>
         </div>

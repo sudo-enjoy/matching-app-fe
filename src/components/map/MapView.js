@@ -267,8 +267,8 @@ const MapView = () => {
       <div className="map-loading">
         <div className="loading-content">
           <div className="loading-spinner"></div>
-          <h3>Getting your location...</h3>
-          <p>Please allow location access to continue</p>
+          <h3>位置情報を取得中...</h3>
+          <p>継続するには位置アクセスを許可してください</p>
         </div>
       </div>
     );
@@ -292,12 +292,12 @@ const MapView = () => {
           </motion.button>
           <span className={`connection-status ${connected ? 'connected' : 'disconnected'}`}>
             <span className="status-indicator"></span>
-            {connected ? 'Connected' : 'Offline'}
+            {connected ? '接続済み' : 'オフライン'}
           </span>
         </div>
 
         <div className="header-center">
-          <h2>MatchApp</h2>
+          <h2>マッチアプリ</h2>
         </div>
 
         <div className="header-right">
@@ -306,7 +306,7 @@ const MapView = () => {
             onClick={handleLocationRefresh}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            title="Refresh Location"
+            title="位置を更新"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="23 4 23 10 17 10"></polyline>
@@ -318,7 +318,7 @@ const MapView = () => {
             onClick={logout}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            title="Logout"
+            title="ログアウト"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -341,10 +341,10 @@ const MapView = () => {
           onClick={toggleUserPanel}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          title="Click to show users within 100km"
+          title="100km以内のユーザーを表示するにはクリック"
         >
           {userPanelExpanded ? '▼' : '▲'}
-          Users within 100km: {radiusUserCount}
+          100km以内のユーザー: {radiusUserCount}人
         </motion.button>
       </div>
 
@@ -367,7 +367,7 @@ const MapView = () => {
           onClick={() => setShowMatchResponse(matchRequests[0])}
         >
           <span className="notification-badge">{matchRequests.length}</span>
-          💌 Match Requests
+          💌 マッチリクエスト
         </motion.div>
       )}
 

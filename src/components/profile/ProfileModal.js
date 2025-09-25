@@ -51,7 +51,7 @@ const ProfileModal = ({ onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h2>Your Profile</h2>
+          <h2>あなたのプロフィール</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -65,18 +65,18 @@ const ProfileModal = ({ onClose }) => {
             <div className="user-details">
               <h3>{user?.name}</h3>
               <p className="user-phone">{user?.phoneNumber} ✅</p>
-              <p className="user-bio">{user?.bio || 'No bio added yet'}</p>
+              <p className="user-bio">{user?.bio || 'まだ自己紹介が追加されていません'}</p>
             </div>
           </div>
 
           <div className="profile-stats-row">
             <div className="stat">
               <span className="stat-number">{user?.matchCount || 0}</span>
-              <span className="stat-label">Total Matches</span>
+              <span className="stat-label">総マッチ数</span>
             </div>
             <div className="stat">
               <span className="stat-number">{user?.actualMeetCount || 0}</span>
-              <span className="stat-label">Meetings</span>
+              <span className="stat-label">実際の出会い</span>
             </div>
           </div>
 
@@ -87,7 +87,7 @@ const ProfileModal = ({ onClose }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              ✏️ Edit Profile
+              ✏️ プロフィールを編集
             </motion.button>
             
             <motion.button
@@ -96,13 +96,13 @@ const ProfileModal = ({ onClose }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              🚪 Sign Out
+              🚪 サインアウト
             </motion.button>
           </div>
 
           <div className="app-info">
             <h4>MatchApp v1.0</h4>
-            <p>Connect with people nearby and meet in real life</p>
+            <p>近くの人々と繋がり、実際に出会いましょう</p>
           </div>
         </div>
       </motion.div>
