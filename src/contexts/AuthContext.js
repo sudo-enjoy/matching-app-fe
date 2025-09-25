@@ -69,13 +69,13 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await authAPI.register(userData);
-      
+
       setPendingVerification({
         userId: response.data.userId,
         phoneNumber: response.data.phoneNumber,
         type: 'register'
       });
-      
+
       toast.success('Verification code sent to your phone');
       return { success: true, data: response.data };
     } catch (error) {
@@ -88,16 +88,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (phoneNumber) => {
+    console.log('=========',phoneNumber);
+
     try {
       setLoading(true);
       const response = await authAPI.login(phoneNumber);
-      
+
       setPendingVerification({
         userId: response.data.userId,
         phoneNumber: response.data.phoneNumber,
         type: 'login'
       });
-      
+
       toast.success('Verification code sent to your phone');
       return { success: true, data: response.data };
     } catch (error) {
@@ -116,18 +118,18 @@ export const AuthProvider = ({ children }) => {
 
     try {
       setLoading(true);
-      const response = pendingVerification.type === 'register' 
+      const response = pendingVerification.type === 'register'
         ? await authAPI.verifySMS({ userId: pendingVerification.userId, code })
         : await authAPI.verifyLogin({ userId: pendingVerification.userId, code });
-      
+
       const { token, user: userData } = response.data;
-      
+
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(userData));
-      
+
       setUser(userData);
       setPendingVerification(null);
-      
+
       toast.success(pendingVerification.type === 'register' ? 'Account created successfully!' : 'Login successful!');
       return { success: true, data: response.data };
     } catch (error) {

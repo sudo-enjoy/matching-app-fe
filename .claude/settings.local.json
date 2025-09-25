@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(del \"E:\\matching\\matching-app-fe\\src\\services\\meetingPointsService.js\")",
+      "Read(//c/Users/Administrator/Videos/Movavi Screen Recorder/**)"
     ],
     "deny": [],
     "ask": []
