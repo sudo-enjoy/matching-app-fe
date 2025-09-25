@@ -47,7 +47,7 @@ const Register = () => {
 
     if (!formData.phoneNumber) {
       newErrors.phoneNumber = 'Phone number is required';
-    } else if (formData.phoneNumber.length < 10) {
+    } else if (formData.phoneNumber.length < 9) {
       newErrors.phoneNumber = 'Please enter a valid phone number';
     }
 
@@ -173,6 +173,7 @@ const Register = () => {
                   country={'us'}
                   value={formData.phoneNumber}
                   onChange={handlePhoneChange}
+                  masks={{'us': '(..)-...-....'}}
                   inputProps={{
                     name: 'phoneNumber',
                     id: 'phoneNumber',

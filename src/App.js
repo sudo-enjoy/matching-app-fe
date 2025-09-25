@@ -5,7 +5,7 @@ import { useLocation } from './contexts/LocationContext';
 import SplashScreen from './components/common/SplashScreen';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
-import SMSVerification from './components/auth/SMSVerification';
+import VerifySMS from './components/auth/VerifySMS';
 import MapView from './components/map/MapView';
 import Profile from './components/profile/Profile';
 import './styles/App.css';
@@ -52,9 +52,9 @@ function App() {
           path="/login" 
           element={!user ? <Login /> : <Navigate to="/map" />} 
         />
-        <Route 
-          path="/verify-sms" 
-          element={!user ? <SMSVerification /> : <Navigate to="/map" />} 
+        <Route
+          path="/verify-sms"
+          element={!user ? <VerifySMS /> : <Navigate to="/map" />}
         />
         <Route 
           path="/map" 

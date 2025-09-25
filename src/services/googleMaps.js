@@ -27,6 +27,21 @@ class GoogleMapsService {
           strokeOpacity: 0.8
         }
       });
+
+      // Add global function for info window onclick handlers
+      if (!window.handleMatchRequest) {
+        window.handleMatchRequest = (tempId) => {
+          const userData = window.tempUserData && window.tempUserData[tempId];
+          if (userData) {
+            window.dispatchEvent(new CustomEvent('requestMatchWithData', { detail: userData }));
+            // Clean up temporary data
+            delete window.tempUserData[tempId];
+          } else {
+            console.error('User data not found for tempId:', tempId);
+          }
+        };
+      }
+
       return this.google;
     } catch (error) {
       console.error('Failed to load Google Maps:', error);
@@ -166,19 +181,30 @@ class GoogleMapsService {
       `;
     }
 
+    // Store user data temporarily and use a simple ID reference
+    const tempId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    if (!window.tempUserData) window.tempUserData = {};
+    window.tempUserData[tempId] = {
+      id: user.id || user._id,
+      name: user.name || '',
+      location: user.location,
+      profilePhoto: user.profilePhoto,
+      bio: user.bio || 'No bio available'
+    };
+
     return `
       <div class="info-window">
         <div class="user-avatar">
-          <img src="${user.profilePhoto || '/default-avatar.png'}" alt="${user.name}" />
+          <img src="${user.profilePhoto || '/default-avatar.png'}" alt="${user.name || 'User'}" />
         </div>
         <div class="user-info">
-          <h3>${user.name}</h3>
+          <h3>${user.name || 'User'}</h3>
           <p class="user-bio">${user.bio || 'No bio available'}</p>
           <div class="user-stats">
             <span class="match-count">${user.matchCount || 0} matches</span>
             <span class="meet-count">${user.actualMeetCount || 0} meets</span>
           </div>
-          <button class="match-button" onclick="window.dispatchEvent(new CustomEvent('requestMatch', {detail: {userId: '${user.id || user._id}', name: '${user.name}'}}))">
+          <button class="match-button" onclick="window.handleMatchRequest && window.handleMatchRequest('${tempId}')">
             Send Match Request
           </button>
         </div>
@@ -219,26 +245,43 @@ class GoogleMapsService {
 
   clearAllUserMarkers() {
     this.markers.forEach((marker, userId) => {
-      if (!userId.includes('current-user')) {
+      // Preserve current-user and meeting-related user markers
+      if (!userId.includes('current-user') && !userId.includes('meeting-current-user') && !userId.includes('meeting-target-user')) {
         marker.setMap(null);
       }
     });
     this.infoWindows.forEach((infoWindow, userId) => {
-      if (!userId.includes('current-user')) {
+      // Preserve current-user and meeting-related user markers
+      if (!userId.includes('current-user') && !userId.includes('meeting-current-user') && !userId.includes('meeting-target-user')) {
         infoWindow.close();
       }
     });
-    // Keep only current user marker
-    const currentUserMarker = this.markers.get('current-user');
-    const currentUserWindow = this.infoWindows.get('current-user');
+
+    // Keep current user, meeting current user, and meeting target user markers
+    const preserveMarkers = new Map();
+    const preserveWindows = new Map();
+
+    ['current-user', 'meeting-current-user', 'meeting-target-user'].forEach(key => {
+      const marker = this.markers.get(key);
+      const window = this.infoWindows.get(key);
+      if (marker) {
+        preserveMarkers.set(key, marker);
+      }
+      if (window) {
+        preserveWindows.set(key, window);
+      }
+    });
+
     this.markers.clear();
     this.infoWindows.clear();
-    if (currentUserMarker) {
-      this.markers.set('current-user', currentUserMarker);
-    }
-    if (currentUserWindow) {
-      this.infoWindows.set('current-user', currentUserWindow);
-    }
+
+    // Restore preserved markers
+    preserveMarkers.forEach((marker, key) => {
+      this.markers.set(key, marker);
+    });
+    preserveWindows.forEach((window, key) => {
+      this.infoWindows.set(key, window);
+    });
   }
 
   fitMapToShowAllUsers(users, currentLocation) {

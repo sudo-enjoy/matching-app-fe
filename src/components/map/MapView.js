@@ -137,7 +137,19 @@ const MapView = () => {
   useEffect(() => {
     const handleMatchRequest = (event) => {
       const { userId, name } = event.detail;
-      setSelectedUser({ id: userId, name });
+      // Find the full user object from nearbyUsers
+      const fullUser = nearbyUsers.find(u => (u.id || u._id) === userId);
+      if (fullUser) {
+        setSelectedUser(fullUser);
+      } else {
+        setSelectedUser({ id: userId, name });
+      }
+      setShowMatchRequest(true);
+    };
+
+    const handleMatchRequestWithData = (event) => {
+      // This event comes with full user data from map marker click
+      setSelectedUser(event.detail);
       setShowMatchRequest(true);
     };
 
@@ -150,15 +162,17 @@ const MapView = () => {
     };
 
     window.addEventListener('requestMatch', handleMatchRequest);
+    window.addEventListener('requestMatchWithData', handleMatchRequestWithData);
     window.addEventListener('showMatchRequest', handleShowMatchRequest);
     window.addEventListener('showMatch', handleShowMatch);
 
     return () => {
       window.removeEventListener('requestMatch', handleMatchRequest);
+      window.removeEventListener('requestMatchWithData', handleMatchRequestWithData);
       window.removeEventListener('showMatchRequest', handleShowMatchRequest);
       window.removeEventListener('showMatch', handleShowMatch);
     };
-  }, []);
+  }, [nearbyUsers]);
 
   const loadNearbyUsers = async () => {
     try {
@@ -271,8 +285,8 @@ const MapView = () => {
             whileTap={{ scale: 0.9 }}
           >
             <img
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="Profile"
+              src={user?.profilePhoto || "https://randomuser.me/api/portraits/men/32.jpg"}
+              alt={`${user?.name || 'User'}'s Profile`}
               className="profile-avatar"
             />
           </motion.button>

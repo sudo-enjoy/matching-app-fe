@@ -158,7 +158,7 @@ export const LocationProvider = ({ children }) => {
         radius
       );
       setNearbyUsers(response.data.users);
-      toast.success(`Loaded ${response.data.users.length} users`);
+      // toast.success(`Loaded ${response.data.users.length} users`); 
       return response.data.users;
     } catch (error) {
       console.error('Error fetching nearby users:', error);

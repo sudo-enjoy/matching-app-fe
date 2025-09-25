@@ -10,7 +10,7 @@ import '../../styles/Auth.css';
 const Login = () => {
   const navigate = useNavigate();
   const { login, loading, setUserDirectly } = useAuth();
-  
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [error, setError] = useState('');
 
@@ -21,40 +21,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!phoneNumber) {
       setError('Phone number is required');
       return;
     }
-    
-    if (phoneNumber.length < 10) {
+
+    if (phoneNumber.length < 9) {
       setError('Please enter a valid phone number');
       return;
     }
-    
-    // Development mode: Create mock user and go directly to map
-    const mockUser = {
-      id: 'dev-user-' + Date.now(),
-      name: 'Test User',
-      phoneNumber: phoneNumber,
-      gender: 'male',
-      interests: 'Testing the app',
-      profilePhoto: null,
-      createdAt: new Date().toISOString()
-    };
 
-    const mockToken = 'dev-token-' + Date.now();
-    localStorage.setItem('authToken', mockToken);
-
-    // Update AuthContext state directly
-    setUserDirectly(mockUser);
-
-    toast.success('Development mode: Logged in successfully!');
-
-    // Navigate to map page
-    navigate('/map');
-
-    /* Original production code:
     try {
       const result = await login(phoneNumber);
       if (result.success) {
@@ -63,13 +40,13 @@ const Login = () => {
     } catch (error) {
       toast.error('Login failed. Please try again.');
     }
-    */
+
   };
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.6, ease: "easeOut" }
     }
@@ -77,14 +54,14 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <motion.div 
+      <motion.div
         className="auth-card"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <div className="auth-header">
-          <motion.div 
+          <motion.div
             className="auth-logo"
             animate={{ rotate: 360 }}
             transition={{ duration: 1, delay: 0.3 }}
@@ -96,33 +73,34 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          <motion.div 
+          <motion.div
             className="form-group"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
             <label htmlFor="phoneNumber">Phone Number</label>
-          <PhoneInput
-            country={'us'}
-            value={phoneNumber}
-            onChange={handlePhoneChange}
-            inputProps={{
-              name: 'phoneNumber',
-              id: 'phoneNumber',
-              className: error ? 'error' : '',
-              placeholder: 'Enter your phone number'
-            }}
-            containerClass="phone-input-container"
-            buttonClass="flag-dropdown"
-            dropdownClass="countrylistview countrylist countrylistview_xs"
-            searchClass="search-box"
-            enableSearch={true}
-            searchPlaceholder="Search countries..."
-            countryCodeEditable={false}
-            preferredCountries={['us', 'gb', 'ca', 'au']}
-            disableSearchIcon={true}
-          />
+            <PhoneInput
+              country={'us'}
+              value={phoneNumber}
+              onChange={handlePhoneChange}
+              masks={{'us': '(..)-...-....'}}
+              inputProps={{
+                name: 'phoneNumber',
+                id: 'phoneNumber',
+                className: error ? 'error' : '',
+                placeholder: 'Enter your phone number'
+              }}
+              containerClass="phone-input-container"
+              buttonClass="flag-dropdown"
+              dropdownClass="countrylistview countrylist countrylistview_xs"
+              searchClass="search-box"
+              enableSearch={true}
+              searchPlaceholder="Search countries..."
+              countryCodeEditable={false}
+              preferredCountries={['us', 'gb', 'ca', 'au']}
+              disableSearchIcon={true}
+            />
             {error && <span className="error-message">{error}</span>}
           </motion.div>
 
@@ -156,7 +134,7 @@ const Login = () => {
           <span>or</span>
         </motion.div> */}
 
-        <motion.div 
+        <motion.div
           className="auth-footer"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -170,7 +148,7 @@ const Login = () => {
           </p>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="auth-info"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
