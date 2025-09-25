@@ -81,10 +81,26 @@ const Login = () => {
           >
             <label htmlFor="phoneNumber">電話番号</label>
             <PhoneInput
-              country={'us'}
+              country={'jp'}
               value={phoneNumber}
               onChange={handlePhoneChange}
-              masks={{'us': '(..)-...-....'}}
+              masks={{
+                'jp': '...-....-....',  // Japan: XXX-XXXX-XXXX
+                'us': '(...) ...-....',  // USA: (XXX) XXX-XXXX
+                'gb': '.... ......',      // UK: XXXX XXXXXX
+                'ca': '(...) ...-....',  // Canada: (XXX) XXX-XXXX
+                'au': '.... ... ...',     // Australia: XXXX XXX XXX
+                'kr': '...-....-....',   // South Korea: XXX-XXXX-XXXX
+                'cn': '... .... ....',    // China: XXX XXXX XXXX
+                'in': '.....-......',     // India: XXXXX-XXXXXX
+                'de': '.... ........',    // Germany: XXXX XXXXXXXX
+                'fr': '. .. .. .. ..',    // France: X XX XX XX XX
+                'it': '... ... ....',     // Italy: XXX XXX XXXX
+                'es': '... .. .. ..',     // Spain: XXX XX XX XX
+                'br': '(..) .....-....', // Brazil: (XX) XXXXX-XXXX
+                'mx': '.. .... ....',     // Mexico: XX XXXX XXXX
+                'ru': '(...) ...-..-..'   // Russia: (XXX) XXX-XX-XX
+              }}
               inputProps={{
                 name: 'phoneNumber',
                 id: 'phoneNumber',
@@ -98,7 +114,7 @@ const Login = () => {
               enableSearch={true}
               searchPlaceholder="国を検索..."
               countryCodeEditable={false}
-              preferredCountries={['us', 'gb', 'ca', 'au']}
+              preferredCountries={['jp', 'us', 'gb', 'ca', 'kr', 'cn']}
               disableSearchIcon={true}
             />
             {error && <span className="error-message">{error}</span>}
