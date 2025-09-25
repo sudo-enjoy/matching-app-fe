@@ -94,7 +94,7 @@ const VerifySMS = () => {
     const code = verificationCode.join('');
 
     if (code.length !== 6) {
-      setError('Please enter all 6 digits');
+      setError('6桁すべて入力してください');
       return;
     }
 
@@ -102,7 +102,7 @@ const VerifySMS = () => {
     if (result.success) {
       navigate('/map');
     } else {
-      setError(result.error || 'Invalid verification code');
+      setError(result.error || '無効な認証コードです');
       setVerificationCode(['', '', '', '', '', '']);
       inputRefs.current[0]?.focus();
     }
@@ -116,7 +116,7 @@ const VerifySMS = () => {
     setVerificationCode(['', '', '', '', '', '']);
     inputRefs.current[0]?.focus();
 
-    toast.info('Verification code resent!');
+    toast.info('認証コードを再送信しました！');
   };
 
   const containerVariants = {
@@ -155,8 +155,8 @@ const VerifySMS = () => {
           >
             📱
           </motion.div>
-          <h1>Verify Your Phone</h1>
-          <p>Enter the 6-digit code sent to {formatPhoneNumber(pendingVerification?.phoneNumber)}</p>
+          <h1>電話番号を認証</h1>
+          <p>{formatPhoneNumber(pendingVerification?.phoneNumber)}に送信された6桁のコードを入力してください</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -210,10 +210,10 @@ const VerifySMS = () => {
             {loading ? (
               <span className="btn-loading">
                 <div className="spinner"></div>
-                Verifying...
+                認証中...
               </span>
             ) : (
-              'Verify & Continue'
+              '認証して継続'
             )}
           </motion.button>
         </form>
@@ -230,11 +230,11 @@ const VerifySMS = () => {
               className="resend-button"
               onClick={handleResend}
             >
-              Didn't receive a code? <span className="resend-link">Resend</span>
+              コードが届かない場合は？ <span className="resend-link">再送信</span>
             </button>
           ) : (
             <p className="resend-timer">
-              Resend code in <span className="timer-count">{resendTimer}s</span>
+              <span className="timer-count">{resendTimer}秒</span>後にコードを再送信
             </p>
           )}
         </motion.div>
@@ -250,7 +250,7 @@ const VerifySMS = () => {
             onClick={() => navigate('/login')}
             className="back-button"
           >
-            ← Back to login
+            ← ログインに戻る
           </button>
         </motion.div>
 
@@ -262,11 +262,11 @@ const VerifySMS = () => {
         >
           <div className="info-item">
             <span className="info-icon">💡</span>
-            <span>Code expires in 10 minutes</span>
+            <span>コードは10分で有効期限が切れます</span>
           </div>
           <div className="info-item">
             <span className="info-icon">📧</span>
-            <span>Check your SMS messages</span>
+            <span>SMSメッセージを確認してください</span>
           </div>
         </motion.div>
       </motion.div>

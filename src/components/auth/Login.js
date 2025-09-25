@@ -23,12 +23,12 @@ const Login = () => {
     e.preventDefault();
 
     if (!phoneNumber) {
-      setError('Phone number is required');
+      setError('電話番号が必要です');
       return;
     }
 
     if (phoneNumber.length < 9) {
-      setError('Please enter a valid phone number');
+      setError('有効な電話番号を入力してください');
       return;
     }
 
@@ -68,8 +68,8 @@ const Login = () => {
           >
             📍
           </motion.div>
-          <h1>Welcome Back</h1>
-          <p>Enter your phone number to sign in</p>
+          <h1>お帰りなさい</h1>
+          <p>サインインするには電話番号を入力してください</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -79,7 +79,7 @@ const Login = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.4 }}
           >
-            <label htmlFor="phoneNumber">Phone Number</label>
+            <label htmlFor="phoneNumber">電話番号</label>
             <PhoneInput
               country={'us'}
               value={phoneNumber}
@@ -89,14 +89,14 @@ const Login = () => {
                 name: 'phoneNumber',
                 id: 'phoneNumber',
                 className: error ? 'error' : '',
-                placeholder: 'Enter your phone number'
+                placeholder: '電話番号を入力してください'
               }}
               containerClass="phone-input-container"
               buttonClass="flag-dropdown"
               dropdownClass="countrylistview countrylist countrylistview_xs"
               searchClass="search-box"
               enableSearch={true}
-              searchPlaceholder="Search countries..."
+              searchPlaceholder="国を検索..."
               countryCodeEditable={false}
               preferredCountries={['us', 'gb', 'ca', 'au']}
               disableSearchIcon={true}
@@ -117,10 +117,10 @@ const Login = () => {
             {loading ? (
               <span className="btn-loading">
                 <div className="spinner"></div>
-                Sending Code...
+                コード送信中...
               </span>
             ) : (
-              'Send Verification Code'
+              '認証コードを送信'
             )}
           </motion.button>
         </form>
@@ -141,9 +141,9 @@ const Login = () => {
           transition={{ delay: 0.8, duration: 0.4 }}
         >
           <p>
-            Don't have an account?{' '}
+            アカウントをお持ちではありませんか？{' '}
             <Link to="/register" className="auth-link">
-              Create Account
+              アカウント作成
             </Link>
           </p>
         </motion.div>
@@ -156,15 +156,15 @@ const Login = () => {
         >
           <div className="info-item">
             <span className="info-icon">🔒</span>
-            <span>Secure SMS verification</span>
+            <span>安全なSMS認証</span>
           </div>
           <div className="info-item">
             <span className="info-icon">🚀</span>
-            <span>Quick and easy login</span>
+            <span>簡単で迅速なログイン</span>
           </div>
           <div className="info-item">
             <span className="info-icon">📱</span>
-            <span>No passwords required</span>
+            <span>パスワード不要</span>
           </div>
         </motion.div>
       </motion.div>

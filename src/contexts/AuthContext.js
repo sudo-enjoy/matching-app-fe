@@ -7,7 +7,7 @@ const AuthContext = createContext();
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuthはAuthProvider内で使用する必要があります');
   }
   return context;
 };
@@ -76,10 +76,10 @@ export const AuthProvider = ({ children }) => {
         type: 'register'
       });
 
-      toast.success('Verification code sent to your phone');
+      toast.success('認証コードをあなたの電話に送信しました');
       return { success: true, data: response.data };
     } catch (error) {
-      const message = error.response?.data?.error || 'Registration failed';
+      const message = error.response?.data?.error || '登録に失敗しました';
       toast.error(message);
       return { success: false, error: message };
     } finally {
@@ -100,10 +100,10 @@ export const AuthProvider = ({ children }) => {
         type: 'login'
       });
 
-      toast.success('Verification code sent to your phone');
+      toast.success('認証コードをあなたの電話に送信しました');
       return { success: true, data: response.data };
     } catch (error) {
-      const message = error.response?.data?.error || 'Login failed';
+      const message = error.response?.data?.error || 'ログインに失敗しました';
       toast.error(message);
       return { success: false, error: message };
     } finally {
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifySMS = async (code) => {
     if (!pendingVerification) {
-      return { success: false, error: 'No verification in progress' };
+      return { success: false, error: '進行中の認証がありません' };
     }
 
     try {
@@ -130,10 +130,10 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       setPendingVerification(null);
 
-      toast.success(pendingVerification.type === 'register' ? 'Account created successfully!' : 'Login successful!');
+      toast.success(pendingVerification.type === 'register' ? 'アカウントが正常に作成されました！' : 'ログイン成功！');
       return { success: true, data: response.data };
     } catch (error) {
-      const message = error.response?.data?.error || 'Verification failed';
+      const message = error.response?.data?.error || '認証に失敗しました';
       toast.error(message);
       return { success: false, error: message };
     } finally {
@@ -146,7 +146,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setUser(null);
     setPendingVerification(null);
-    toast.success('Logged out successfully');
+    toast.success('ログアウトが正常に完了しました');
   };
 
   const updateUser = (userData) => {

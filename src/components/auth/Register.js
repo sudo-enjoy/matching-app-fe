@@ -40,15 +40,15 @@ const Register = () => {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = '名前が必要です';
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
+      newErrors.name = '名前は2文字以上である必要があります';
     }
 
     if (!formData.phoneNumber) {
-      newErrors.phoneNumber = 'Phone number is required';
+      newErrors.phoneNumber = '電話番号が必要です';
     } else if (formData.phoneNumber.length < 9) {
-      newErrors.phoneNumber = 'Please enter a valid phone number';
+      newErrors.phoneNumber = '有効な電話番号を入力してください';
     }
 
     setErrors(newErrors);
@@ -59,13 +59,13 @@ const Register = () => {
     const newErrors = {};
 
     if (!formData.gender) {
-      newErrors.gender = 'Please select your gender';
+      newErrors.gender = '性別を選択してください';
     }
 
     if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
+      newErrors.address = '住所が必要です';
     } else if (formData.address.trim().length < 5) {
-      newErrors.address = 'Please enter a complete address';
+      newErrors.address = '完全な住所を入力してください';
     }
 
     setErrors(newErrors);
@@ -127,19 +127,19 @@ const Register = () => {
           >
             📍
           </motion.div>
-          <h1>Create Account</h1>
-          <p>Join MatchApp and start connecting with people nearby</p>
+          <h1>アカウント作成</h1>
+          <p>MatchAppに参加して、近くの人とつながりを始めましょう</p>
         </div>
 
         <div className="step-indicator">
           <div className={`step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'completed' : ''}`}>
             <span>1</span>
-            <label>Basic Info</label>
+            <label>基本情報</label>
           </div>
           <div className="step-line"></div>
           <div className={`step ${step >= 2 ? 'active' : ''} ${step > 2 ? 'completed' : ''}`}>
             <span>2</span>
-            <label>Details</label>
+            <label>詳細</label>
           </div>
         </div>
 
@@ -153,14 +153,14 @@ const Register = () => {
               transition={{ duration: 0.3 }}
             >
               <motion.div className="form-group" variants={inputVariants}>
-                <label htmlFor="name">Full Name</label>
+                <label htmlFor="name">フルネーム</label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Enter your full name"
+                  placeholder="フルネームを入力してください"
                   className={errors.name ? 'error' : ''}
                   whileFocus="focus"
                   whileBlur="blur"
@@ -168,7 +168,7 @@ const Register = () => {
                 {errors.name && <span className="error-message">{errors.name}</span>}
               </motion.div>
               <motion.div className="form-group" variants={inputVariants}>
-                <label htmlFor="phoneNumber">Phone Number</label>
+                <label htmlFor="phoneNumber">電話番号</label>
                 <PhoneInput
                   country={'us'}
                   value={formData.phoneNumber}
@@ -178,7 +178,7 @@ const Register = () => {
                     name: 'phoneNumber',
                     id: 'phoneNumber',
                     className: errors.phoneNumber ? 'error' : '',
-                    placeholder: 'Enter your phone number'
+                    placeholder: '電話番号を入力してください'
                   }}
                   containerClass="phone-input-container"
                   buttonClass="flag-dropdown"
@@ -199,7 +199,7 @@ const Register = () => {
                 whileTap={{ scale: 0.98 }}
                 disabled={loading}
               >
-                Next Step
+次のステップ
               </motion.button>
             </motion.div>
           )}
@@ -215,7 +215,7 @@ const Register = () => {
               <motion.div className="form-group" variants={inputVariants}>
                 <label htmlFor="gender">
                   <span style={{ marginRight: '6px' }}>👤</span>
-                  Gender
+                  性別
                 </label>
                 <select
                   id="gender"
@@ -224,10 +224,10 @@ const Register = () => {
                   onChange={handleInputChange}
                   className={errors.gender ? 'error' : ''}
                 >
-                  <option value="" disabled>Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
+                  <option value="" disabled>性別を選択</option>
+                  <option value="male">男性</option>
+                  <option value="female">女性</option>
+                  <option value="other">その他</option>
                 </select>
                 {errors.gender && <span className="error-message">{errors.gender}</span>}
               </motion.div>
@@ -235,7 +235,7 @@ const Register = () => {
               <motion.div className="form-group" variants={inputVariants}>
                 <label htmlFor="address">
                   <span style={{ marginRight: '6px' }}>📍</span>
-                  Address
+                  住所
                 </label>
                 <input
                   type="text"
@@ -243,7 +243,7 @@ const Register = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  placeholder="Enter your address"
+                  placeholder="住所を入力してください"
                   className={errors.address ? 'error' : ''}
                   maxLength="100"
                   whileFocus="focus"
@@ -269,7 +269,7 @@ const Register = () => {
                   whileTap={{ scale: 0.98 }}
                   disabled={loading}
                 >
-                  {loading ? 'Creating Account...' : 'Create Account'}
+                  {loading ? 'アカウント作成中...' : 'アカウント作成'}
                 </motion.button>
               </div>
             </motion.div>
@@ -278,9 +278,9 @@ const Register = () => {
 
         <div className="auth-footer">
           <p>
-            Already have an account?{' '}
+            すでにアカウントをお持ちですか？{' '}
             <Link to="/login" className="auth-link">
-              Sign In
+              サインイン
             </Link>
           </p>
         </div>
