@@ -76,7 +76,7 @@ class GoogleMapsService {
 
     this.map = new this.google.maps.Map(element, { ...defaultOptions, ...options });
     this.directionsRenderer.setMap(this.map);
-    
+
     return this.map;
   }
 
@@ -94,6 +94,24 @@ class GoogleMapsService {
     return marker;
   }
 
+  createLocationPin(color, isCurrentUser = false) {
+    // Create SVG location pin
+    const size = isCurrentUser ? 50 : 44;
+    const svg = `
+      <svg width="${size}" height="${size}" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+              fill="${color}" stroke="white" stroke-width="2"/>
+        <circle cx="12" cy="9" r="3" fill="white"/>
+      </svg>
+    `;
+
+    return {
+      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+      scaledSize: new this.google.maps.Size(size, size),
+      anchor: new this.google.maps.Point(size / 2, size)
+    };
+  }
+
   createUserMarker(user, isCurrentUser = false, isWithinRadius = false) {
     const position = {
       lat: user.location.coordinates[1],
@@ -106,47 +124,11 @@ class GoogleMapsService {
     };
 
     if (isCurrentUser) {
-      // Use a distinctive blue circle for current user
-      markerOptions.icon = {
-        path: this.google.maps.SymbolPath.CIRCLE,
-        scale: 12,
-        fillColor: '#4285F4',
-        fillOpacity: 1,
-        strokeColor: '#ffffff',
-        strokeWeight: 3,
-        strokeOpacity: 1
-      };
-    } else if (isWithinRadius) {
-      // Use distinctive green markers for users within 100km radius
-      markerOptions.icon = {
-        path: this.google.maps.SymbolPath.CIRCLE,
-        scale: 10,
-        fillColor: '#34C759',
-        fillOpacity: 1,
-        strokeColor: '#ffffff',
-        strokeWeight: 3,
-        strokeOpacity: 1
-      };
+      // Use red location pin for current user
+      markerOptions.icon = this.createLocationPin('#EA4335', true);
     } else {
-      // Use default red marker for other users or custom icon if available
-      try {
-        markerOptions.icon = {
-          url: '/icons/user-pin.png',
-          scaledSize: new this.google.maps.Size(40, 40),
-          anchor: new this.google.maps.Point(20, 40)
-        };
-      } catch (e) {
-        // Fallback to default marker if custom icon fails
-        markerOptions.icon = {
-          path: this.google.maps.SymbolPath.CIRCLE,
-          scale: 8,
-          fillColor: '#EA4335',
-          fillOpacity: 1,
-          strokeColor: '#ffffff',
-          strokeWeight: 2,
-          strokeOpacity: 1
-        };
-      }
+      // Use blue location pins for nearby users
+      markerOptions.icon = this.createLocationPin('#4285F4', false);
     }
 
     const marker = this.createMarker(position, markerOptions);
@@ -220,7 +202,7 @@ class GoogleMapsService {
         lng: newPosition.coordinates[0]
       };
       marker.setPosition(position);
-      
+
       const infoWindow = this.infoWindows.get(userId);
       if (infoWindow && userData) {
         infoWindow.setContent(this.createInfoWindowContent(userData));
@@ -342,7 +324,7 @@ class GoogleMapsService {
     if (!this.directionsRenderer) {
       throw new Error('Directions renderer not initialized');
     }
-    
+
     this.directionsRenderer.setDirections(directionsResult);
   }
 
@@ -398,7 +380,7 @@ class GoogleMapsService {
     }
 
     const service = new this.google.maps.places.PlacesService(this.map);
-    
+
     return new Promise((resolve, reject) => {
       service.nearbySearch({
         location,
