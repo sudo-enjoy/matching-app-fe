@@ -27,6 +27,7 @@
 }
 
 .modal-header {
+  width: 75%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -403,15 +404,24 @@
 }
 
 @keyframes bounce {
-  0%, 20%, 53%, 80%, 100% {
-    transform: translate3d(0,0,0);
+
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
   }
-  40%, 43% {
+
+  40%,
+  43% {
     transform: translate3d(0, -20px, 0);
   }
+
   70% {
     transform: translate3d(0, -10px, 0);
   }
+
   90% {
     transform: translate3d(0, -4px, 0);
   }
@@ -1065,68 +1075,68 @@
   .modal-overlay {
     padding: 16px;
   }
-  
+
   .modal {
     max-width: 100%;
     max-height: 95vh;
   }
-  
+
   .modal-header {
     padding: 20px 24px;
   }
-  
+
   .modal-header h2 {
     font-size: 18px;
   }
-  
+
   .modal-content {
     padding: 24px 20px;
   }
-  
+
   .target-user-info,
   .requester-info {
     gap: 16px;
   }
-  
+
   .user-avatar-large {
     width: 56px;
     height: 56px;
   }
-  
+
   .meeting-reasons {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .reason-option {
     padding: 12px 8px;
   }
-  
+
   .reason-emoji {
     font-size: 20px;
   }
-  
+
   .reason-label {
     font-size: 13px;
   }
-  
+
   .modal-actions {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .quick-actions {
     flex-direction: column;
   }
-  
+
   .progress-steps {
     flex-wrap: wrap;
     gap: 16px;
   }
-  
+
   .progress-steps::before {
     display: none;
   }
-  
+
   .safety-reminders li,
   .preview-benefits li {
     font-size: 13px;
@@ -1184,15 +1194,15 @@
   .modal-overlay {
     padding: 12px;
   }
-  
+
   .modal-header {
     padding: 16px 20px;
   }
-  
+
   .modal-content {
     padding: 20px 16px;
   }
-  
+
   .target-user-info,
   .requester-info,
   .quick-profile-info {
@@ -1200,25 +1210,25 @@
     text-align: center;
     gap: 12px;
   }
-  
+
   .meeting-reasons {
     grid-template-columns: 1fr;
   }
-  
+
   .detail-item {
     flex-direction: column;
     gap: 8px;
     text-align: left;
   }
-  
+
   .detail-value {
     text-align: left;
   }
-  
+
   .profile-stats-row {
     gap: 16px;
   }
-  
+
   .stat-number {
     font-size: 20px;
   }
