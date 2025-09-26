@@ -100,7 +100,12 @@ const VerifySMS = () => {
 
     const result = await verifySMS(code);
     if (result.success) {
-      navigate('/map');
+      // Navigate based on verification type
+      if (result.type === 'register') {
+        navigate('/login');
+      } else {
+        navigate('/map');
+      }
     } else {
       setError(result.error || '無効な認証コードです');
       setVerificationCode(['', '', '', '', '', '']);
