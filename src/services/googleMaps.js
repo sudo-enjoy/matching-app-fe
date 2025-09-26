@@ -76,7 +76,7 @@ class GoogleMapsService {
 
     this.map = new this.google.maps.Map(element, { ...defaultOptions, ...options });
     this.directionsRenderer.setMap(this.map);
-    
+
     return this.map;
   }
 
@@ -96,7 +96,7 @@ class GoogleMapsService {
 
   createLocationPin(color, isCurrentUser = false) {
     // Create SVG location pin
-    const size = isCurrentUser ? 32 : 28;
+    const size = isCurrentUser ? 50 : 44;
     const svg = `
       <svg width="${size}" height="${size}" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
@@ -202,7 +202,7 @@ class GoogleMapsService {
         lng: newPosition.coordinates[0]
       };
       marker.setPosition(position);
-      
+
       const infoWindow = this.infoWindows.get(userId);
       if (infoWindow && userData) {
         infoWindow.setContent(this.createInfoWindowContent(userData));
@@ -324,7 +324,7 @@ class GoogleMapsService {
     if (!this.directionsRenderer) {
       throw new Error('Directions renderer not initialized');
     }
-    
+
     this.directionsRenderer.setDirections(directionsResult);
   }
 
@@ -380,7 +380,7 @@ class GoogleMapsService {
     }
 
     const service = new this.google.maps.places.PlacesService(this.map);
-    
+
     return new Promise((resolve, reject) => {
       service.nearbySearch({
         location,
