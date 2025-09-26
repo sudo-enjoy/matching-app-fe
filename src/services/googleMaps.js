@@ -95,6 +95,10 @@ class GoogleMapsService {
   }
 
   createLocationPin(color, isCurrentUser = false) {
+    if (!this.google || !this.google.maps) {
+      throw new Error('Google Maps not initialized');
+    }
+
     // Create SVG location pin
     const size = isCurrentUser ? 50 : 44;
     const svg = `
@@ -151,15 +155,29 @@ class GoogleMapsService {
   createInfoWindowContent(user, isCurrentUser = false) {
     if (isCurrentUser) {
       return `
-        <div class="info-window current-user">
-          <div class="user-avatar">
-            <img src="${user.profilePhoto || '/default-avatar.png'}" alt="${user.name}" />
-          </div>
-          <div class="user-info">
-            <h3>${user.name} (You)</h3>
-            <p class="user-bio">${user.bio || 'No bio available'}</p>
+        <div class="sophisticated-modal current-user-modal">
+          <div class="modal-backdrop"></div>
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="avatar-container">
+                <div class="avatar-ring">
+                  <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name}" class="user-avatar" />
+                </div>
+                <div class="online-indicator pulsing"></div>
+              </div>
+              <div class="user-details">
+                <h3 class="user-name">${user.name}</h3>
+                <span class="user-badge current-user">あなた</span>
+              </div>
+            </div>
+            <div class="modal-body">
+              <div class="bio-section">
+                <p class="user-bio">${user.bio || '自己紹介がありません'}</p>
+              </div>
+            </div>
           </div>
         </div>
+        ${this.getModalStyles()}
       `;
     }
 
@@ -175,22 +193,310 @@ class GoogleMapsService {
     };
 
     return `
-      <div class="info-window">
-        <div class="user-avatar">
-          <img src="${user.profilePhoto || '/default-avatar.png'}" alt="${user.name || 'User'}" />
-        </div>
-        <div class="user-info">
-          <h3>${user.name || 'User'}</h3>
-          <p class="user-bio">${user.bio || 'No bio available'}</p>
-          <div class="user-stats">
-            <span class="match-count">${user.matchCount || 0} matches</span>
-            <span class="meet-count">${user.actualMeetCount || 0} meets</span>
+      <div class="sophisticated-modal user-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="avatar-container">
+              <div class="avatar-ring">
+                <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name || 'User'}" class="user-avatar" />
+              </div>
+              <div class="online-indicator pulsing"></div>
+            </div>
+            <div class="user-details">
+              <h3 class="user-name">${user.name || 'User'}</h3>
+              <div class="stats-container">
+                <div class="stat-item">
+                  <span class="stat-icon">💝</span>
+                  <span class="stat-value">${user.matchCount || 0}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-icon">🤝</span>
+                  <span class="stat-value">${user.actualMeetCount || 0}</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <button class="match-button" onclick="window.handleMatchRequest && window.handleMatchRequest('${tempId}')">
-            Send Match Request
-          </button>
+          <div class="modal-body">
+            <div class="bio-section">
+              <div class="bio-label">
+                <span class="bio-icon">📝</span>
+                <span>自己紹介</span>
+              </div>
+              <p class="user-bio">${user.bio || '自己紹介がありません'}</p>
+            </div>
+            <div class="action-section">
+              <button class="modern-match-button" onclick="window.handleMatchRequest && window.handleMatchRequest('${tempId}')">
+                <span class="button-gradient"></span>
+                <span class="button-content">
+                  <span class="button-icon">💌</span>
+                  <span class="button-text">マッチリクエスト送信</span>
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+      ${this.getModalStyles()}
+    `;
+  }
+
+  getModalStyles() {
+    return `
+      <style>
+        .sophisticated-modal {
+          min-width: 320px;
+          max-width: 380px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+          position: relative;
+          overflow: hidden;
+          border-radius: 20px;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 8px 32px rgba(0, 0, 0, 0.15);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-backdrop {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(248, 250, 255, 0.95) 50%,
+            rgba(240, 245, 255, 0.95) 100%);
+          z-index: 1;
+        }
+
+        .modal-content {
+          position: relative;
+          z-index: 2;
+          padding: 0;
+          background: transparent;
+        }
+
+        .modal-header {
+          display: flex;
+          align-items: center;
+          padding: 24px 24px 16px 24px;
+          background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(248, 250, 255, 0.6) 100%);
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .avatar-container {
+          position: relative;
+          margin-right: 16px;
+        }
+
+        .avatar-ring {
+          position: relative;
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          padding: 3px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .user-avatar {
+          width: 66px;
+          height: 66px;
+          border-radius: 50%;
+          object-fit: cover;
+          transition: all 0.3s ease;
+          border: 2px solid white;
+        }
+
+        .user-avatar:hover {
+          transform: scale(1.05);
+        }
+
+        .online-indicator {
+          position: absolute;
+          bottom: 4px;
+          right: 4px;
+          width: 20px;
+          height: 20px;
+          background: #34c759;
+          border: 3px solid white;
+          border-radius: 50%;
+          box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
+        }
+
+        .online-indicator.pulsing {
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0% { transform: scale(1); box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4); }
+          50% { transform: scale(1.1); box-shadow: 0 4px 16px rgba(52, 199, 89, 0.6); }
+          100% { transform: scale(1); box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4); }
+        }
+
+        .user-details {
+          flex: 1;
+        }
+
+        .user-name {
+          margin: 0 0 8px 0;
+          font-size: 22px;
+          font-weight: 700;
+          color: #1a1a1a;
+          letter-spacing: -0.5px;
+          line-height: 1.2;
+        }
+
+        .user-badge {
+          display: inline-block;
+          padding: 4px 12px;
+          border-radius: 16px;
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .user-badge.current-user {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .stats-container {
+          display: flex;
+          gap: 16px;
+          margin-top: 8px;
+        }
+
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 12px;
+          background: rgba(255, 255, 255, 0.6);
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-icon {
+          font-size: 16px;
+        }
+
+        .stat-value {
+          font-size: 14px;
+          font-weight: 600;
+          color: #555;
+        }
+
+        .modal-body {
+        width:75%
+          padding: 20px 24px 24px 24px;
+        }
+
+        .bio-section {
+          margin-bottom: 20px;
+        }
+
+        .bio-label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+          font-size: 14px;
+          font-weight: 600;
+          color: #666;
+        }
+
+        .bio-icon {
+          font-size: 16px;
+        }
+
+        .user-bio {
+          margin: 0;
+          font-size: 15px;
+          line-height: 1.5;
+          color: #444;
+          background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(248, 250, 255, 0.8) 100%);
+          padding: 16px;
+          border-radius: 14px;
+          border: 1px solid rgba(0, 0, 0, 0.05);
+          border-left: 4px solid #667eea;
+        }
+
+        .action-section {
+          margin-top: 20px;
+        }
+
+        .modern-match-button {
+          position: relative;
+          width: 100%;
+          border: none;
+          border-radius: 16px;
+          padding: 0;
+          cursor: pointer;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .modern-match-button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+        }
+
+        .modern-match-button:active {
+          transform: translateY(-1px);
+        }
+
+        .button-gradient {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          z-index: 1;
+        }
+
+        .button-content {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          padding: 16px 24px;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          letter-spacing: -0.3px;
+        }
+
+        .button-icon {
+          font-size: 20px;
+        }
+
+        .button-text {
+          font-weight: 700;
+        }
+
+        .sophisticated-modal.current-user-modal .modal-header {
+          background: linear-gradient(135deg,
+            rgba(66, 133, 244, 0.1) 0%,
+            rgba(102, 126, 234, 0.1) 100%);
+        }
+
+        .sophisticated-modal.current-user-modal .avatar-ring {
+          background: linear-gradient(135deg, #4285f4 0%, #667eea 100%);
+        }
+      </style>
     `;
   }
 

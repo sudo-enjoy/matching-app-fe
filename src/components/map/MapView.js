@@ -27,6 +27,7 @@ const MapView = () => {
   const [userPanelExpanded, setUserPanelExpanded] = useState(false);
   const [usersWithinRadius, setUsersWithinRadius] = useState([]);
   const [radiusUserCount, setRadiusUserCount] = useState(0);
+  const [hasSearchedNearbyUsers, setHasSearchedNearbyUsers] = useState(false);
 
   // Define loadAllUsers first to avoid dependency issues
   const loadAllUsers = useCallback(async () => {
@@ -118,7 +119,7 @@ const MapView = () => {
   useEffect(() => {
     if (user && !loading) {
       loadAllUsers();
-      loadUsersWithinRadius();
+      // Don't automatically load nearby users - only when user clicks search button
     }
   }, [user]); // Remove loadAllUsers and loading from dependencies to prevent infinite loop
 
@@ -218,6 +219,11 @@ const MapView = () => {
     if (!userPanelExpanded) {
       // When opening the panel, refresh users within 100km
       const users = await loadUsersWithinRadius();
+
+      // Mark that we have searched for nearby users
+      if (!hasSearchedNearbyUsers) {
+        setHasSearchedNearbyUsers(true);
+      }
 
       // Clear all existing markers except current user
       GoogleMapsService.clearAllUserMarkers();
@@ -341,10 +347,10 @@ const MapView = () => {
           onClick={toggleUserPanel}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          title="100km以内のユーザーを表示するにはクリック"
+          title={hasSearchedNearbyUsers ? "100km以内のユーザーを表示するにはクリック" : "近くのユーザーを検索するにはクリック"}
         >
           {userPanelExpanded ? '▼' : '▲'}
-          100km以内のユーザー: {radiusUserCount}人
+          {hasSearchedNearbyUsers ? `100km以内に : ${radiusUserCount}人` : '近くのユーザーを検索'}
         </motion.button>
       </div>
 
