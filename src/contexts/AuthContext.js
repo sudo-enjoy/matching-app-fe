@@ -124,19 +124,14 @@ export const AuthProvider = ({ children }) => {
 
       const { token, user: userData } = response.data;
 
-      // Only set user for login, not for registration
-      if (pendingVerification.type === 'login') {
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('user', JSON.stringify(userData));
-        setUser(userData);
-        toast.success('ログイン成功！');
-      } else {
-        // For registration, just show success message without logging in
-        toast.success('アカウントが正常に作成されました！ログインしてください。');
-      }
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('user', JSON.stringify(userData));
 
+      setUser(userData);
       setPendingVerification(null);
-      return { success: true, data: response.data, type: pendingVerification.type };
+
+      toast.success(pendingVerification.type === 'register' ? 'アカウントが正常に作成されました！' : 'ログイン成功！');
+      return { success: true, data: response.data };
     } catch (error) {
       const message = error.response?.data?.error || '認証に失敗しました';
       toast.error(message);
