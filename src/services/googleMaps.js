@@ -245,7 +245,7 @@ class GoogleMapsService {
     return `
       <style>
         .sophisticated-modal {
-          min-width: 320px;
+          min-width: 200px;
           max-width: 380px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
           position: relative;
@@ -369,8 +369,8 @@ class GoogleMapsService {
 
         .stats-container {
           display: flex;
-          gap: 16px;
-          margin-top: 8px;
+          gap: 6px;
+          margin-top: 6px;
         }
 
         .stat-item {
@@ -394,7 +394,6 @@ class GoogleMapsService {
         }
 
         .modal-body {
-        width:75%
           padding: 20px 24px 24px 24px;
         }
 
