@@ -24,9 +24,12 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only logout on 401 for auth-related endpoints, not all API calls
-    if (error.response?.status === 401 &&
-      (error.config?.url?.includes('/auth/') || error.config?.url?.includes('/users/profile'))) {
+    // Only logout on 401 for specific authentication-critical endpoints
+    const isAuthEndpoint = error.config?.url?.includes('/auth/');
+    const isCurrentUserProfile = error.config?.url === '/users/profile' && error.config?.method === 'get';
+    const isTokenValidation = error.config?.url === '/auth/validate';
+
+    if (error.response?.status === 401 && (isAuthEndpoint || isCurrentUserProfile || isTokenValidation)) {
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       window.location.href = '/login';
