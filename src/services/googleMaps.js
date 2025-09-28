@@ -205,16 +205,7 @@ class GoogleMapsService {
             </div>
             <div class="user-details">
               <h3 class="user-name">${user.name || 'User'}</h3>
-              <div class="stats-container">
-                <div class="stat-item">
-                  <span class="stat-icon">💝</span>
-                  <span class="stat-value">${user.matchCount || 0}</span>
-                </div>
-                <div class="stat-item">
-                  <span class="stat-icon">🤝</span>
-                  <span class="stat-value">${user.actualMeetCount || 0}</span>
-                </div>
-              </div>
+              
             </div>
           </div>
           <div class="modal-body">
@@ -229,8 +220,7 @@ class GoogleMapsService {
               <button class="modern-match-button" onclick="window.handleMatchRequest && window.handleMatchRequest('${tempId}')">
                 <span class="button-gradient"></span>
                 <span class="button-content">
-                  <span class="button-icon">💌</span>
-                  <span class="button-text">マッチリクエスト送信</span>
+                  <span class="button-text">リクエストを送信</span>
                 </span>
               </button>
             </div>

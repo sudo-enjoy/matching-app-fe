@@ -66,7 +66,7 @@ const Profile = () => {
               />
               {editing && (
                 <button className="change-photo-btn">
-                  📷
+                  変更
                 </button>
               )}
             </div>
@@ -102,11 +102,11 @@ const Profile = () => {
                 </button>
               </div>
             ) : (
-              <button 
+              <button
                 onClick={() => setEditing(true)}
                 className="btn btn-outline"
               >
-                ✏️ プロフィール編集
+                プロフィール編集
               </button>
             )}
           </div>
@@ -178,17 +178,17 @@ const Profile = () => {
             <label>電話番号</label>
             <div className="profile-field-display">
               {user?.phoneNumber}
-              <span className="verified-badge">✅ 認証済み</span>
+              <span className="verified-badge">認証済み</span>
             </div>
           </div>
         </form>
 
         <div className="profile-footer">
-          <button 
+          <button
             onClick={logout}
             className="btn btn-danger"
           >
-            🚪 サインアウト
+            サインアウト
           </button>
         </div>
       </motion.div>
