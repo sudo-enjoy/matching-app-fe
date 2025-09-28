@@ -26,9 +26,18 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json'
         }
       });
-      return response.ok;
+
+      // Only return false for actual 401 Unauthorized
+      if (response.status === 401) {
+        return false;
+      }
+
+      // For any other response (including errors), assume token is valid
+      return true;
     } catch (error) {
-      // If backend is not running, assume token is valid
+      // If backend is not running or network error, assume token is valid
+      // This prevents logout due to temporary network issues
+      console.log('Token validation error (assuming valid):', error.message);
       return true;
     }
   };

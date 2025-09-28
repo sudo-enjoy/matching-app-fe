@@ -156,7 +156,7 @@ class GoogleMapsService {
     if (isCurrentUser) {
       return `
         <div class="sophisticated-modal current-user-modal">
-          <div class="modal-backdrop"></div>
+        <div class="modal-backdrop"></div>
           <div class="modal-content">
             <div class="modal-header">
               <div class="avatar-container">
@@ -246,7 +246,7 @@ class GoogleMapsService {
       <style>
         .sophisticated-modal {
           min-width: 200px;
-          max-width: 380px;
+          max-width: 420px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
           position: relative;
           overflow: hidden;
@@ -279,7 +279,6 @@ class GoogleMapsService {
         .modal-header {
           display: flex;
           align-items: center;
-          padding: 24px 24px 16px 24px;
           background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.8) 0%,
             rgba(248, 250, 255, 0.6) 100%);
