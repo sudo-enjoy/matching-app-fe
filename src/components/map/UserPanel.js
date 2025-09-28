@@ -172,7 +172,7 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
                 >
                   <div className="user-avatar-container">
                     <img 
-                      src={user.profilePhoto || '/default-avatar.png'} 
+                      src={user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'} 
                       alt={user.name}
                       className="user-avatar"
                     />

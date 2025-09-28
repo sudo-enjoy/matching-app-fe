@@ -90,7 +90,7 @@ const MatchResponseModal = ({ matchRequest, onClose }) => {
           >
             <div className="requester-info">
               <img 
-                src={matchRequest.requester.profilePhoto || '/default-avatar.png'} 
+                src={matchRequest.requester.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'} 
                 alt={matchRequest.requester.name}
                 className="user-avatar-large"
               />
