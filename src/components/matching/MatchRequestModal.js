@@ -363,7 +363,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
           {/* User Info Section */}
           <div className="target-user-info">
             <img
-              src={targetUser?.profilePhoto || '/default-avatar.png'}
+              src={targetUser?.profilePhoto ||  "https://randomuser.me/api/portraits/men/32.jpg"}
               alt={targetUser?.name}
               className="user-avatar-large"
             />

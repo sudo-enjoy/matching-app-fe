@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (phoneNumber) => {
-    console.log('=========',phoneNumber);
+    console.log('=========', phoneNumber);
 
     try {
       setLoading(true);
@@ -135,9 +135,21 @@ export const AuthProvider = ({ children }) => {
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(userData));
-
       setUser(userData);
       setPendingVerification(null);
+      console.log('aaaaaaaaaa', userData);
+
+      // Display user location in console on login
+      if (userData && userData.location && userData.location.coordinates) {
+        console.log('═══════════════════════════════════════════');
+        console.log('🎉 LOGIN SUCCESSFUL - USER LOCATION');
+        console.log('═══════════════════════════════════════════');
+        console.log(`👤 User: ${userData.name || 'Unknown'}`);
+        console.log(`📍 Latitude: ${userData.location.coordinates[1]}`);
+        console.log(`📍 Longitude: ${userData.location.coordinates[0]}`);
+        console.log(`📱 Phone: ${userData.phoneNumber || 'N/A'}`);
+        console.log('═══════════════════════════════════════════');
+      }
 
       toast.success(pendingVerification.type === 'register' ? 'アカウントが正常に作成されました！' : 'ログイン成功！');
       return { success: true, data: response.data };

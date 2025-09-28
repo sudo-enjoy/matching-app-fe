@@ -58,7 +58,7 @@ const ProfileModal = ({ onClose }) => {
         <div className="modal-content">
           <div className="quick-profile-info">
             <img 
-              src={user?.profilePhoto || '/default-avatar.png'} 
+              src={user?.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'} 
               alt="Profile"
               className="user-avatar-large"
             />

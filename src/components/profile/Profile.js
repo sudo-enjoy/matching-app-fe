@@ -60,7 +60,7 @@ const Profile = () => {
           <div className="profile-avatar-section">
             <div className="avatar-container">
               <img 
-                src={formData.profilePhoto || '/default-avatar.png'} 
+                src={formData.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'} 
                 alt="Profile"
                 className="profile-avatar-large"
               />
