@@ -64,7 +64,7 @@ const ProfileModal = ({ onClose }) => {
             />
             <div className="user-details">
               <h3>{user?.name}</h3>
-              <p className="user-phone">{user?.phoneNumber} ✅</p>
+              <p className="user-phone">{user?.phoneNumber} 認証済み</p>
               <p className="user-bio">{user?.bio || 'まだ自己紹介が追加されていません'}</p>
             </div>
           </div>
@@ -87,7 +87,7 @@ const ProfileModal = ({ onClose }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              ✏️ プロフィールを編集
+              プロフィールを編集
             </motion.button>
             
             <motion.button
@@ -96,7 +96,7 @@ const ProfileModal = ({ onClose }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              🚪 サインアウト
+              サインアウト
             </motion.button>
           </div>
 

@@ -373,7 +373,7 @@ const MapView = () => {
           onClick={() => setShowMatchResponse(matchRequests[0])}
         >
           <span className="notification-badge">{matchRequests.length}</span>
-          💌 マッチリクエスト
+          マッチリクエスト
         </motion.div>
       )}
 
