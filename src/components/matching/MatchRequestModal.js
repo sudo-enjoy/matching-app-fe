@@ -55,10 +55,11 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     };
   }, []);
 
-  // Clean up map markers when modal closes
+  // Clean up map markers when modal closes, but preserve selected meeting points
   useEffect(() => {
     return () => {
-      MeetingPointsService.clearMeetingMarkers();
+      // Clear meeting markers but preserve any selected meeting point
+      MeetingPointsService.clearMeetingMarkers(true);
     };
   }, []);
 
@@ -201,7 +202,6 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
   const handleSelectFromList = (point) => {
     setSelectedMeetingPoint(point);
     // Show on map immediately
-    MeetingPointsService.clearMeetingMarkers();
     MeetingPointsService.selectMeetingPoint(point);
     toast.success(`待ち合わせ場所を選択しました: ${point.name}`);
 
@@ -249,6 +249,8 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     setSelectedReason('');
     setMeetingPoints([]);
     setSelectedMeetingPoint(null);
+    // Clear selected meeting point from service as well
+    MeetingPointsService.selectedMeetingPoint = null;
     MeetingPointsService.clearMeetingMarkers();
   };
 

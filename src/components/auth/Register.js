@@ -215,7 +215,7 @@ const Register = () => {
                 whileTap={{ scale: 0.98 }}
                 disabled={loading}
               >
-次のステップ
+                次のステップ
               </motion.button>
             </motion.div>
           )}
@@ -294,7 +294,7 @@ const Register = () => {
 
         <div className="auth-footer">
           <p>
-            すでにアカウントをお持ちですか？{' '}
+            すでにアカウントをお持ちですか？{' '} <br />
             <Link to="/login" className="auth-link">
               サインイン
             </Link>

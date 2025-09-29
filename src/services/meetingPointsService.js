@@ -460,8 +460,8 @@ class MeetingPointsService {
   selectMeetingPoint(point) {
     this.selectedMeetingPoint = point;
 
-    // Clear all markers first
-    this.clearMeetingMarkers();
+    // Clear all meeting markers except selected ones
+    this.clearMeetingMarkers(false);
 
     // Create a prominent marker for selected point
     const marker = new this.google.maps.Marker({
@@ -522,12 +522,28 @@ class MeetingPointsService {
   }
 
   // Clear all meeting markers from the map (but preserve user markers)
-  clearMeetingMarkers() {
-    this.meetingMarkers.forEach(({ marker, infoWindow }) => {
-      infoWindow.close();
-      marker.setMap(null);
-    });
-    this.meetingMarkers = [];
+  clearMeetingMarkers(preserveSelected = false) {
+    if (preserveSelected && this.selectedMeetingPoint) {
+      // Only clear non-selected markers
+      this.meetingMarkers = this.meetingMarkers.filter(({ marker, infoWindow, point }) => {
+        if (point && point.id === this.selectedMeetingPoint.id) {
+          // Keep selected marker
+          return true;
+        } else {
+          // Remove non-selected marker
+          infoWindow.close();
+          marker.setMap(null);
+          return false;
+        }
+      });
+    } else {
+      // Clear all markers
+      this.meetingMarkers.forEach(({ marker, infoWindow }) => {
+        infoWindow.close();
+        marker.setMap(null);
+      });
+      this.meetingMarkers = [];
+    }
   }
 
   // Clear all markers including user markers
