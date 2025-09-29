@@ -18,7 +18,7 @@ const MeetingModal = ({ meetingData, onClose }) => {
         lat: meetingData.meetingPoint.coordinates[1],
         lng: meetingData.meetingPoint.coordinates[0]
       };
-      
+
       const directionsData = getDirections(meetingLocation);
       setDirections(directionsData);
     }
@@ -26,9 +26,9 @@ const MeetingModal = ({ meetingData, onClose }) => {
 
   const handleConfirmMeeting = async () => {
     if (!meetingData?.meetingId) return;
-    
+
     setLoading(true);
-    
+
     try {
       await matchingAPI.confirmMeeting(meetingData.meetingId);
       setConfirmed(true);
@@ -62,9 +62,9 @@ const MeetingModal = ({ meetingData, onClose }) => {
   };
 
   const formatTime = (date) => {
-    return new Date(date).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(date).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -83,15 +83,15 @@ const MeetingModal = ({ meetingData, onClose }) => {
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8, y: 50 },
-    visible: { 
-      opacity: 1, 
-      scale: 1, 
+    visible: {
+      opacity: 1,
+      scale: 1,
       y: 0,
       transition: { type: "spring", damping: 25, stiffness: 300 }
     },
-    exit: { 
-      opacity: 0, 
-      scale: 0.8, 
+    exit: {
+      opacity: 0,
+      scale: 0.8,
       y: 50,
       transition: { duration: 0.2 }
     }
@@ -121,7 +121,7 @@ const MeetingModal = ({ meetingData, onClose }) => {
         </div>
 
         <div className="modal-content">
-          <motion.div 
+          <motion.div
             className="success-animation"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}

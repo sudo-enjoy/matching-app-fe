@@ -266,7 +266,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     }
 
     const reason = selectedReason === 'other' ? customReason :
-                  MEETING_REASONS.find(r => r.value === selectedReason)?.label || selectedReason;
+      MEETING_REASONS.find(r => r.value === selectedReason)?.label || selectedReason;
 
     if (selectedReason === 'other' && !customReason.trim()) {
       toast.error('待ち合わせの理由を記述してください');
@@ -363,7 +363,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
           {/* User Info Section */}
           <div className="target-user-info">
             <img
-              src={targetUser?.profilePhoto ||  "https://randomuser.me/api/portraits/men/32.jpg"}
+              src={targetUser?.profilePhoto || "https://randomuser.me/api/portraits/men/32.jpg"}
               alt={targetUser?.name}
               className="user-avatar-large"
             />
@@ -490,9 +490,8 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                       {meetingPoints.map((point, index) => (
                         <motion.div
                           key={point.id}
-                          className={`meeting-point-item ${
-                            selectedMeetingPoint?.id === point.id ? 'selected' : ''
-                          }`}
+                          className={`meeting-point-item ${selectedMeetingPoint?.id === point.id ? 'selected' : ''
+                            }`}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
@@ -604,7 +603,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                       送信中...
                     </span>
                   ) : (
-                    `Send Request to ${targetUser?.name}`
+                    `${targetUser?.name} にリクエストを送信`
                   )}
                 </motion.button>
               )}

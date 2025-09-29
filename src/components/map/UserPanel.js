@@ -65,8 +65,8 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
 
   const handleUserClick = (user) => {
     onUserSelect(user);
-    window.dispatchEvent(new CustomEvent('requestMatch', { 
-      detail: { userId: user.id || user._id, name: user.name }
+    window.dispatchEvent(new CustomEvent('requestMatchWithData', {
+      detail: user
     }));
   };
 

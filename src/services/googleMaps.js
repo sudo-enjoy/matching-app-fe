@@ -161,8 +161,8 @@ class GoogleMapsService {
     if (isCurrentUser) {
       return `
       <div class="sophisticated-modal user-modal">
-        <div class="modal-content">
-          <div class="modal-header">
+        <div class="modal-content1">
+          <div class="modal-header1">
             <div class="avatar-container">
               <div class="avatar-ring">
                 <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name || 'User'}" class="user-avatar" />
@@ -217,8 +217,8 @@ class GoogleMapsService {
 
     return `
       <div class="sophisticated-modal user-modal">
-        <div class="modal-content">
-          <div class="modal-header">
+        <div class="modal-content1">
+          <div class="modal-header1">
             <div class="avatar-container">
               <div class="avatar-ring">
                 <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name || 'User'}" class="user-avatar" />
@@ -288,19 +288,16 @@ class GoogleMapsService {
           z-index: 1;
         }
 
-        .modal-content {
+        .modal-content1 {
           position: relative;
           z-index: 2;
-          padding: 0;
+          padding: 0px;
           background: transparent;
         }
-
-        .modal-header {
+        .modal-header1 {
           display: flex;
+          padding:10px;
           align-items: center;
-          background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.8) 0%,
-            rgba(248, 250, 255, 0.6) 100%);
           border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 

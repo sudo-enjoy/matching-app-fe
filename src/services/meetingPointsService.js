@@ -128,7 +128,7 @@ class MeetingPointsService {
             return {
               id: place.place_id,
               name: place.name,
-              address: place.vicinity || place.formatted_address || 'Address not available',
+              address: place.vicinity || place.formatted_address || '住所情報なし',
               location: placeLocation,
               rating: place.rating || null,
               priceLevel: place.price_level || null,
@@ -179,74 +179,74 @@ class MeetingPointsService {
     // Activity-specific fallback names
     const fallbackNames = {
       coffee: [
-        'Central Cafe Spot',
-        'Midpoint Coffee Meeting',
-        'Convenient Coffee Location',
-        'Halfway Coffee Point',
-        'Central Meeting Spot'
+        '中央カフェスポット',
+        '中間点コーヒーミーティング',
+        '便利なコーヒー場所',
+        '中間地点コーヒーポイント',
+        '中央待ち合わせスポット'
       ],
       lunch: [
-        'Midpoint Restaurant Area',
-        'Central Dining Location',
-        'Lunch Meeting Point',
-        'Convenient Restaurant Spot',
-        'Central Food Court Area'
+        '中間点レストランエリア',
+        '中央ダイニング場所',
+        'ランチミーティングポイント',
+        '便利なレストランスポット',
+        '中央フードコートエリア'
       ],
       walk: [
-        'Scenic Walking Area',
-        'Central Park Space',
-        'Walking Path Meetup',
-        'Green Space Meeting',
-        'Nature Walk Starting Point'
+        '景色の良い散歩エリア',
+        '中央公園スペース',
+        '散歩道待ち合わせ',
+        '緑地ミーティング',
+        '自然散歩スタート地点'
       ],
       drink: [
-        'Central Bar District',
-        'Nightlife Meeting Point',
-        'Social Hub Location',
-        'Entertainment Area',
-        'Central Pub Area'
+        '中央バー街',
+        'ナイトライフミーティングポイント',
+        'ソーシャルハブ場所',
+        'エンターテイメントエリア',
+        '中央パブエリア'
       ],
       workout: [
-        'Fitness Meeting Point',
-        'Exercise Area',
-        'Active Lifestyle Hub',
-        'Workout Zone',
-        'Sports Center Area'
+        'フィットネスミーティングポイント',
+        'エクササイズエリア',
+        'アクティブライフスタイルハブ',
+        'ワークアウトゾーン',
+        'スポーツセンターエリア'
       ],
       explore: [
-        'Exploration Starting Point',
-        'Discovery Hub',
-        'Cultural District',
-        'Tourist Area',
-        'Adventure Meetup Point'
+        '探検スタート地点',
+        'ディスカバリーハブ',
+        '文化地区',
+        '観光エリア',
+        'アドベンチャーミートアップポイント'
       ],
       study: [
-        'Study Group Location',
-        'Academic Meeting Point',
-        'Learning Hub',
-        'Quiet Study Area',
-        'Educational Center'
+        'スタディグループ場所',
+        '学術ミーティングポイント',
+        'ラーニングハブ',
+        '静かな勉強エリア',
+        '教育センター'
       ],
       networking: [
-        'Business District',
-        'Professional Hub',
-        'Networking Center',
-        'Commercial Area',
-        'Business Meeting Point'
+        'ビジネス街',
+        'プロフェッショナルハブ',
+        'ネットワーキングセンター',
+        '商業エリア',
+        'ビジネスミーティングポイント'
       ],
       hobby: [
-        'Creative Hub',
-        'Activity Center',
-        'Community Space',
-        'Hobby Meetup Point',
-        'Interest Group Location'
+        'クリエイティブハブ',
+        'アクティビティセンター',
+        'コミュニティスペース',
+        '趣味ミートアップポイント',
+        '興味グループ場所'
       ],
       other: [
-        'Central Meeting Point',
-        'Convenient Location',
-        'Midway Spot',
-        'General Meetup Area',
-        'Central Hub'
+        '中央ミーティングポイント',
+        '便利な場所',
+        '中間スポット',
+        '一般ミートアップエリア',
+        '中央ハブ'
       ]
     };
 
@@ -255,11 +255,11 @@ class MeetingPointsService {
     // Generate points around midpoint with varied distances
     const points = [];
     const offsets = [
-      { lat: 0, lng: 0, description: 'Perfect center point between both locations' },
-      { lat: 0.003, lng: 0.001, description: 'Slightly northeast of center' },
-      { lat: -0.002, lng: 0.003, description: 'Southeast of midpoint' },
-      { lat: 0.001, lng: -0.003, description: 'West of center point' },
-      { lat: -0.001, lng: -0.001, description: 'Southwest of midpoint' }
+      { lat: 0, lng: 0, description: '両者の完璧な中央地点' },
+      { lat: 0.003, lng: 0.001, description: '中心より少し北東' },
+      { lat: -0.002, lng: 0.003, description: '中間点の南東' },
+      { lat: 0.001, lng: -0.003, description: '中心点の西' },
+      { lat: -0.001, lng: -0.001, description: '中間点の南西' }
     ];
 
     offsets.forEach((offset, index) => {
@@ -422,7 +422,7 @@ class MeetingPointsService {
           onmouseover="this.style.background='#764ba2'"
           onmouseout="this.style.background='#667eea'"
         >
-          Select This Location
+          この場所を選択
         </button>
       `;
     }
@@ -442,13 +442,13 @@ class MeetingPointsService {
         ` : ''}
         <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee;">
           <div style="font-size: 12px; color: #666; line-height: 1.4;">
-            <div style="margin-bottom: 4px;">👤 You: ${point.distanceToUser} km (${this.formatWalkingTime(point.walkingTimeUser)})</div>
-            <div>👥 Them: ${point.distanceToTarget} km (${this.formatWalkingTime(point.walkingTimeTarget)})</div>
+            <div style="margin-bottom: 4px;">👤 あなた: ${point.distanceToUser} km (${this.formatWalkingTime(point.walkingTimeUser)})</div>
+            <div>👥 相手: ${point.distanceToTarget} km (${this.formatWalkingTime(point.walkingTimeTarget)})</div>
           </div>
         </div>
         ${!point.isFallback && point.isOpen !== null ? `
           <div style="margin-top: 6px; font-size: 12px; color: ${point.isOpen ? '#27ae60' : '#e74c3c'};">
-            ${point.isOpen ? '🟢 Open now' : '🔴 Closed'}
+            ${point.isOpen ? '🟢 営業中' : '🔴 閉店'}
           </div>
         ` : ''}
         ${buttonHtml}
@@ -467,7 +467,7 @@ class MeetingPointsService {
     const marker = new this.google.maps.Marker({
       position: point.location,
       map: this.map,
-      title: `Meeting Point: ${point.name}`,
+      title: `待ち合わせ場所: ${point.name}`,
       animation: this.google.maps.Animation.BOUNCE,
       icon: {
         path: this.google.maps.SymbolPath.CIRCLE,
@@ -491,7 +491,7 @@ class MeetingPointsService {
       content: `
         <div style="padding: 12px; max-width: 280px;">
           <h3 style="margin: 0 0 10px 0; color: #4CAF50;">
-            📍 Selected Meeting Point
+            📍 選択された待ち合わせ場所
           </h3>
           <h4 style="margin: 0 0 8px 0; color: #333;">
             ${point.name}
@@ -501,8 +501,8 @@ class MeetingPointsService {
           </p>
           <div style="margin-top: 10px; padding: 8px; background: #f5f5f5; border-radius: 4px;">
             <div style="font-size: 13px; color: #555;">
-              <div>📍 Your distance: ${point.distanceToUser} km</div>
-              <div>🚶 Walking time: ${point.walkingTimeUser} min</div>
+              <div>📍 あなたまでの距離: ${point.distanceToUser} km</div>
+              <div>🚶 徒歩時間: ${point.walkingTimeUser} 分</div>
             </div>
           </div>
         </div>
@@ -601,7 +601,7 @@ class MeetingPointsService {
     this.currentUserMarker = new this.google.maps.Marker({
       position: { lat: userLocation.lat, lng: userLocation.lng },
       map: this.map,
-      title: 'Your Location (Meeting Points)',
+      title: 'あなたの場所（待ち合わせポイント）',
       icon: {
         path: this.google.maps.SymbolPath.CIRCLE,
         scale: 10,
@@ -623,8 +623,8 @@ class MeetingPointsService {
     const infoWindow = new this.google.maps.InfoWindow({
       content: `
         <div style="padding: 8px; text-align: center;">
-          <div style="font-weight: bold; color: #4285F4; margin-bottom: 4px;">📍 Your Location</div>
-          <div style="font-size: 12px; color: #666;">Current position</div>
+          <div style="font-weight: bold; color: #4285F4; margin-bottom: 4px;">📍 あなたの場所</div>
+          <div style="font-size: 12px; color: #666;">現在位置</div>
         </div>
       `
     });
@@ -661,7 +661,7 @@ class MeetingPointsService {
     this.targetUserMarker = new this.google.maps.Marker({
       position: { lat: targetLocation.lat, lng: targetLocation.lng },
       map: this.map,
-      title: targetName + "'s Location",
+      title: targetName + 'の場所',
       icon: {
         path: this.google.maps.SymbolPath.CIRCLE,
         scale: 9,
@@ -684,7 +684,7 @@ class MeetingPointsService {
       content: `
         <div style="padding: 8px; text-align: center;">
           <div style="font-weight: bold; color: #FF6B35; margin-bottom: 4px;">👤 ${targetName}</div>
-          <div style="font-size: 12px; color: #666;">Meeting partner location</div>
+          <div style="font-size: 12px; color: #666;">待ち合わせ相手の場所</div>
         </div>
       `
     });
@@ -711,11 +711,11 @@ class MeetingPointsService {
   // Format walking time
   formatWalkingTime(minutes) {
     if (minutes < 60) {
-      return `${minutes} min`;
+      return `${minutes}分`;
     } else {
       const hours = Math.floor(minutes / 60);
       const mins = minutes % 60;
-      return mins > 0 ? `${hours}h ${mins}min` : `${hours}h`;
+      return mins > 0 ? `${hours}時間${mins}分` : `${hours}時間`;
     }
   }
 
