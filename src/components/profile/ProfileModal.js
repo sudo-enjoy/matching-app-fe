@@ -20,15 +20,15 @@ const ProfileModal = ({ onClose }) => {
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8, y: 50 },
-    visible: { 
-      opacity: 1, 
-      scale: 1, 
+    visible: {
+      opacity: 1,
+      scale: 1,
       y: 0,
       transition: { type: "spring", damping: 25, stiffness: 300 }
     },
-    exit: { 
-      opacity: 0, 
-      scale: 0.8, 
+    exit: {
+      opacity: 0,
+      scale: 0.8,
       y: 50,
       transition: { duration: 0.2 }
     }
@@ -57,9 +57,9 @@ const ProfileModal = ({ onClose }) => {
 
         <div className="modal-content">
           <div className="quick-profile-info">
-            <img 
-              src={user?.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'} 
-              alt="Profile"
+            <img
+              src={user?.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}
+              alt="プロフィール"
               className="user-avatar-large"
             />
             <div className="user-details">
@@ -89,7 +89,7 @@ const ProfileModal = ({ onClose }) => {
             >
               プロフィールを編集
             </motion.button>
-            
+
             <motion.button
               onClick={handleLogout}
               className="btn btn-secondary btn-full"
@@ -101,7 +101,7 @@ const ProfileModal = ({ onClose }) => {
           </div>
 
           <div className="app-info">
-            <h4>MatchApp v1.0</h4>
+            <h4>マッチアプリ v1.0</h4>
             <p>近くの人々と繋がり、実際に出会いましょう</p>
           </div>
         </div>

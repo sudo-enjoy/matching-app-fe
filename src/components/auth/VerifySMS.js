@@ -53,6 +53,18 @@ const VerifySMS = () => {
       inputRefs.current[index + 1]?.focus();
     }
 
+    if (value && index == 5) {
+      console.log('change', newCode);
+      const code = newCode.join('');
+      const result = verifySMS(code);
+      if (result.success) {
+        navigate('/map');
+      } else {
+        setError(result.error || '無効な認証コードです');
+        setVerificationCode(['', '', '', '', '', '']);
+        inputRefs.current[0]?.focus();
+      }
+    }
     if (error) setError('');
   };
 

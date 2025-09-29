@@ -93,7 +93,7 @@ const Register = () => {
         navigate('/verify-sms');
       }
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      toast.error('登録に失敗しました。もう一度お試しください。');
     }
   };
 
@@ -128,7 +128,7 @@ const Register = () => {
             📍
           </motion.div>
           <h1>アカウント作成</h1>
-          <p>MatchAppに参加して、近くの人とつながりを始めましょう</p>
+          <p>マッチアプリ に参加して、近くの人とつながりを始めましょう</p>
         </div>
 
         <div className="step-indicator">

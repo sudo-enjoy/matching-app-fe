@@ -18,7 +18,7 @@ const MeetingModal = ({ meetingData, onClose }) => {
         lat: meetingData.meetingPoint.coordinates[1],
         lng: meetingData.meetingPoint.coordinates[0]
       };
-      
+
       const directionsData = getDirections(meetingLocation);
       setDirections(directionsData);
     }
@@ -26,16 +26,16 @@ const MeetingModal = ({ meetingData, onClose }) => {
 
   const handleConfirmMeeting = async () => {
     if (!meetingData?.meetingId) return;
-    
+
     setLoading(true);
-    
+
     try {
       await matchingAPI.confirmMeeting(meetingData.meetingId);
       setConfirmed(true);
-      toast.success('✅ Meeting confirmed! Waiting for the other person...');
+      toast.success('✅ 待ち合わせを確認しました！相手の確認を待っています...');
     } catch (error) {
       console.error('Meeting confirmation error:', error);
-      const message = error.response?.data?.error || 'Failed to confirm meeting';
+      const message = error.response?.data?.error || '待ち合わせの確認に失敗しました';
       toast.error(message);
     } finally {
       setLoading(false);
@@ -53,18 +53,18 @@ const MeetingModal = ({ meetingData, onClose }) => {
     try {
       const result = await GoogleMapsService.calculateRoute(currentLocation, meetingLocation);
       GoogleMapsService.displayRoute(result);
-      toast.success('📍 Directions displayed on map');
+      toast.success('📍 ルートをマップに表示しました');
       onClose();
     } catch (error) {
       console.error('Directions error:', error);
-      toast.error('Failed to get directions');
+      toast.error('ルートの取得に失敗しました');
     }
   };
 
   const formatTime = (date) => {
-    return new Date(date).toLocaleTimeString([], { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(date).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -78,20 +78,20 @@ const MeetingModal = ({ meetingData, onClose }) => {
   };
 
   const getOtherPersonName = () => {
-    return meetingData?.targetUser?.name || meetingData?.requester?.name || 'Other person';
+    return meetingData?.targetUser?.name || meetingData?.requester?.name || '相手';
   };
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8, y: 50 },
-    visible: { 
-      opacity: 1, 
-      scale: 1, 
+    visible: {
+      opacity: 1,
+      scale: 1,
       y: 0,
       transition: { type: "spring", damping: 25, stiffness: 300 }
     },
-    exit: { 
-      opacity: 0, 
-      scale: 0.8, 
+    exit: {
+      opacity: 0,
+      scale: 0.8,
       y: 50,
       transition: { duration: 0.2 }
     }
@@ -121,7 +121,7 @@ const MeetingModal = ({ meetingData, onClose }) => {
         </div>
 
         <div className="modal-content">
-          <motion.div 
+          <motion.div
             className="success-animation"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}

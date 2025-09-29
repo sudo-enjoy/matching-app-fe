@@ -21,7 +21,7 @@ export const LocationProvider = ({ children }) => {
 
   const requestLocationPermission = useCallback(async () => {
     if (!navigator.geolocation) {
-      toast.error('Geolocation is not supported by this browser');
+      toast.error('このブラウザではジオロケーションがサポートされていません');
       // Use fallback location (San Francisco)
       const fallbackLocation = {
         lat: 40.7749,
@@ -66,11 +66,11 @@ export const LocationProvider = ({ children }) => {
       setCurrentLocation(fallbackLocation);
 
       if (error.code === 1) {
-        toast.warning('Location permission denied. Using default location. Grant permission for better experience.');
+        toast.warning('位置情報の許可が拒否されました。デフォルトの位置を使用します。より良い体験のために許可してください。');
       } else if (error.code === 2) {
-        toast.warning('Location unavailable. Using default location.');
+        toast.warning('位置情報が利用できません。デフォルトの位置を使用します。');
       } else {
-        toast.warning('Location request timeout. Using default location.');
+        toast.warning('位置情報の取得がタイムアウトしました。デフォルトの位置を使用します。');
       }
 
       return true; // Return true so map can still display
@@ -138,7 +138,7 @@ export const LocationProvider = ({ children }) => {
       return users;
     } catch (error) {
       console.error('Error fetching all users:', error);
-      toast.error('Failed to load users');
+      toast.error('ユーザーの読み込みに失敗しました');
       return [];
     } finally {
       setLoading(false);
@@ -147,7 +147,7 @@ export const LocationProvider = ({ children }) => {
 
   const getNearbyUsers = async (radius = 100000) => {
     if (!currentLocation) {
-      toast.error('Location not available');
+      toast.error('位置情報が利用できません');
       return;
     }
     try {
@@ -162,7 +162,7 @@ export const LocationProvider = ({ children }) => {
       return response.data.users;
     } catch (error) {
       console.error('Error fetching nearby users:', error);
-      toast.error('Failed to load nearby users');
+      toast.error('近くのユーザーの読み込みに失敗しました');
       return [];
     } finally {
       setLoading(false);
@@ -173,11 +173,11 @@ export const LocationProvider = ({ children }) => {
     try {
       setLoading(true);
       const response = await userAPI.seedUsers();
-      toast.success('Test users created successfully!');
+      toast.success('テストユーザーが正常に作成されました！');
       return response.data;
     } catch (error) {
       console.error('Error seeding users:', error);
-      toast.error('Failed to create test users');
+      toast.error('テストユーザーの作成に失敗しました');
     } finally {
       setLoading(false);
     }
