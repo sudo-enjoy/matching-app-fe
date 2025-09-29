@@ -12,8 +12,15 @@ class MeetingPointsService {
   setGoogle(google, map) {
     this.google = google;
     this.map = map;
-    if (map && google) {
+    if (map && google && google.maps && google.maps.places) {
       this.placesService = new google.maps.places.PlacesService(map);
+      console.log('Places service initialized successfully');
+    } else {
+      console.error('Failed to initialize Places service:', {
+        hasGoogle: !!google,
+        hasMap: !!map,
+        hasPlaces: !!(google && google.maps && google.maps.places)
+      });
     }
 
     // Add global function for meeting point selection
@@ -59,6 +66,11 @@ class MeetingPointsService {
   // Find convenient meeting points between two users based on meeting reason
   async findMeetingPoints(userLocation, targetLocation, meetingType = 'coffee') {
     console.log('Finding meeting points for:', meetingType, userLocation, targetLocation);
+    console.log('Services status:', {
+      hasGoogle: !!this.google,
+      hasPlacesService: !!this.placesService,
+      hasMap: !!this.map
+    });
 
     const midpoint = this.calculateMidpoint(userLocation, targetLocation);
     const distance = this.calculateDistance(userLocation, targetLocation);
@@ -70,6 +82,7 @@ class MeetingPointsService {
 
     // If Google Maps services are available, try to enhance with real places
     if (this.google && this.placesService) {
+      console.log('Attempting to fetch real places from Google Places API...');
       try {
         // Adjust search radius based on distance between users
         const searchRadius = Math.min(Math.max(distance * 500, 1000), 10000); // 1km to 10km
@@ -294,10 +307,16 @@ class MeetingPointsService {
 
   // Search nearby places using Google Places API
   searchNearbyPlaces(location, radius, type) {
-    if (!this.placesService || !this.google) {
-      console.warn('Places service not available');
+    if (!this.google || !this.map) {
+      console.warn('Google Maps or map not available', {
+        hasGoogle: !!this.google,
+        hasMap: !!this.map
+      });
       return Promise.resolve([]);
     }
+
+    // Create a fresh PlacesService instance for each search
+    const placesService = new this.google.maps.places.PlacesService(this.map);
 
     return new Promise((resolve, reject) => {
       const request = {
@@ -308,16 +327,46 @@ class MeetingPointsService {
 
       console.log(`Searching for ${type} within ${radius}m of`, location);
 
-      this.placesService.nearbySearch(request, (results, status) => {
+      placesService.nearbySearch(request, (results, status) => {
         console.log(`Places search for ${type} returned status: ${status}, found: ${results ? results.length : 0} results`);
 
         if (status === this.google.maps.places.PlacesServiceStatus.OK) {
+          // Log sample results to see what we're getting
+          if (results && results.length > 0) {
+            console.log('Sample place result:', {
+              name: results[0].name,
+              vicinity: results[0].vicinity,
+              rating: results[0].rating,
+              types: results[0].types,
+              geometry: results[0].geometry ? {
+                lat: results[0].geometry.location.lat(),
+                lng: results[0].geometry.location.lng()
+              } : null
+            });
+          }
           resolve(results.slice(0, 20)); // Increased limit for better selection
         } else if (status === this.google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
           console.log(`No ${type} places found in radius`);
           resolve([]);
         } else {
-          console.warn(`Places search failed for ${type}: ${status}`);
+          // Log all possible error statuses for debugging
+          const errorDetails = {
+            status,
+            possibleReasons: []
+          };
+
+          if (status === 'REQUEST_DENIED') {
+            errorDetails.possibleReasons.push('API key might not have Places API enabled');
+            errorDetails.possibleReasons.push('Billing might not be enabled for the project');
+          } else if (status === 'INVALID_REQUEST') {
+            errorDetails.possibleReasons.push('Invalid request parameters');
+          } else if (status === 'OVER_QUERY_LIMIT') {
+            errorDetails.possibleReasons.push('Query limit exceeded');
+          } else if (status === 'UNKNOWN_ERROR') {
+            errorDetails.possibleReasons.push('Server error, try again');
+          }
+
+          console.error(`Places search failed for ${type}:`, errorDetails);
           resolve([]);
         }
       });
