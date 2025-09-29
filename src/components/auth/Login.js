@@ -38,7 +38,7 @@ const Login = () => {
         navigate('/verify-sms');
       }
     } catch (error) {
-      toast.error('Login failed. Please try again.');
+      toast.error('ログインに失敗しました。もう一度お試しください。');
     }
 
   };

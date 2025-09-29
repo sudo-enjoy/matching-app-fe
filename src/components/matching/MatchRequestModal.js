@@ -192,7 +192,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
       setMeetingPoints(emergencyPoints);
       setSelectedMeetingPoint(emergencyPoints[0]);
-      toast.warning('Using suggested meeting locations');
+      toast.warning('提案された待ち合わせ場所を使用しています');
     } finally {
       setLoadingPoints(false);
     }
@@ -475,7 +475,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                         onClick={handleShowAllOnMap}
                         disabled={loadingPoints || meetingPoints.length === 0}
                       >
-                        📍 Show All on Map
+                        📍 マップで全て表示
                       </button>
                     </div>
                   </div>
@@ -483,7 +483,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   {loadingPoints ? (
                     <div className="loading-points">
                       <div className="spinner"></div>
-                      <span>Finding convenient locations...</span>
+                      <span>便利な場所を検索中...</span>
                     </div>
                   ) : meetingPoints.length > 0 ? (
                     <div className="meeting-points-list">
@@ -514,7 +514,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
                             <div className="point-distances">
                               <span className="distance-badge">
-                                👤 You: {point.distanceToUser} km
+                                👤 あなた: {point.distanceToUser} km
                                 <span className="walking-time">
                                   ({MeetingPointsService.formatWalkingTime(point.walkingTimeUser)})
                                 </span>
@@ -529,7 +529,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
                             {point.isOpen !== null && (
                               <span className={`open-status ${point.isOpen ? 'open' : 'closed'}`}>
-                                {point.isOpen ? '🟢 Open now' : '🔴 Closed'}
+                                {point.isOpen ? '🟢 営業中' : '🔴 閉店'}
                               </span>
                             )}
                           </div>
@@ -542,20 +542,20 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                               handleSelectFromList(point);
                             }}
                           >
-                            Select & View
+                            選択して表示
                           </button>
                         </motion.div>
                       ))}
                     </div>
                   ) : (
                     <div className="no-meeting-points">
-                      <p>No meeting points available</p>
+                      <p>利用可能な待ち合わせ場所がありません</p>
                       <button
                         type="button"
                         className="back-btn"
                         onClick={handleBackToReasons}
                       >
-                        ← Choose Different Activity
+                        ← 別の活動を選択
                       </button>
                     </div>
                   )}
@@ -572,7 +572,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Cancel
+                キャンセル
               </motion.button>
 
               {step === 1 ? (
@@ -588,7 +588,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                     }
                   }}
                 >
-                  Next: Choose Location →
+                  次へ: 場所を選択 →
                 </motion.button>
               ) : (
                 <motion.button
@@ -601,7 +601,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   {loading ? (
                     <span className="btn-loading">
                       <div className="spinner"></div>
-                      Sending...
+                      送信中...
                     </span>
                   ) : (
                     `Send Request to ${targetUser?.name}`
@@ -615,15 +615,15 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
           <div className="match-request-info">
             <div className="info-item">
               <span className="info-icon">🎯</span>
-              <span>Meeting point will be marked on the map</span>
+              <span>待ち合わせ場所がマップにマークされます</span>
             </div>
             <div className="info-item">
               <span className="info-icon">⏰</span>
-              <span>They have 24 hours to respond</span>
+              <span>相手は24時間以内に返答する必要があります</span>
             </div>
             <div className="info-item">
               <span className="info-icon">🔒</span>
-              <span>Your exact location is only shared after they accept</span>
+              <span>正確な位置は相手が承認した後にのみ共有されます</span>
             </div>
           </div>
         </div>

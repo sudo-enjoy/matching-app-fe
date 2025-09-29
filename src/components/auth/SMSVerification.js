@@ -92,10 +92,10 @@ const SMSVerification = () => {
     try {
       const result = await verifySMS(verificationCode);
       if (result.success) {
-        toast.success('Phone verified successfully!');
+        toast.success('電話番号の認証が完了しました！');
         navigate('/map');
       } else {
-        setError(result.error || 'Verification failed');
+        setError(result.error || '認証に失敗しました');
         setCode(['', '', '', '', '', '']);
         inputRefs.current[0]?.focus();
       }
@@ -107,7 +107,7 @@ const SMSVerification = () => {
   const handleResend = async () => {
     if (!canResend) return;
     
-    toast.info('Resend functionality would be implemented here');
+    toast.info('再送信機能がここに実装されます');
     setResendTimer(60);
     setCanResend(false);
   };

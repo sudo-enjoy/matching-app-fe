@@ -18,9 +18,9 @@ const MatchResponseModal = ({ matchRequest, onClose }) => {
       await matchingAPI.respondToMatch(matchRequest.matchId, response);
       
       if (response === 'accepted') {
-        toast.success('🎉 Match accepted! Meeting details will be shared shortly.');
+        toast.success('🎉 マッチを承認しました！待ち合わせの詳細がまもなく共有されます。');
       } else {
-        toast.info('Match request declined.');
+        toast.info('マッチリクエストをお断りしました。');
       }
       
       removeMatchRequest(matchRequest.matchId);
@@ -187,7 +187,7 @@ const MatchResponseModal = ({ matchRequest, onClose }) => {
               whileTap={{ scale: 0.95 }}
               onClick={() => {
                 // View profile functionality would go here
-                toast.info('Profile view coming soon!');
+                toast.info('プロフィール表示機能は近日公開予定です！');
               }}
             >
               👤 View Profile
@@ -199,7 +199,7 @@ const MatchResponseModal = ({ matchRequest, onClose }) => {
               whileTap={{ scale: 0.95 }}
               onClick={() => {
                 // Report functionality would go here
-                toast.info('Report feature coming soon!');
+                toast.info('報告機能は近日公開予定です！');
               }}
             >
               🚨 Report User

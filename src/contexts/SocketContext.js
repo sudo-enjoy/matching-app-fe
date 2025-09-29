@@ -99,43 +99,43 @@ export const SocketProvider = ({ children }) => {
 
       newSocket.on('newMatchRequest', (data) => {
         setMatchRequests(prev => [...prev, data]);
-        toast.info(`New match request from ${data.requester.name}`, {
+        toast.info(`${data.requester.name}から新しいマッチリクエストが届きました`, {
           onClick: () => window.dispatchEvent(new CustomEvent('showMatchRequest', { detail: data }))
         });
       });
 
       newSocket.on('matchAccepted', (data) => {
         setCurrentMatches(prev => [...prev, data]);
-        toast.success(`${data.targetUser.name} accepted your match request!`, {
+        toast.success(`${data.targetUser.name}があなたのマッチリクエストを承認しました！`, {
           onClick: () => window.dispatchEvent(new CustomEvent('showMatch', { detail: data }))
         });
       });
 
       newSocket.on('matchRejected', (data) => {
-        toast.error('Your match request was declined');
+        toast.error('あなたのマッチリクエストは断られました');
       });
 
       newSocket.on('matchConfirmed', (data) => {
         setCurrentMatches(prev => [...prev, data]);
-        toast.success('Match confirmed! Meeting details available.', {
+        toast.success('マッチが確認されました！待ち合わせの詳細が利用できます。', {
           onClick: () => window.dispatchEvent(new CustomEvent('showMatch', { detail: data }))
         });
       });
 
       newSocket.on('meetingConfirmed', (data) => {
         if (data.bothConfirmed) {
-          toast.success('Both parties confirmed the meeting!');
+          toast.success('両者とも待ち合わせを確認しました！');
         } else {
-          toast.info(`${data.confirmedBy} confirmed the meeting`);
+          toast.info(`${data.confirmedBy}が待ち合わせを確認しました`);
         }
       });
 
       newSocket.on('userApproachingMeeting', (data) => {
-        toast.info(`${data.userName} is approaching the meeting point`);
+        toast.info(`${data.userName}が待ち合わせ場所に近づいています`);
       });
 
       newSocket.on('locationShared', (data) => {
-        toast.info(`${data.senderName} shared their location with you`);
+        toast.info(`${data.senderName}があなたと位置情報を共有しました`);
         window.dispatchEvent(new CustomEvent('locationShared', { detail: data }));
       });
 
