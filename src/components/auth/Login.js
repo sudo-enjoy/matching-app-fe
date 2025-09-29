@@ -157,7 +157,7 @@ const Login = () => {
           transition={{ delay: 0.8, duration: 0.4 }}
         >
           <p>
-            アカウントをお持ちではありませんか？{' '}
+            アカウントをお持ちではありませんか？{' '} <br/>
             <Link to="/register" className="auth-link">
               アカウント作成
             </Link>

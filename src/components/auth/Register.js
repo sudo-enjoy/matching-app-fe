@@ -215,7 +215,7 @@ const Register = () => {
                 whileTap={{ scale: 0.98 }}
                 disabled={loading}
               >
-次のステップ
+                次のステップ
               </motion.button>
             </motion.div>
           )}
@@ -241,9 +241,9 @@ const Register = () => {
                   className={errors.gender ? 'error' : ''}
                 >
                   <option value="" disabled>性別を選択</option>
-                  <option value="male">男性</option>
-                  <option value="female">女性</option>
-                  <option value="other">その他</option>
+                  <option value="男性">男性</option>
+                  <option value="女性">女性</option>
+                  <option value="その他">その他</option>
                 </select>
                 {errors.gender && <span className="error-message">{errors.gender}</span>}
               </motion.div>
@@ -294,7 +294,7 @@ const Register = () => {
 
         <div className="auth-footer">
           <p>
-            すでにアカウントをお持ちですか？{' '}
+            すでにアカウントをお持ちですか？{' '}<br />
             <Link to="/login" className="auth-link">
               サインイン
             </Link>

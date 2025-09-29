@@ -13,6 +13,7 @@ const VerifySMS = () => {
   const [error, setError] = useState('');
   const [resendTimer, setResendTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
+  const [verificationTimeout, setVerificationTimeout] = useState(60);
 
   const inputRefs = useRef([]);
 
@@ -36,6 +37,17 @@ const VerifySMS = () => {
     inputRefs.current[0]?.focus();
   }, []);
 
+  // Verification timeout effect - redirect to registration after 60 seconds
+  useEffect(() => {
+    if (verificationTimeout > 0) {
+      const timer = setTimeout(() => setVerificationTimeout(verificationTimeout - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      toast.error('認証がタイムアウトしました');
+      navigate('/login');
+    }
+  }, [verificationTimeout, navigate]);
+
   const handleCodeChange = (index, value) => {
     if (value.length > 1) {
       value = value.slice(-1);
@@ -56,14 +68,20 @@ const VerifySMS = () => {
     if (value && index == 5) {
       console.log('change', newCode);
       const code = newCode.join('');
-      const result = verifySMS(code);
-      if (result.success) {
-        navigate('/map');
-      } else {
-        setError(result.error || '無効な認証コードです');
-        setVerificationCode(['', '', '', '', '', '']);
-        inputRefs.current[0]?.focus();
-      }
+
+      // Auto-submit the verification code
+      setTimeout(async () => {
+        const result = await verifySMS(code);
+        if (result.success) {
+          // Clear timeout on successful verification
+          setVerificationTimeout(0);
+          navigate('/map');
+        } else {
+          setError(result.error || '無効な認証コードです');
+          setVerificationCode(['', '', '', '', '', '']);
+          inputRefs.current[0]?.focus();
+        }
+      }, 100);
     }
     if (error) setError('');
   };
@@ -112,6 +130,8 @@ const VerifySMS = () => {
 
     const result = await verifySMS(code);
     if (result.success) {
+      // Clear timeout on successful verification
+      setVerificationTimeout(0);
       navigate('/map');
     } else {
       setError(result.error || '無効な認証コードです');
@@ -125,6 +145,7 @@ const VerifySMS = () => {
 
     setCanResend(false);
     setResendTimer(60);
+    setVerificationTimeout(60); // Reset verification timeout
     setVerificationCode(['', '', '', '', '', '']);
     inputRefs.current[0]?.focus();
 
