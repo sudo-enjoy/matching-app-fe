@@ -7,7 +7,6 @@ import '../../styles/Profile.css';
 
 const Profile = () => {
   const { user, updateUser, logout } = useAuth();
-  const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || '',
@@ -29,7 +28,6 @@ const Profile = () => {
       const response = await userAPI.updateProfile(formData);
       updateUser(response.data.user);
       toast.success('プロフィールが正常に更新されました！');
-      setEditing(false);
     } catch (error) {
       console.error('Profile update error:', error);
       toast.error('プロフィールの更新に失敗しました');
@@ -45,7 +43,6 @@ const Profile = () => {
       profilePhoto: user?.profilePhoto || '',
       address: user?.address || ''
     });
-    setEditing(false);
   };
 
   return (
@@ -64,107 +61,68 @@ const Profile = () => {
                 alt="プロフィール"
                 className="profile-avatar-large"
               />
-              {editing && (
-                <button className="change-photo-btn">
-                  変更
-                </button>
-              )}
+              <button className="change-photo-btn">
+                変更
+              </button>
             </div>
-            {!editing && (
-              <div className="profile-stats">
-                <div className="stat">
-                  <span className="stat-number">{user?.matchCount || 0}</span>
-                  <span className="stat-label">マッチ</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">{user?.actualMeetCount || 0}</span>
-                  <span className="stat-label">出会い</span>
-                </div>
-              </div>
-            )}
           </div>
           
           <div className="profile-actions">
-            {editing ? (
-              <div className="edit-actions">
-                <button 
-                  onClick={handleCancel}
-                  className="btn btn-secondary"
-                >
-                  キャンセル
-                </button>
-                <button 
-                  onClick={handleSubmit}
-                  className="btn btn-primary"
-                  disabled={loading}
-                >
-                  {loading ? '保存中...' : '変更を保存'}
-                </button>
-              </div>
-            ) : (
+            <div className="edit-actions">
               <button
-                onClick={() => setEditing(true)}
-                className="btn btn-outline"
+                onClick={handleCancel}
+                className="btn btn-secondary"
               >
-                プロフィール編集
+                キャンセル
               </button>
-            )}
+              <button
+                onClick={handleSubmit}
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                {loading ? '保存中...' : '変更を保存'}
+              </button>
+            </div>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="profile-form">
           <div className="form-section">
             <label htmlFor="name">名前</label>
-            {editing ? (
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="フルネームを入力してください"
-              />
-            ) : (
-              <div className="profile-field-display">{user?.name}</div>
-            )}
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="フルネームを入力してください"
+            />
           </div>
 
           <div className="form-section">
             <label htmlFor="bio">自己紹介</label>
-            {editing ? (
-              <textarea
-                id="bio"
-                name="bio"
-                value={formData.bio}
-                onChange={handleInputChange}
-                placeholder="自分について教えてください..."
-                rows="4"
-                maxLength="500"
-              />
-            ) : (
-              <div className="profile-field-display">
-                {user?.bio || 'まだ自己紹介が追加されていません'}
-              </div>
-            )}
-            {editing && (
-              <span className="char-count">{formData.bio.length}/500</span>
-            )}
+            <textarea
+              id="bio"
+              name="bio"
+              value={formData.bio}
+              onChange={handleInputChange}
+              placeholder="自分について教えてください..."
+              rows="4"
+              maxLength="500"
+            />
+            <span className="char-count">{formData.bio.length}/500</span>
           </div>
 
           <div className="form-section">
             <label htmlFor="address">住所</label>
-            {editing ? (
-              <textarea
-                id="address"
-                name="address"
-                value={formData.address}
-                onChange={handleInputChange}
-                placeholder="住所を入力してください"
-                rows="2"
-              />
-            ) : (
-              <div className="profile-field-display">{user?.address}</div>
-            )}
+            <textarea
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="住所を入力してください"
+              rows="2"
+            />
           </div>
 
           <div className="form-section">
