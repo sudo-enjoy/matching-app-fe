@@ -55,10 +55,11 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     };
   }, []);
 
-  // Clean up map markers when modal closes
+  // Clean up map markers when modal closes, but preserve selected meeting points
   useEffect(() => {
     return () => {
-      MeetingPointsService.clearMeetingMarkers();
+      // Clear meeting markers but preserve any selected meeting point
+      MeetingPointsService.clearMeetingMarkers(true);
     };
   }, []);
 
@@ -113,8 +114,12 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     try {
       console.log('Fetching meeting points for:', selectedReason);
 
-      // Initialize service with Google Maps
-      MeetingPointsService.setGoogle(GoogleMapsService.google, GoogleMapsService.map);
+      // Initialize service with Google Maps - ensure Places API is ready
+      if (GoogleMapsService.google && GoogleMapsService.map) {
+        MeetingPointsService.setGoogle(GoogleMapsService.google, GoogleMapsService.map);
+      } else {
+        console.error('Google Maps not properly initialized');
+      }
 
       const userLocation = {
         lat: currentLocation.lat,
@@ -201,7 +206,6 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
   const handleSelectFromList = (point) => {
     setSelectedMeetingPoint(point);
     // Show on map immediately
-    MeetingPointsService.clearMeetingMarkers();
     MeetingPointsService.selectMeetingPoint(point);
     toast.success(`待ち合わせ場所を選択しました: ${point.name}`);
 
@@ -249,6 +253,8 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     setSelectedReason('');
     setMeetingPoints([]);
     setSelectedMeetingPoint(null);
+    // Clear selected meeting point from service as well
+    MeetingPointsService.selectedMeetingPoint = null;
     MeetingPointsService.clearMeetingMarkers();
   };
 
@@ -486,6 +492,20 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                       <span>便利な場所を検索中...</span>
                     </div>
                   ) : meetingPoints.length > 0 ? (
+                    <>
+                      {meetingPoints.every(p => p.isFallback) && (
+                        <div style={{
+                          padding: '12px',
+                          marginBottom: '16px',
+                          backgroundColor: '#fff3cd',
+                          border: '1px solid #ffc107',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          color: '#856404'
+                        }}>
+                          ⚠️ Google Placesからの実際の場所を取得できませんでした。提案された場所を表示しています。
+                        </div>
+                      )}
                     <div className="meeting-points-list">
                       {meetingPoints.map((point, index) => (
                         <motion.div
@@ -505,6 +525,11 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                               {point.rating && (
                                 <span className="point-rating">
                                   ⭐ {point.rating}
+                                </span>
+                              )}
+                              {point.isReal && (
+                                <span className="verified-badge" style={{ marginLeft: '8px', fontSize: '12px', color: '#4CAF50' }}>
+                                  ✓ Google認証済み
                                 </span>
                               )}
                             </div>
@@ -546,6 +571,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                         </motion.div>
                       ))}
                     </div>
+                    </>
                   ) : (
                     <div className="no-meeting-points">
                       <p>利用可能な待ち合わせ場所がありません</p>
