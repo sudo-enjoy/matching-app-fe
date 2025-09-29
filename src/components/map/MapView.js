@@ -78,6 +78,9 @@ const MapView = () => {
             location: {
               coordinates: [currentLocation.lng, currentLocation.lat]
             },
+            gender: user.gender,
+            address: user.address,
+            phoneNumber: user.phoneNumber,
             profilePhoto: user.profilePhoto,
             bio: user.bio,
             matchCount: user.matchCount,
@@ -136,6 +139,7 @@ const MapView = () => {
   }, [mapLoaded, updateMapMarkers]);
 
   useEffect(() => {
+
     const handleMatchRequest = (event) => {
       const { userId, name } = event.detail;
       // Find the full user object from nearbyUsers
@@ -248,8 +252,8 @@ const MapView = () => {
           location: {
             coordinates: [currentLocation.lng, currentLocation.lat]
           },
+
           profilePhoto: user.profilePhoto,
-          bio: 'Your current location',
           isCurrentUser: true
         }, true);
       }

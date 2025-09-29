@@ -42,6 +42,9 @@ class GoogleMapsService {
         };
       }
 
+      // Make GoogleMapsService available globally for close button
+      window.googleMapsService = this;
+
       return this.google;
     } catch (error) {
       console.error('Failed to load Google Maps:', error);
@@ -153,48 +156,11 @@ class GoogleMapsService {
   }
 
   createInfoWindowContent(user, isCurrentUser = false) {
+    console.log('aaaaaaaaa', user);
+
     if (isCurrentUser) {
       return `
-        <div class="sophisticated-modal current-user-modal">
-        <div class="modal-backdrop"></div>
-          <div class="modal-content">
-            <div class="modal-header">
-              <div class="avatar-container">
-                <div class="avatar-ring">
-                  <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name}" class="user-avatar" />
-                </div>
-                <div class="online-indicator pulsing"></div>
-              </div>
-              <div class="user-details">
-                <h3 class="user-name">${user.name}</h3>
-                <span class="user-badge current-user">あなた</span>
-              </div>
-            </div>
-            <div class="modal-body">
-              <div class="bio-section">
-                <p class="user-bio">${user.bio || '自己紹介がありません'}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        ${this.getModalStyles()}
-      `;
-    }
-
-    // Store user data temporarily and use a simple ID reference
-    const tempId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    if (!window.tempUserData) window.tempUserData = {};
-    window.tempUserData[tempId] = {
-      id: user.id || user._id,
-      name: user.name || '',
-      location: user.location,
-      profilePhoto: user.profilePhoto,
-      bio: user.bio || 'No bio available'
-    };
-
-    return `
       <div class="sophisticated-modal user-modal">
-        <div class="modal-backdrop"></div>
         <div class="modal-content">
           <div class="modal-header">
             <div class="avatar-container">
@@ -205,16 +171,79 @@ class GoogleMapsService {
             </div>
             <div class="user-details">
               <h3 class="user-name">${user.name || 'User'}</h3>
-              
             </div>
+            <button class="modal-close-btn" onclick="window.googleMapsService && window.googleMapsService.closeAllInfoWindows()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; color: #666; z-index: 10; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center;">✕</button>
           </div>
           <div class="modal-body">
-            <div class="bio-section">
-              <div class="bio-label">
-                <span class="bio-icon">📝</span>
-                <span>自己紹介</span>
+            <div class="user-info-section">
+              <div class="info-item">
+                <span class="info-label">性別:</span>
+                <span class="info-value">${user.gender || '未設定'}</span>
               </div>
-              <p class="user-bio">${user.bio || '自己紹介がありません'}</p>
+              <div class="info-item">
+                <span class="info-label">電話番号:</span>
+                <span class="info-value">${user.phoneNumber || '未設定'}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">住所:</span>
+                <span class="info-value">${user.address || '未設定'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      ${this.getModalStyles()}
+      `;
+    }
+
+    // Store user data temporarily and use a simple ID reference
+    const tempId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    if (!window.tempUserData) window.tempUserData = {};
+
+    // Debug: Log user data to see what fields are available
+    console.log('User data for modal:', user);
+    console.log('Phone number field:', user.phoneNumber);
+    console.log('All user fields:', Object.keys(user));
+
+    window.tempUserData[tempId] = {
+      id: user.id || user._id,
+      name: user.name || '',
+      location: user.location,
+      profilePhoto: user.profilePhoto,
+      gender: user.gender || '',
+      phoneNumber: user.phoneNumber || '',
+      address: user.address || ''
+    };
+
+    return `
+      <div class="sophisticated-modal user-modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="avatar-container">
+              <div class="avatar-ring">
+                <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name || 'User'}" class="user-avatar" />
+              </div>
+              <div class="online-indicator pulsing"></div>
+            </div>
+            <div class="user-details">
+              <h3 class="user-name">${user.name || 'User'}</h3>
+            </div>
+            <button class="modal-close-btn" onclick="window.googleMapsService && window.googleMapsService.closeAllInfoWindows()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; color: #666; z-index: 10; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center;">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="user-info-section">
+              <div class="info-item">
+                <span class="info-label">性別:</span>
+                <span class="info-value">${user.gender || '未設定'}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">電話番号:</span>
+                <span class="info-value">${user.phoneNumber || '未設定'}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">住所:</span>
+                <span class="info-value">${user.address || '未設定'}</span>
+              </div>
             </div>
             <div class="action-section">
               <button class="modern-match-button" onclick="window.handleMatchRequest && window.handleMatchRequest('${tempId}')">
@@ -386,40 +415,65 @@ class GoogleMapsService {
           padding: 20px 24px 24px 24px;
         }
 
-        .bio-section {
+        .user-info-section {
           margin-bottom: 20px;
         }
 
-        .bio-label {
+        .info-item {
           display: flex;
+          justify-content: space-between;
           align-items: center;
-          gap: 8px;
-          margin-bottom: 12px;
-          font-size: 14px;
-          font-weight: 600;
-          color: #666;
-        }
-
-        .bio-icon {
-          font-size: 16px;
-        }
-
-        .user-bio {
-          margin: 0;
-          font-size: 15px;
-          line-height: 1.5;
-          color: #444;
+          padding: 12px 16px;
+          margin-bottom: 8px;
           background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.8) 0%,
             rgba(248, 250, 255, 0.8) 100%);
-          padding: 16px;
-          border-radius: 14px;
+          border-radius: 12px;
           border: 1px solid rgba(0, 0, 0, 0.05);
           border-left: 4px solid #667eea;
+          border-right: 4px solid #667eea;
+        }
+
+        .info-label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #666;
+          min-width: 60px;
+        }
+
+        .info-value {
+          font-size: 15px;
+          color: #444;
+          flex: 1;
+        }
+
+
+        .modal-close-btn {
+          transition: all 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+          background: rgba(255, 255, 255, 1) !important;
+          transform: scale(1.1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .action-section {
           margin-top: 20px;
+        }
+
+        /* Hide Google Maps default close button */
+        .gm-style-iw-chr {
+          display: none !important;
+        }
+
+        /* Remove padding from Google Maps elements */
+        .gm-style {
+          padding: 0 !important;
+        }
+
+        .gm-style-iw-c {
+          padding: 0 !important;
         }
 
         .modern-match-button {
