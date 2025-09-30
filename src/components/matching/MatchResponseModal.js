@@ -77,7 +77,7 @@ const MatchResponseModal = ({ matchRequest, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h2>💌 Match Request</h2>
+          <h2> Match Request</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 

@@ -299,11 +299,10 @@ const MapView = () => {
               alt={`${user?.name || 'User'}'s Profile`}
               className="profile-avatar"
             />
+            <span className={`connection-status ${connected ? 'connected' : 'disconnected'}`}>
+              <span className="status-indicator"></span>
+            </span>
           </motion.button>
-          <span className={`connection-status ${connected ? 'connected' : 'disconnected'}`}>
-            <span className="status-indicator"></span>
-            {connected ? '接続済み' : 'オフライン'}
-          </span>
         </div>
 
         <div className="header-center">

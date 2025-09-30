@@ -8,16 +8,16 @@ import MeetingPointsService from '../../services/meetingPointsService';
 import '../../styles/Modal.css';
 
 const MEETING_REASONS = [
-  { value: 'coffee', label: '☕ コーヒー＆チャット', emoji: '☕' },
-  { value: 'lunch', label: '🍽️ ランチを一緒に', emoji: '🍽️' },
-  { value: 'walk', label: '🚶 散歩', emoji: '🚶' },
-  { value: 'drink', label: '🍺 飲み物', emoji: '🍺' },
-  { value: 'workout', label: '💪 一緒にワークアウト', emoji: '💪' },
-  { value: 'explore', label: '🗺️ エリア探索', emoji: '🗺️' },
-  { value: 'study', label: '📚 勉強会', emoji: '📚' },
-  { value: 'networking', label: '🤝 ネットワーキング', emoji: '🤝' },
-  { value: 'hobby', label: '🎨 趣味を共有', emoji: '🎨' },
-  { value: 'other', label: '📝 その他', emoji: '📝' }
+  { value: 'coffee', label: 'コーヒー＆チャット', emoji: '' },
+  { value: 'lunch', label: 'ランチを一緒に', emoji: '' },
+  { value: 'walk', label: '散歩', emoji: '' },
+  { value: 'drink', label: '飲み物', emoji: '' },
+  { value: 'workout', label: '一緒にワークアウト', emoji: '' },
+  { value: 'explore', label: 'エリア探索', emoji: '' },
+  { value: 'study', label: '勉強会', emoji: '' },
+  { value: 'networking', label: 'ネットワーキング', emoji: '' },
+  { value: 'hobby', label: '趣味を共有', emoji: '' },
+  { value: 'other', label: 'その他', emoji: '' }
 ];
 
 const MatchRequestModal = ({ targetUser, onClose }) => {
@@ -481,7 +481,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                         onClick={handleShowAllOnMap}
                         disabled={loadingPoints || meetingPoints.length === 0}
                       >
-                        📍 マップで全て表示
+                        マップで全て表示
                       </button>
                     </div>
                   </div>
@@ -538,13 +538,13 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
                             <div className="point-distances">
                               <span className="distance-badge">
-                                👤 あなた: {point.distanceToUser} km
+                                あなた: {point.distanceToUser} km
                                 <span className="walking-time">
                                   ({MeetingPointsService.formatWalkingTime(point.walkingTimeUser)})
                                 </span>
                               </span>
                               <span className="distance-badge">
-                                👥 {targetUser.name}: {point.distanceToTarget} km
+                                {targetUser.name}: {point.distanceToTarget} km
                                 <span className="walking-time">
                                   ({MeetingPointsService.formatWalkingTime(point.walkingTimeTarget)})
                                 </span>
@@ -639,15 +639,12 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
           {/* Info Section */}
           <div className="match-request-info">
             <div className="info-item">
-              <span className="info-icon">🎯</span>
               <span>待ち合わせ場所がマップにマークされます</span>
             </div>
             <div className="info-item">
-              <span className="info-icon">⏰</span>
               <span>相手は24時間以内に返答する必要があります</span>
             </div>
             <div className="info-item">
-              <span className="info-icon">🔒</span>
               <span>正確な位置は相手が承認した後にのみ共有されます</span>
             </div>
           </div>

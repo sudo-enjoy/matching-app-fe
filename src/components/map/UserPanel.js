@@ -200,7 +200,7 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
                         <span className="online-status">🟢 オンライン中</span>
                       ) : (
                         <span className="offline-status">
-                          最後に見た時間 {getTimeAgo(user.lastSeen)}
+                          ⚫ 最後に見た時間 {getTimeAgo(user.lastSeen)}
                         </span>
                       )}
                     </div>
@@ -216,7 +216,7 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
                         handleUserClick(user);
                       }}
                     >
-                      💌
+                      
                     </motion.button>
                   </div>
                 </motion.div>
@@ -228,15 +228,15 @@ const UserPanel = ({ users, onClose, onUserSelect }) => {
         <div className="user-panel-footer">
           <div className="legend">
             <div className="legend-item">
-              <span className="legend-icon">🟢</span>
+              <span className="legend-icon"></span>
               <span>オンライン</span>
             </div>
             <div className="legend-item">
-              <span className="legend-icon">⚫</span>
+              <span className="legend-icon"></span>
               <span>オフライン</span>
             </div>
             <div className="legend-item">
-              <span className="legend-icon">💌</span>
+              <span className="legend-icon"></span>
               <span>マッチリクエストを送信</span>
             </div>
           </div>
