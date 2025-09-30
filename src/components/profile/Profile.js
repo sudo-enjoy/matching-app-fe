@@ -4,8 +4,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import { userAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import '../../styles/Profile.css';
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+  const navigator = useNavigate();
   const { user, updateUser, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,11 +45,12 @@ const Profile = () => {
       profilePhoto: user?.profilePhoto || '',
       address: user?.address || ''
     });
+    navigator('/map');
   };
 
   return (
     <div className="profile-container">
-      <motion.div 
+      <motion.div
         className="profile-card"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -56,8 +59,8 @@ const Profile = () => {
         <div className="profile-header">
           <div className="profile-avatar-section">
             <div className="avatar-container">
-              <img 
-                src={formData.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'} 
+              <img
+                src={formData.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}
                 alt="プロフィール"
                 className="profile-avatar-large"
               />
@@ -66,24 +69,7 @@ const Profile = () => {
               </button>
             </div>
           </div>
-          
-          <div className="profile-actions">
-            <div className="edit-actions">
-              <button
-                onClick={handleCancel}
-                className="btn btn-secondary"
-              >
-                キャンセル
-              </button>
-              <button
-                onClick={handleSubmit}
-                className="btn btn-primary"
-                disabled={loading}
-              >
-                {loading ? '保存中...' : '変更を保存'}
-              </button>
-            </div>
-          </div>
+
         </div>
 
         <form onSubmit={handleSubmit} className="profile-form">
@@ -142,12 +128,23 @@ const Profile = () => {
         </form>
 
         <div className="profile-footer">
-          <button
-            onClick={logout}
-            className="btn btn-danger"
-          >
-            サインアウト
-          </button>
+          <div className="profile-actions">
+            <div className="edit-actions">
+              <button
+                onClick={handleSubmit}
+                className="btn btn-primary"
+                disabled={loading}
+              >
+                {loading ? '保存中...' : '変更を保存'}
+              </button>
+              <button
+                onClick={handleCancel}
+                className="btn btn-secondary"
+              >
+                キャンセル
+              </button>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>
