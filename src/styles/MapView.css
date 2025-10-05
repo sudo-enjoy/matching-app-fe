@@ -543,7 +543,7 @@
 
   .connection-status {
     font-size: 10px;
-    padding: 6px 10px;
+    padding: 0px 4px;
   }
 
   .status-indicator {
@@ -557,8 +557,8 @@
   }
 
   .profile-avatar {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-width: 2px;
   }
 

@@ -14,7 +14,7 @@ const ProfileModal = ({ onClose }) => {
   };
 
   const handleLogout = () => {
-    logout();
+    navigate('/map');
     onClose();
   };
 
