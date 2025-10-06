@@ -383,12 +383,7 @@ class MeetingPointsService {
         map: this.map,
         title: point.name,
         animation: this.google.maps.Animation.DROP,
-        icon: {
-          url: point.isFallback
-            ? 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-            : 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-          scaledSize: new this.google.maps.Size(40, 40)
-        },
+        icon: GoogleMapsService.createLocationPin('c', false),
         zIndex: 100 + index
       });
 
@@ -518,15 +513,7 @@ class MeetingPointsService {
       map: this.map,
       title: `待ち合わせ場所: ${point.name}`,
       animation: this.google.maps.Animation.BOUNCE,
-      icon: {
-        path: this.google.maps.SymbolPath.CIRCLE,
-        scale: 15,
-        fillColor: '#4CAF50',
-        fillOpacity: 0.9,
-        strokeColor: '#ffffff',
-        strokeWeight: 3,
-        strokeOpacity: 1
-      },
+      icon: GoogleMapsService.createLocationPin('#35ea9f', false),
       zIndex: 1000
     });
 
@@ -558,16 +545,8 @@ class MeetingPointsService {
       `
     });
 
-    // Auto open info window
     infoWindow.open(this.map, marker);
-
     this.meetingMarkers.push({ marker, infoWindow, point });
-
-    // Center map to show the meeting point
-    this.map.panTo(point.location);
-    this.map.setZoom(15);
-
-    return marker;
   }
 
   // Clear all meeting markers from the map (but preserve user markers)
