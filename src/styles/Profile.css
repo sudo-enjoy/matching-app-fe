@@ -179,7 +179,7 @@
 }
 
 .profile-field-display:empty::before {
-  content: 'Not provided';
+  content: "Not provided";
   color: #999;
   font-style: italic;
 }
@@ -240,7 +240,7 @@
 }
 
 .profile-stats .stat::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 50%;
