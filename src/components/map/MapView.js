@@ -15,7 +15,7 @@ const MapView = () => {
   const mapRef = useRef(null);
   const loadingUsersRef = useRef(false);
   const { user, logout } = useAuth();
-  const { currentLocation, getNearbyUsers, getAllUsers, nearbyUsers, seedUsers, loading } = useLocation();
+  const { currentLocation, getNearbyUsers, getAllUsers, nearbyUsers, seedUsers, loading, calculateDistance } = useLocation();
   const { connected, onlineUsers, matchRequests, updateLocation } = useSocket();
 
   const [mapLoaded, setMapLoaded] = useState(false);
@@ -108,15 +108,28 @@ const MapView = () => {
       const users = await getNearbyUsers(100000); // 100km in meters
       // const users = await getAllUsers();
       console.log("Users=====", users);
-      setUsersWithinRadius(users || []);
-      setRadiusUserCount(users?.length || 0);
-      return users;
+      
+      // Filter out users with 0m distance
+      const filteredUsers = users?.filter(user => {
+        if (user.location && user.location.coordinates && currentLocation) {
+          const distance = calculateDistance(
+            currentLocation.lat, currentLocation.lng,
+            user.location.coordinates[1], user.location.coordinates[0]
+          );
+          return distance > 0; // Filter out users with 0m distance
+        }
+        return true;
+      }) || [];
+      
+      setUsersWithinRadius(filteredUsers);
+      setRadiusUserCount(filteredUsers.length);
+      return filteredUsers;
     } catch (error) {
       console.error('Failed to load users within radius:', error);
       setUsersWithinRadius([]);
       setRadiusUserCount(0);
     }
-  }, [currentLocation, getNearbyUsers]);
+  }, [currentLocation, getNearbyUsers, calculateDistance]);
 
   // Load users when component mounts
   useEffect(() => {
@@ -232,7 +245,7 @@ const MapView = () => {
       // Clear all existing markers except current user
       GoogleMapsService.clearAllUserMarkers();
 
-      // Create markers for users within 100km radius
+      // Create markers for users within 100km radius (already filtered in loadUsersWithinRadius)
       if (users && users.length > 0) {
         users.forEach(user => {
           if (user.location && user.location.coordinates) {

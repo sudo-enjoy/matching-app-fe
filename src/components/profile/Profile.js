@@ -11,25 +11,50 @@ const Profile = () => {
   const { user, updateUser, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    userId:user?.id || '',
     name: user?.name || '',
     bio: user?.bio || '',
     profilePhoto: user?.profilePhoto || '',
     address: user?.address || ''
   });
+  const fileInputRef = React.useRef(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('画像サイズは5MB以下にしてください');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, profilePhoto: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePhotoClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log("abcde" ,formData);
 
     try {
       const response = await userAPI.updateProfile(formData);
+      
       updateUser(response.data.user);
       toast.success('プロフィールが正常に更新されました！');
+      navigator('/map');
     } catch (error) {
       console.error('Profile update error:', error);
       toast.error('プロフィールの更新に失敗しました');
@@ -40,6 +65,7 @@ const Profile = () => {
 
   const handleCancel = () => {
     setFormData({
+      userId: user?._id || '',
       name: user?.name || '',
       bio: user?.bio || '',
       profilePhoto: user?.profilePhoto || '',
@@ -64,15 +90,36 @@ const Profile = () => {
                 alt="プロフィール"
                 className="profile-avatar-large"
               />
-              <button className="change-photo-btn">
-                変更
+              <button
+                type="button"
+                className="change-photo-btn"
+                onClick={handlePhotoClick}
+                aria-label="写真を変更"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="camera-icon"
+                >
+                  <path d="M12 9a3 3 0 100 6 3 3 0 000-6z" />
+                  <path fillRule="evenodd" d="M9 2.25h6l1.5 2.25H19.5A2.25 2.25 0 0121.75 6.75v12a2.25 2.25 0 01-2.25 2.25h-15A2.25 2.25 0 012.25 18.75v-12A2.25 2.25 0 014.5 4.5h3.25L9 2.25zM12 15a4.5 4.5 0 100-9 4.5 4.5 0 000 9z" clipRule="evenodd" />
+                </svg>
               </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                style={{ display: 'none' }}
+                aria-label="プロフィール写真をアップロード"
+              />
             </div>
           </div>
 
         </div>
 
-        <form onSubmit={handleSubmit} className="profile-form">
+        <form className="profile-form">
           <div className="form-section">
             <label htmlFor="name">名前</label>
             <input
