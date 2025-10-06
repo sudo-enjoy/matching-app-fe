@@ -1,11 +1,11 @@
-import { Loader } from '@googlemaps/js-api-loader';
+import { Loader } from "@googlemaps/js-api-loader";
 
 class GoogleMapsService {
   constructor() {
     this.loader = new Loader({
       apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-      version: 'weekly',
-      libraries: ['places', 'geometry']
+      version: "weekly",
+      libraries: ["places", "geometry"],
     });
     this.google = null;
     this.map = null;
@@ -22,10 +22,10 @@ class GoogleMapsService {
       this.directionsRenderer = new this.google.maps.DirectionsRenderer({
         suppressMarkers: false,
         polylineOptions: {
-          strokeColor: '#667eea',
+          strokeColor: "#667eea",
           strokeWeight: 4,
-          strokeOpacity: 0.8
-        }
+          strokeOpacity: 0.8,
+        },
       });
 
       // Add global function for info window onclick handlers
@@ -33,11 +33,13 @@ class GoogleMapsService {
         window.handleMatchRequest = (tempId) => {
           const userData = window.tempUserData && window.tempUserData[tempId];
           if (userData) {
-            window.dispatchEvent(new CustomEvent('requestMatchWithData', { detail: userData }));
+            window.dispatchEvent(
+              new CustomEvent("requestMatchWithData", { detail: userData })
+            );
             // Clean up temporary data
             delete window.tempUserData[tempId];
           } else {
-            console.error('User data not found for tempId:', tempId);
+            console.error("User data not found for tempId:", tempId);
           }
         };
       }
@@ -47,14 +49,14 @@ class GoogleMapsService {
 
       return this.google;
     } catch (error) {
-      console.error('Failed to load Google Maps:', error);
+      console.error("Failed to load Google Maps:", error);
       throw error;
     }
   }
 
   createMap(element, options = {}) {
     if (!this.google) {
-      throw new Error('Google Maps not initialized');
+      throw new Error("Google Maps not initialized");
     }
 
     const defaultOptions = {
@@ -65,19 +67,22 @@ class GoogleMapsService {
       fullscreenControl: false,
       styles: [
         {
-          featureType: 'poi',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }]
+          featureType: "poi",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }],
         },
         {
-          featureType: 'transit',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }]
-        }
-      ]
+          featureType: "transit",
+          elementType: "labels",
+          stylers: [{ visibility: "off" }],
+        },
+      ],
     };
 
-    this.map = new this.google.maps.Map(element, { ...defaultOptions, ...options });
+    this.map = new this.google.maps.Map(element, {
+      ...defaultOptions,
+      ...options,
+    });
     this.directionsRenderer.setMap(this.map);
 
     return this.map;
@@ -85,13 +90,13 @@ class GoogleMapsService {
 
   createMarker(position, options = {}) {
     if (!this.google || !this.map) {
-      throw new Error('Google Maps not initialized or map not created');
+      throw new Error("Google Maps not initialized or map not created");
     }
 
     const marker = new this.google.maps.Marker({
       position,
       map: this.map,
-      ...options
+      ...options,
     });
 
     return marker;
@@ -99,7 +104,7 @@ class GoogleMapsService {
 
   createLocationPin(color, isCurrentUser = false) {
     if (!this.google || !this.google.maps) {
-      throw new Error('Google Maps not initialized');
+      throw new Error("Google Maps not initialized");
     }
 
     // Create SVG location pin
@@ -113,38 +118,38 @@ class GoogleMapsService {
     `;
 
     return {
-      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+      url: "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg),
       scaledSize: new this.google.maps.Size(size, size),
-      anchor: new this.google.maps.Point(size / 2, size)
+      anchor: new this.google.maps.Point(size / 2, size),
     };
   }
 
   createUserMarker(user, isCurrentUser = false, isWithinRadius = false) {
     const position = {
       lat: user.location.coordinates[1],
-      lng: user.location.coordinates[0]
+      lng: user.location.coordinates[0],
     };
 
     let markerOptions = {
       title: user.name,
-      zIndex: isCurrentUser ? 1000 : (isWithinRadius ? 200 : 100)
+      zIndex: isCurrentUser ? 1000 : isWithinRadius ? 200 : 100,
     };
 
     if (isCurrentUser) {
       // Use red location pin for current user
-      markerOptions.icon = this.createLocationPin('#EA4335', true);
+      markerOptions.icon = this.createLocationPin("#EA4335", true);
     } else {
       // Use blue location pins for nearby users
-      markerOptions.icon = this.createLocationPin('#4285F4', false);
+      markerOptions.icon = this.createLocationPin("#4285F4", false);
     }
 
     const marker = this.createMarker(position, markerOptions);
 
     const infoWindow = new this.google.maps.InfoWindow({
-      content: this.createInfoWindowContent(user, isCurrentUser)
+      content: this.createInfoWindowContent(user, isCurrentUser),
     });
 
-    marker.addListener('click', () => {
+    marker.addListener("click", () => {
       this.closeAllInfoWindows();
       infoWindow.open(this.map, marker);
     });
@@ -156,7 +161,7 @@ class GoogleMapsService {
   }
 
   createInfoWindowContent(user, isCurrentUser = false) {
-    console.log('aaaaaaaaa', user);
+    console.log("aaaaaaaaa", user);
 
     if (isCurrentUser) {
       return `
@@ -165,12 +170,15 @@ class GoogleMapsService {
           <div class="modal-header1">
             <div class="avatar-container">
               <div class="avatar-ring">
-                <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name || 'User'}" class="user-avatar" />
+                <img src="${
+                  user.profilePhoto ||
+                  "https://randomuser.me/api/portraits/men/32.jpg"
+                }" alt="${user.name || "User"}" class="user-avatar" />
               </div>
               <div class="online-indicator pulsing"></div>
             </div>
             <div class="user-details">
-              <h3 class="user-name">${user.name || 'User'}</h3>
+              <h3 class="user-name">${user.name || "User"}</h3>
             </div>
             <button class="modal-close-btn" onclick="window.googleMapsService && window.googleMapsService.closeAllInfoWindows()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; color: #666; z-index: 10; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center;">✕</button>
           </div>
@@ -178,15 +186,15 @@ class GoogleMapsService {
             <div class="user-info-section">
               <div class="info-item">
                 <span class="info-label">性別:</span>
-                <span class="info-value">${user.gender || '未設定'}</span>
+                <span class="info-value">${user.gender || "未設定"}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">電話番号:</span>
-                <span class="info-value">${user.phoneNumber || '未設定'}</span>
+                <span class="info-value">${user.phoneNumber || "未設定"}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">住所:</span>
-                <span class="info-value">${user.address || '未設定'}</span>
+                <span class="info-value">${user.address || "未設定"}</span>
               </div>
             </div>
           </div>
@@ -197,22 +205,24 @@ class GoogleMapsService {
     }
 
     // Store user data temporarily and use a simple ID reference
-    const tempId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const tempId = `user_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
     if (!window.tempUserData) window.tempUserData = {};
 
     // Debug: Log user data to see what fields are available
-    console.log('User data for modal:', user);
-    console.log('Phone number field:', user.phoneNumber);
-    console.log('All user fields:', Object.keys(user));
+    console.log("User data for modal:", user);
+    console.log("Phone number field:", user.phoneNumber);
+    console.log("All user fields:", Object.keys(user));
 
     window.tempUserData[tempId] = {
       id: user.id || user._id,
-      name: user.name || '',
+      name: user.name || "",
       location: user.location,
       profilePhoto: user.profilePhoto,
-      gender: user.gender || '',
-      phoneNumber: user.phoneNumber || '',
-      address: user.address || ''
+      gender: user.gender || "",
+      phoneNumber: user.phoneNumber || "",
+      address: user.address || "",
     };
 
     return `
@@ -221,12 +231,15 @@ class GoogleMapsService {
           <div class="modal-header1">
             <div class="avatar-container">
               <div class="avatar-ring">
-                <img src="${user.profilePhoto || 'https://randomuser.me/api/portraits/men/32.jpg'}" alt="${user.name || 'User'}" class="user-avatar" />
+                <img src="${
+                  user.profilePhoto ||
+                  "https://randomuser.me/api/portraits/men/32.jpg"
+                }" alt="${user.name || "User"}" class="user-avatar" />
               </div>
               <div class="online-indicator pulsing"></div>
             </div>
             <div class="user-details">
-              <h3 class="user-name">${user.name || 'User'}</h3>
+              <h3 class="user-name">${user.name || "User"}</h3>
             </div>
             <button class="modal-close-btn" onclick="window.googleMapsService && window.googleMapsService.closeAllInfoWindows()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 18px; cursor: pointer; color: #666; z-index: 10; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center;">✕</button>
           </div>
@@ -234,15 +247,15 @@ class GoogleMapsService {
             <div class="user-info-section">
               <div class="info-item">
                 <span class="info-label">性別:</span>
-                <span class="info-value">${user.gender || '未設定'}</span>
+                <span class="info-value">${user.gender || "未設定"}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">電話番号:</span>
-                <span class="info-value">${user.phoneNumber || '未設定'}</span>
+                <span class="info-value">${user.phoneNumber || "未設定"}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">住所:</span>
-                <span class="info-value">${user.address || '未設定'}</span>
+                <span class="info-value">${user.address || "未設定"}</span>
               </div>
             </div>
             <div class="action-section">
@@ -265,11 +278,12 @@ class GoogleMapsService {
       <style>
         .sophisticated-modal {
           min-width: 200px;
-          max-width: 420px;
+          max-width: 300px;
+          width: 280px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
           position: relative;
           overflow: hidden;
-          border-radius: 20px;
+          border-radius: 16px;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 8px 32px rgba(0, 0, 0, 0.15);
           backdrop-filter: blur(20px);
           border: 1px solid rgba(255, 255, 255, 0.2);
@@ -296,31 +310,31 @@ class GoogleMapsService {
         }
         .modal-header1 {
           display: flex;
-          padding:10px;
+          padding: 8px 12px;
           align-items: center;
           border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .avatar-container {
           position: relative;
-          margin-right: 16px;
+          margin-right: 12px;
         }
 
         .avatar-ring {
           position: relative;
-          width: 72px;
-          height: 72px;
+          width: 48px;
+          height: 48px;
           border-radius: 50%;
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          padding: 3px;
+          padding: 2px;
           display: flex;
           align-items: center;
           justify-content: center;
         }
 
         .user-avatar {
-          width: 66px;
-          height: 66px;
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
           object-fit: cover;
           transition: all 0.3s ease;
@@ -333,12 +347,12 @@ class GoogleMapsService {
 
         .online-indicator {
           position: absolute;
-          bottom: 4px;
-          right: 4px;
-          width: 20px;
-          height: 20px;
+          bottom: 2px;
+          right: 2px;
+          width: 14px;
+          height: 14px;
           background: #34c759;
-          border: 3px solid white;
+          border: 2px solid white;
           border-radius: 50%;
           box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
         }
@@ -358,8 +372,8 @@ class GoogleMapsService {
         }
 
         .user-name {
-          margin: 0 0 8px 0;
-          font-size: 22px;
+          margin: 0 0 4px 0;
+          font-size: 16px;
           font-weight: 700;
           color: #1a1a1a;
           letter-spacing: -0.5px;
@@ -409,7 +423,7 @@ class GoogleMapsService {
         }
 
         .modal-body {
-          padding: 20px 24px 24px 24px;
+          padding: 12px 16px 16px 16px;
         }
 
         .user-info-section {
@@ -420,28 +434,29 @@ class GoogleMapsService {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 12px 16px;
-          margin-bottom: 8px;
+          padding: 8px 12px;
+          margin-bottom: 6px;
           background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.8) 0%,
             rgba(248, 250, 255, 0.8) 100%);
-          border-radius: 12px;
+          border-radius: 8px;
           border: 1px solid rgba(0, 0, 0, 0.05);
-          border-left: 4px solid #667eea;
-          border-right: 4px solid #667eea;
+          border-left: 3px solid #667eea;
+          border-right: 3px solid #667eea;
         }
 
         .info-label {
-          font-size: 14px;
+          font-size: 12px;
           font-weight: 600;
           color: #666;
-          min-width: 60px;
+          min-width: 50px;
         }
 
         .info-value {
-          font-size: 15px;
+          font-size: 13px;
           color: #444;
           flex: 1;
+          text-align: right;
         }
 
 
@@ -456,7 +471,7 @@ class GoogleMapsService {
         }
 
         .action-section {
-          margin-top: 20px;
+          margin-top: 12px;
         }
 
         /* Hide Google Maps default close button */
@@ -471,18 +486,30 @@ class GoogleMapsService {
 
         .gm-style-iw-c {
           padding: 0 !important;
+          max-width: 300px !important;
+          overflow: hidden !important;
+        }
+
+        .gm-style-iw-d {
+          overflow: hidden !important;
+          max-width: 300px !important;
+        }
+
+        /* Ensure no scrollbars appear */
+        .gm-style-iw {
+          overflow: hidden !important;
         }
 
         .modern-match-button {
           position: relative;
           width: 100%;
           border: none;
-          border-radius: 16px;
+          border-radius: 12px;
           padding: 0;
           cursor: pointer;
           overflow: hidden;
           transition: all 0.3s ease;
-          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
 
         .modern-match-button:hover {
@@ -510,10 +537,10 @@ class GoogleMapsService {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 10px;
-          padding: 16px 24px;
+          gap: 8px;
+          padding: 10px 16px;
           color: white;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 600;
           letter-spacing: -0.3px;
         }
@@ -544,7 +571,7 @@ class GoogleMapsService {
     if (marker) {
       const position = {
         lat: newPosition.coordinates[1],
-        lng: newPosition.coordinates[0]
+        lng: newPosition.coordinates[0],
       };
       marker.setPosition(position);
 
@@ -573,13 +600,21 @@ class GoogleMapsService {
   clearAllUserMarkers() {
     this.markers.forEach((marker, userId) => {
       // Preserve current-user and meeting-related user markers
-      if (!userId.includes('current-user') && !userId.includes('meeting-current-user') && !userId.includes('meeting-target-user')) {
+      if (
+        !userId.includes("current-user") &&
+        !userId.includes("meeting-current-user") &&
+        !userId.includes("meeting-target-user")
+      ) {
         marker.setMap(null);
       }
     });
     this.infoWindows.forEach((infoWindow, userId) => {
       // Preserve current-user and meeting-related user markers
-      if (!userId.includes('current-user') && !userId.includes('meeting-current-user') && !userId.includes('meeting-target-user')) {
+      if (
+        !userId.includes("current-user") &&
+        !userId.includes("meeting-current-user") &&
+        !userId.includes("meeting-target-user")
+      ) {
         infoWindow.close();
       }
     });
@@ -588,16 +623,18 @@ class GoogleMapsService {
     const preserveMarkers = new Map();
     const preserveWindows = new Map();
 
-    ['current-user', 'meeting-current-user', 'meeting-target-user'].forEach(key => {
-      const marker = this.markers.get(key);
-      const window = this.infoWindows.get(key);
-      if (marker) {
-        preserveMarkers.set(key, marker);
+    ["current-user", "meeting-current-user", "meeting-target-user"].forEach(
+      (key) => {
+        const marker = this.markers.get(key);
+        const window = this.infoWindows.get(key);
+        if (marker) {
+          preserveMarkers.set(key, marker);
+        }
+        if (window) {
+          preserveWindows.set(key, window);
+        }
       }
-      if (window) {
-        preserveWindows.set(key, window);
-      }
-    });
+    );
 
     this.markers.clear();
     this.infoWindows.clear();
@@ -618,16 +655,20 @@ class GoogleMapsService {
 
     // Include current location
     if (currentLocation) {
-      bounds.extend(new this.google.maps.LatLng(currentLocation.lat, currentLocation.lng));
+      bounds.extend(
+        new this.google.maps.LatLng(currentLocation.lat, currentLocation.lng)
+      );
     }
 
     // Include all user locations
-    users.forEach(user => {
+    users.forEach((user) => {
       if (user.location && user.location.coordinates) {
-        bounds.extend(new this.google.maps.LatLng(
-          user.location.coordinates[1],
-          user.location.coordinates[0]
-        ));
+        bounds.extend(
+          new this.google.maps.LatLng(
+            user.location.coordinates[1],
+            user.location.coordinates[0]
+          )
+        );
       }
     });
 
@@ -642,32 +683,35 @@ class GoogleMapsService {
   }
 
   closeAllInfoWindows() {
-    this.infoWindows.forEach(infoWindow => infoWindow.close());
+    this.infoWindows.forEach((infoWindow) => infoWindow.close());
   }
 
   async calculateRoute(origin, destination) {
     if (!this.directionsService) {
-      throw new Error('Directions service not initialized');
+      throw new Error("Directions service not initialized");
     }
 
     return new Promise((resolve, reject) => {
-      this.directionsService.route({
-        origin,
-        destination,
-        travelMode: this.google.maps.TravelMode.WALKING
-      }, (result, status) => {
-        if (status === 'OK') {
-          resolve(result);
-        } else {
-          reject(new Error(`Directions request failed: ${status}`));
+      this.directionsService.route(
+        {
+          origin,
+          destination,
+          travelMode: this.google.maps.TravelMode.WALKING,
+        },
+        (result, status) => {
+          if (status === "OK") {
+            resolve(result);
+          } else {
+            reject(new Error(`Directions request failed: ${status}`));
+          }
         }
-      });
+      );
     });
   }
 
   displayRoute(directionsResult) {
     if (!this.directionsRenderer) {
-      throw new Error('Directions renderer not initialized');
+      throw new Error("Directions renderer not initialized");
     }
 
     this.directionsRenderer.setDirections(directionsResult);
@@ -681,37 +725,47 @@ class GoogleMapsService {
 
   createMeetingPointMarker(position, meetingInfo) {
     const icon = {
-      url: '/icons/meeting-point.png',
+      url: "/icons/meeting-point.png",
       scaledSize: new this.google.maps.Size(50, 50),
-      anchor: new this.google.maps.Point(25, 50)
+      anchor: new this.google.maps.Point(25, 50),
     };
 
     const marker = this.createMarker(position, {
       icon,
-      title: 'Meeting Point',
-      zIndex: 500
+      title: "Meeting Point",
+      zIndex: 500,
     });
 
     const infoWindow = new this.google.maps.InfoWindow({
       content: `
         <div class="meeting-point-info">
           <h3>🎯 Meeting Point</h3>
-          <p>${meetingInfo.address || 'Custom location'}</p>
+          <p>${meetingInfo.address || "Custom location"}</p>
           <p><strong>Reason:</strong> ${meetingInfo.reason}</p>
-          ${meetingInfo.scheduledTime ? `<p><strong>Time:</strong> ${new Date(meetingInfo.scheduledTime).toLocaleString()}</p>` : ''}
+          ${
+            meetingInfo.scheduledTime
+              ? `<p><strong>Time:</strong> ${new Date(
+                  meetingInfo.scheduledTime
+                ).toLocaleString()}</p>`
+              : ""
+          }
           <div class="meeting-actions">
-            <button onclick="window.dispatchEvent(new CustomEvent('getDirections', {detail: {lat: ${position.lat}, lng: ${position.lng}}}))">
+            <button onclick="window.dispatchEvent(new CustomEvent('getDirections', {detail: {lat: ${
+              position.lat
+            }, lng: ${position.lng}}}))">
               Get Directions
             </button>
-            <button onclick="window.dispatchEvent(new CustomEvent('confirmMeeting', {detail: {meetingId: '${meetingInfo.meetingId}'}}))">
+            <button onclick="window.dispatchEvent(new CustomEvent('confirmMeeting', {detail: {meetingId: '${
+              meetingInfo.meetingId
+            }'}}))">
               I'm Here
             </button>
           </div>
         </div>
-      `
+      `,
     });
 
-    marker.addListener('click', () => {
+    marker.addListener("click", () => {
       this.closeAllInfoWindows();
       infoWindow.open(this.map, marker);
     });
@@ -719,25 +773,28 @@ class GoogleMapsService {
     return marker;
   }
 
-  async findNearbyPlaces(location, type = 'restaurant') {
+  async findNearbyPlaces(location, type = "restaurant") {
     if (!this.google) {
-      throw new Error('Google Maps not initialized');
+      throw new Error("Google Maps not initialized");
     }
 
     const service = new this.google.maps.places.PlacesService(this.map);
 
     return new Promise((resolve, reject) => {
-      service.nearbySearch({
-        location,
-        radius: 1000,
-        type
-      }, (results, status) => {
-        if (status === this.google.maps.places.PlacesServiceStatus.OK) {
-          resolve(results);
-        } else {
-          reject(new Error(`Places search failed: ${status}`));
+      service.nearbySearch(
+        {
+          location,
+          radius: 1000,
+          type,
+        },
+        (results, status) => {
+          if (status === this.google.maps.places.PlacesServiceStatus.OK) {
+            resolve(results);
+          } else {
+            reject(new Error(`Places search failed: ${status}`));
+          }
         }
-      });
+      );
     });
   }
 
@@ -757,8 +814,8 @@ class GoogleMapsService {
       id: userId,
       name: "You",
       location: {
-        coordinates: [newLocation.lng, newLocation.lat]
-      }
+        coordinates: [newLocation.lng, newLocation.lat],
+      },
     };
 
     this.createUserMarker(user, true);
@@ -777,13 +834,13 @@ class GoogleMapsService {
 
   addClickListener(callback) {
     if (this.map) {
-      this.map.addListener('click', callback);
+      this.map.addListener("click", callback);
     }
   }
 
   addIdleListener(callback) {
     if (this.map) {
-      this.map.addListener('idle', callback);
+      this.map.addListener("idle", callback);
     }
   }
 }
