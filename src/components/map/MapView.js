@@ -28,6 +28,8 @@ const MapView = () => {
   const [usersWithinRadius, setUsersWithinRadius] = useState([]);
   const [radiusUserCount, setRadiusUserCount] = useState(0);
   const [hasSearchedNearbyUsers, setHasSearchedNearbyUsers] = useState(false);
+  const [alternatingMarkers, setAlternatingMarkers] = useState([]);
+  const alternationTimerRef = useRef(null);
 
   // Define loadAllUsers first to avoid dependency issues
   const loadAllUsers = useCallback(async () => {
@@ -147,6 +149,82 @@ const MapView = () => {
     }
   }, [currentLocation, getNearbyUsers, calculateDistance]);
 
+  // Stop marker alternation timer
+  const stopMarkerAlternation = useCallback(() => {
+    if (alternationTimerRef.current) {
+      clearInterval(alternationTimerRef.current);
+      alternationTimerRef.current = null;
+    }
+  }, []);
+
+  // Start marker alternation timer
+  const startMarkerAlternation = useCallback((pairs) => {
+    stopMarkerAlternation(); // Clear any existing timer
+    
+    let isFirstMarker = true;
+    
+    alternationTimerRef.current = setInterval(() => {
+      pairs.forEach(pair => {
+        const marker1 = GoogleMapsService.markers.get(pair.user1.id || pair.user1._id);
+        const marker2 = GoogleMapsService.markers.get(pair.user2.id || pair.user2._id);
+        
+        if (marker1 && marker2) {
+          if (isFirstMarker) {
+            marker1.setZIndex(1000);
+            marker2.setZIndex(100);
+          } else {
+            marker1.setZIndex(100);
+            marker2.setZIndex(1000);
+          }
+        }
+      });
+      
+      isFirstMarker = !isFirstMarker;
+    }, 1000); // Change every 1 second
+  }, [stopMarkerAlternation]);
+
+  // Function to detect nearby markers and start alternation
+  const detectAndAlternateNearbyMarkers = useCallback((users) => {
+    if (!currentLocation || !users || users.length < 2) return;
+
+    const nearbyPairs = [];
+    const proximityThreshold = 1000; // 1km in meters
+
+    // Find pairs of users that are very close to each other
+    for (let i = 0; i < users.length; i++) {
+      for (let j = i + 1; j < users.length; j++) {
+        const user1 = users[i];
+        const user2 = users[j];
+        
+        if (user1.location && user1.location.coordinates && 
+            user2.location && user2.location.coordinates) {
+          
+          const distance = calculateDistance(
+            user1.location.coordinates[1], user1.location.coordinates[0],
+            user2.location.coordinates[1], user2.location.coordinates[0]
+          );
+          
+          if (distance < proximityThreshold) {
+            nearbyPairs.push({
+              user1: user1,
+              user2: user2,
+              distance: distance
+            });
+          }
+        }
+      }
+    }
+
+    if (nearbyPairs.length > 0) {
+      console.log('Found nearby marker pairs:', nearbyPairs);
+      setAlternatingMarkers(nearbyPairs);
+      startMarkerAlternation(nearbyPairs);
+    } else {
+      setAlternatingMarkers([]);
+      stopMarkerAlternation();
+    }
+  }, [currentLocation, calculateDistance, startMarkerAlternation, stopMarkerAlternation]);
+
   // Load users when component mounts
   useEffect(() => {
     if (user && !loading) {
@@ -154,6 +232,13 @@ const MapView = () => {
       // Don't automatically load nearby users - only when user clicks search button
     }
   }, [user]); // Remove loadAllUsers and loading from dependencies to prevent infinite loop
+
+  // Cleanup timer on component unmount
+  useEffect(() => {
+    return () => {
+      stopMarkerAlternation();
+    };
+  }, [stopMarkerAlternation]);
 
   useEffect(() => {
     if (mapLoaded && currentLocation) {
@@ -166,6 +251,18 @@ const MapView = () => {
       updateMapMarkers();
     }
   }, [mapLoaded, updateMapMarkers, usersWithinRadius]);
+
+  // Separate effect to handle marker alternation after markers are updated
+  useEffect(() => {
+    if (mapLoaded) {
+      const usersToDisplay = usersWithinRadius.length > 0 ? usersWithinRadius : nearbyUsers;
+      if (usersToDisplay.length > 0) {
+        setTimeout(() => {
+          detectAndAlternateNearbyMarkers(usersToDisplay);
+        }, 200); // Delay to ensure markers are created
+      }
+    }
+  }, [mapLoaded, usersWithinRadius, nearbyUsers, detectAndAlternateNearbyMarkers]);
 
   useEffect(() => {
 
@@ -260,6 +357,7 @@ const MapView = () => {
 
       // Clear all existing markers except current user
       GoogleMapsService.clearAllUserMarkers();
+      stopMarkerAlternation(); // Stop any existing alternation
 
       // Create markers for users within 100km radius (already filtered in loadUsersWithinRadius)
       if (users && users.length > 0) {
@@ -289,6 +387,7 @@ const MapView = () => {
     } else {
       // When closing the panel, clear all user markers except current user
       GoogleMapsService.clearAllUserMarkers();
+      stopMarkerAlternation(); // Stop alternation when closing panel
 
       // Re-center on current location
       if (currentLocation) {
