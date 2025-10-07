@@ -36,8 +36,7 @@ const MapView = () => {
     }
     try {
       loadingUsersRef.current = true;
-      // await getAllUsers();
-      // await getNearbyUsers(); 
+      await getAllUsers();
       // The users are automatically stored in nearbyUsers by getAllUsers function
     } catch (error) {
       console.error('Failed to load all users:', error);
@@ -48,17 +47,29 @@ const MapView = () => {
 
   // Define updateMapMarkers
   const updateMapMarkers = useCallback(() => {
-    nearbyUsers.forEach(user => {
+    // Use usersWithinRadius if available (from search), otherwise use nearbyUsers
+    const usersToDisplay = usersWithinRadius.length > 0 ? usersWithinRadius : nearbyUsers;
+    
+    console.log('updateMapMarkers called with:', {
+      usersWithinRadius: usersWithinRadius.length,
+      nearbyUsers: nearbyUsers.length,
+      usersToDisplay: usersToDisplay.length
+    });
+    
+    usersToDisplay.forEach(user => {
       if (user.location && user.location.coordinates) {
+        console.log(`Creating/updating marker for user: ${user.name || user.id}`);
         const existingMarker = GoogleMapsService.markers.get(user.id || user._id);
         if (existingMarker) {
           GoogleMapsService.updateUserMarker(user.id || user._id, user.location, user);
         } else {
           GoogleMapsService.createUserMarker(user);
         }
+      } else {
+        console.log(`User ${user.name || user.id} has no valid location data:`, user.location);
       }
     });
-  }, [nearbyUsers]);
+  }, [nearbyUsers, usersWithinRadius]);
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -102,12 +113,15 @@ const MapView = () => {
 
   // Load users within 100km radius
   const loadUsersWithinRadius = useCallback(async () => {
-    if (!currentLocation) return;
+    if (!currentLocation) {
+      console.log('No current location available for loading users');
+      return;
+    }
 
     try {
+      console.log('Loading users within 100km of:', currentLocation);
       const users = await getNearbyUsers(100000); // 100km in meters
-      // const users = await getAllUsers();
-      console.log("Users=====", users);
+      console.log("Raw users from API:", users);
       
       // Filter out users with 0m distance
       const filteredUsers = users?.filter(user => {
@@ -116,11 +130,13 @@ const MapView = () => {
             currentLocation.lat, currentLocation.lng,
             user.location.coordinates[1], user.location.coordinates[0]
           );
+          console.log(`User ${user.name || user.id}: distance = ${distance}m`);
           return distance > 0; // Filter out users with 0m distance
         }
         return true;
       }) || [];
       
+      console.log("Filtered users:", filteredUsers);
       setUsersWithinRadius(filteredUsers);
       setRadiusUserCount(filteredUsers.length);
       return filteredUsers;
@@ -149,7 +165,7 @@ const MapView = () => {
     if (mapLoaded) {
       updateMapMarkers();
     }
-  }, [mapLoaded, updateMapMarkers]);
+  }, [mapLoaded, updateMapMarkers, usersWithinRadius]);
 
   useEffect(() => {
 
