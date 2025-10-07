@@ -724,12 +724,24 @@ class GoogleMapsService {
   }
 
   createMeetingPointMarker(position, meetingInfo) {
+<<<<<<< HEAD
     // Match uploaded marker style: red teardrop with white center
     const icon = this.createLocationPin('#35ea9f', false);
 
     const marker = this.createMarker(position, {
       icon,
       title: 'Meeting Point',
+=======
+    const icon = {
+      url: "/icons/meeting-point.png",
+      scaledSize: new this.google.maps.Size(50, 50),
+      anchor: new this.google.maps.Point(25, 50),
+    };
+
+    const marker = this.createMarker(position, {
+      icon,
+      title: "Meeting Point",
+>>>>>>> origin/main
       zIndex: 500,
     });
 
@@ -737,14 +749,18 @@ class GoogleMapsService {
       content: `
         <div class="meeting-point-info">
           <h3>🎯 Meeting Point</h3>
-          <p>${meetingInfo.address || 'Custom location'}</p>
+          <p>${meetingInfo.address || "Custom location"}</p>
           <p><strong>Reason:</strong> ${meetingInfo.reason}</p>
           ${
             meetingInfo.scheduledTime
               ? `<p><strong>Time:</strong> ${new Date(
                   meetingInfo.scheduledTime
                 ).toLocaleString()}</p>`
+<<<<<<< HEAD
               : ''
+=======
+              : ""
+>>>>>>> origin/main
           }
           <div class="meeting-actions">
             <button onclick="window.dispatchEvent(new CustomEvent('getDirections', {detail: {lat: ${
@@ -762,7 +778,7 @@ class GoogleMapsService {
       `,
     });
 
-    marker.addListener('click', () => {
+    marker.addListener("click", () => {
       this.closeAllInfoWindows();
       infoWindow.open(this.map, marker);
     });
@@ -770,7 +786,7 @@ class GoogleMapsService {
     return marker;
   }
 
-  async findNearbyPlaces(location, type = 'restaurant') {
+  async findNearbyPlaces(location, type = "restaurant") {
     if (!this.google) {
       throw new Error("Google Maps not initialized");
     }
