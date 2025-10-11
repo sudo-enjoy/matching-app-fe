@@ -1,6 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import '../../styles/SplashScreen.css';
+import React from "react";
+import { motion } from "framer-motion";
+import { MapPin } from "lucide-react";
+import "../../styles/SplashScreen.css";
 
 const SplashScreen = () => {
   return (
@@ -21,14 +22,14 @@ const SplashScreen = () => {
           className="logo"
           animate={{
             rotate: [0, 360],
-            scale: [1, 1.1, 1]
+            scale: [1, 1.1, 1],
           }}
           transition={{
             rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-            scale: { duration: 1, repeat: Infinity, repeatType: "reverse" }
+            scale: { duration: 1, repeat: Infinity, repeatType: "reverse" },
           }}
         >
-          <span className="logo-icon">📍</span>
+          <MapPin size={48} className="logo-icon" />
         </motion.div>
 
         <motion.h1
