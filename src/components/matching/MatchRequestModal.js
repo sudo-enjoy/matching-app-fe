@@ -1,29 +1,30 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { matchingAPI } from '../../services/api';
-import { toast } from 'react-toastify';
-import { useLocation } from '../../contexts/LocationContext';
-import GoogleMapsService from '../../services/googleMaps';
-import MeetingPointsService from '../../services/meetingPointsService';
-import '../../styles/Modal.css';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, AlertTriangle, Star, Check, Clock, MapPin } from "lucide-react";
+import { matchingAPI } from "../../services/api";
+import { toast } from "react-toastify";
+import { useLocation } from "../../contexts/LocationContext";
+import GoogleMapsService from "../../services/googleMaps";
+import MeetingPointsService from "../../services/meetingPointsService";
+import "../../styles/Modal.css";
 
 const MEETING_REASONS = [
-  { value: 'coffee', label: 'コーヒー＆チャット', emoji: '' },
-  { value: 'lunch', label: 'ランチを一緒に', emoji: '' },
-  { value: 'walk', label: '散歩', emoji: '' },
-  { value: 'drink', label: '飲み物', emoji: '' },
-  { value: 'workout', label: '一緒にワークアウト', emoji: '' },
-  { value: 'explore', label: 'エリア探索', emoji: '' },
-  { value: 'study', label: '勉強会', emoji: '' },
-  { value: 'networking', label: 'ネットワーキング', emoji: '' },
-  { value: 'hobby', label: '趣味を共有', emoji: '' },
-  { value: 'other', label: 'その他', emoji: '' }
+  { value: "coffee", label: "コーヒー＆チャット", emoji: "" },
+  { value: "lunch", label: "ランチを一緒に", emoji: "" },
+  { value: "walk", label: "散歩", emoji: "" },
+  { value: "drink", label: "飲み物", emoji: "" },
+  { value: "workout", label: "一緒にワークアウト", emoji: "" },
+  { value: "explore", label: "エリア探索", emoji: "" },
+  { value: "study", label: "勉強会", emoji: "" },
+  { value: "networking", label: "ネットワーキング", emoji: "" },
+  { value: "hobby", label: "趣味を共有", emoji: "" },
+  { value: "other", label: "その他", emoji: "" },
 ];
 
 const MatchRequestModal = ({ targetUser, onClose }) => {
   const { currentLocation } = useLocation();
-  const [selectedReason, setSelectedReason] = useState('');
-  const [customReason, setCustomReason] = useState('');
+  const [selectedReason, setSelectedReason] = useState("");
+  const [customReason, setCustomReason] = useState("");
   const [selectedMeetingPoint, setSelectedMeetingPoint] = useState(null);
   const [meetingPoints, setMeetingPoints] = useState([]);
   const [loadingPoints, setLoadingPoints] = useState(false);
@@ -49,9 +50,9 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       toast.success(`選択しました: ${point.name}`);
     };
 
-    window.addEventListener('meetingPointSelected', handleMarkerSelection);
+    window.addEventListener("meetingPointSelected", handleMarkerSelection);
     return () => {
-      window.removeEventListener('meetingPointSelected', handleMarkerSelection);
+      window.removeEventListener("meetingPointSelected", handleMarkerSelection);
     };
   }, []);
 
@@ -65,44 +66,44 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
   const fetchMeetingPoints = async () => {
     if (!targetUser?.location || !currentLocation) {
-      console.log('Missing location data');
-      toast.warning('待ち合わせ場所の提案に位置データが利用できません');
+      console.log("Missing location data");
+      toast.warning("待ち合わせ場所の提案に位置データが利用できません");
 
       // Generate basic fallback points even without full location data
       const basicPoints = [
         {
-          id: 'basic-1',
-          name: '中央待ち合わせ場所',
-          address: '便利な待ち合わせ場所',
+          id: "basic-1",
+          name: "中央待ち合わせ場所",
+          address: "便利な待ち合わせ場所",
           location: { lat: 0, lng: 0 },
-          distanceToUser: '0.5',
-          distanceToTarget: '0.5',
+          distanceToUser: "0.5",
+          distanceToTarget: "0.5",
           walkingTimeUser: 6,
           walkingTimeTarget: 6,
-          isFallback: true
+          isFallback: true,
         },
         {
-          id: 'basic-2',
-          name: '公共待ち合わせスポット',
-          address: '安全でアクセスしやすい場所',
+          id: "basic-2",
+          name: "公共待ち合わせスポット",
+          address: "安全でアクセスしやすい場所",
           location: { lat: 0.001, lng: 0.001 },
-          distanceToUser: '0.7',
-          distanceToTarget: '0.7',
+          distanceToUser: "0.7",
+          distanceToTarget: "0.7",
           walkingTimeUser: 8,
           walkingTimeTarget: 8,
-          isFallback: true
+          isFallback: true,
         },
         {
-          id: 'basic-3',
-          name: 'コミュニティセンター',
-          address: '中央コミュニティ施設',
+          id: "basic-3",
+          name: "コミュニティセンター",
+          address: "中央コミュニティ施設",
           location: { lat: -0.001, lng: 0.001 },
-          distanceToUser: '0.6',
-          distanceToTarget: '0.6',
+          distanceToUser: "0.6",
+          distanceToTarget: "0.6",
           walkingTimeUser: 7,
           walkingTimeTarget: 7,
-          isFallback: true
-        }
+          isFallback: true,
+        },
       ];
 
       setMeetingPoints(basicPoints);
@@ -112,27 +113,30 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
     setLoadingPoints(true);
     try {
-      console.log('Fetching meeting points for:', selectedReason);
+      console.log("Fetching meeting points for:", selectedReason);
 
       // Initialize service with Google Maps - ensure Places API is ready
       if (GoogleMapsService.google && GoogleMapsService.map) {
-        MeetingPointsService.setGoogle(GoogleMapsService.google, GoogleMapsService.map);
+        MeetingPointsService.setGoogle(
+          GoogleMapsService.google,
+          GoogleMapsService.map
+        );
       } else {
-        console.error('Google Maps not properly initialized');
+        console.error("Google Maps not properly initialized");
       }
 
       const userLocation = {
         lat: currentLocation.lat,
-        lng: currentLocation.lng
+        lng: currentLocation.lng,
       };
 
       const targetLocation = {
         lat: targetUser.location.coordinates[1],
-        lng: targetUser.location.coordinates[0]
+        lng: targetUser.location.coordinates[0],
       };
 
-      console.log('User location:', userLocation);
-      console.log('Target location:', targetLocation);
+      console.log("User location:", userLocation);
+      console.log("Target location:", targetLocation);
 
       const points = await MeetingPointsService.findMeetingPoints(
         userLocation,
@@ -140,7 +144,7 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
         selectedReason
       );
 
-      console.log('Received meeting points:', points);
+      console.log("Received meeting points:", points);
 
       if (points && points.length > 0) {
         setMeetingPoints(points);
@@ -156,48 +160,56 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
         setSelectedMeetingPoint(fallbackPoints[0]);
       }
     } catch (error) {
-      console.error('Error fetching meeting points:', error);
+      console.error("Error fetching meeting points:", error);
 
       // Generate emergency fallback points
       const emergencyPoints = [
         {
-          id: 'emergency-1',
-          name: `${selectedReason === 'coffee' ? 'Coffee' : 'Meeting'} Point A`,
-          address: 'Central meeting location',
+          id: "emergency-1",
+          name: `${selectedReason === "coffee" ? "Coffee" : "Meeting"} Point A`,
+          address: "Central meeting location",
           location: currentLocation,
-          distanceToUser: '0.1',
-          distanceToTarget: '0.5',
+          distanceToUser: "0.1",
+          distanceToTarget: "0.5",
           walkingTimeUser: 1,
           walkingTimeTarget: 6,
-          isFallback: true
+          isFallback: true,
         },
         {
-          id: 'emergency-2',
-          name: `${selectedReason === 'coffee' ? 'Cafe' : 'Meeting'} Point B`,
-          address: 'Alternative meeting spot',
-          location: { lat: currentLocation.lat + 0.001, lng: currentLocation.lng + 0.001 },
-          distanceToUser: '0.2',
-          distanceToTarget: '0.4',
+          id: "emergency-2",
+          name: `${selectedReason === "coffee" ? "Cafe" : "Meeting"} Point B`,
+          address: "Alternative meeting spot",
+          location: {
+            lat: currentLocation.lat + 0.001,
+            lng: currentLocation.lng + 0.001,
+          },
+          distanceToUser: "0.2",
+          distanceToTarget: "0.4",
           walkingTimeUser: 2,
           walkingTimeTarget: 5,
-          isFallback: true
+          isFallback: true,
         },
         {
-          id: 'emergency-3',
-          name: `${selectedReason === 'coffee' ? 'Central Cafe' : 'Hub'} Point C`,
-          address: 'Convenient meetup location',
-          location: { lat: currentLocation.lat - 0.001, lng: currentLocation.lng + 0.001 },
-          distanceToUser: '0.3',
-          distanceToTarget: '0.3',
+          id: "emergency-3",
+          name: `${
+            selectedReason === "coffee" ? "Central Cafe" : "Hub"
+          } Point C`,
+          address: "Convenient meetup location",
+          location: {
+            lat: currentLocation.lat - 0.001,
+            lng: currentLocation.lng + 0.001,
+          },
+          distanceToUser: "0.3",
+          distanceToTarget: "0.3",
           walkingTimeUser: 4,
           walkingTimeTarget: 4,
-          isFallback: true
-        }
+          isFallback: true,
+        },
       ];
 
       setMeetingPoints(emergencyPoints);
       setSelectedMeetingPoint(emergencyPoints[0]);
-      toast.warning('提案された待ち合わせ場所を使用しています');
+      toast.warning("提案された待ち合わせ場所を使用しています");
     } finally {
       setLoadingPoints(false);
     }
@@ -221,15 +233,19 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     setShowOnMap(true);
 
     // Prepare user locations for the map display
-    const userLocation = currentLocation ? {
-      lat: currentLocation.lat,
-      lng: currentLocation.lng
-    } : null;
+    const userLocation = currentLocation
+      ? {
+          lat: currentLocation.lat,
+          lng: currentLocation.lng,
+        }
+      : null;
 
-    const targetLocation = targetUser?.location ? {
-      lat: targetUser.location.coordinates[1],
-      lng: targetUser.location.coordinates[0]
-    } : null;
+    const targetLocation = targetUser?.location
+      ? {
+          lat: targetUser.location.coordinates[1],
+          lng: targetUser.location.coordinates[0],
+        }
+      : null;
 
     // Display all meeting points on the map with user locations
     MeetingPointsService.displayMeetingPoints(
@@ -245,12 +261,14 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
 
     // Close modal to see the map
     onClose();
-    toast.info('待ち合わせ地点がマップに表示されました。マーカーをクリックして選択してください。');
+    toast.info(
+      "待ち合わせ地点がマップに表示されました。マーカーをクリックして選択してください。"
+    );
   };
 
   const handleBackToReasons = () => {
     setStep(1);
-    setSelectedReason('');
+    setSelectedReason("");
     setMeetingPoints([]);
     setSelectedMeetingPoint(null);
     // Clear selected meeting point from service as well
@@ -262,20 +280,23 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     e.preventDefault();
 
     if (!selectedReason) {
-      toast.error('待ち合わせの理由を選択してください');
+      toast.error("待ち合わせの理由を選択してください");
       return;
     }
 
     if (step === 2 && !selectedMeetingPoint && meetingPoints.length > 0) {
-      toast.error('待ち合わせ場所を選択してください');
+      toast.error("待ち合わせ場所を選択してください");
       return;
     }
 
-    const reason = selectedReason === 'other' ? customReason :
-      MEETING_REASONS.find(r => r.value === selectedReason)?.label || selectedReason;
+    const reason =
+      selectedReason === "other"
+        ? customReason
+        : MEETING_REASONS.find((r) => r.value === selectedReason)?.label ||
+          selectedReason;
 
-    if (selectedReason === 'other' && !customReason.trim()) {
-      toast.error('待ち合わせの理由を記述してください');
+    if (selectedReason === "other" && !customReason.trim()) {
+      toast.error("待ち合わせの理由を記述してください");
       return;
     }
 
@@ -286,11 +307,13 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       const requestData = {
         targetUserId: targetUser.id || targetUser._id,
         meetingReason: reason,
-        meetingPoint: selectedMeetingPoint ? {
-          name: selectedMeetingPoint.name,
-          address: selectedMeetingPoint.address,
-          location: selectedMeetingPoint.location
-        } : null
+        meetingPoint: selectedMeetingPoint
+          ? {
+              name: selectedMeetingPoint.name,
+              address: selectedMeetingPoint.address,
+              location: selectedMeetingPoint.location,
+            }
+          : null,
       };
 
       const response = await matchingAPI.sendMatchRequest(
@@ -309,8 +332,9 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
         onClose();
       }
     } catch (error) {
-      console.error('Match request error:', error);
-      const message = error.response?.data?.error || 'マッチリクエストの送信に失敗しました';
+      console.error("Match request error:", error);
+      const message =
+        error.response?.data?.error || "マッチリクエストの送信に失敗しました";
       toast.error(message);
     } finally {
       setLoading(false);
@@ -323,14 +347,14 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { type: "spring", damping: 25, stiffness: 300 }
+      transition: { type: "spring", damping: 25, stiffness: 300 },
     },
     exit: {
       opacity: 0,
       scale: 0.8,
       y: 50,
-      transition: { duration: 0.2 }
-    }
+      transition: { duration: 0.2 },
+    },
   };
 
   const reasonVariants = {
@@ -338,9 +362,9 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
     visible: (i) => ({
       opacity: 1,
       x: 0,
-      transition: { delay: i * 0.05, duration: 0.3 }
+      transition: { delay: i * 0.05, duration: 0.3 },
     }),
-    hover: { scale: 1.02, transition: { duration: 0.2 } }
+    hover: { scale: 1.02, transition: { duration: 0.2 } },
   };
 
   return (
@@ -362,33 +386,38 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
       >
         <div className="modal-header">
           <h2>マッチリクエストを送信</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
         </div>
 
         <div className="modal-content">
           {/* User Info Section */}
           <div className="target-user-info">
             <img
-              src={targetUser?.profilePhoto || "https://randomuser.me/api/portraits/men/32.jpg"}
+              src={
+                targetUser?.profilePhoto ||
+                "https://randomuser.me/api/portraits/men/32.jpg"
+              }
               alt={targetUser?.name}
               className="user-avatar-large"
             />
             <div className="user-details">
               <h3>{targetUser?.name}</h3>
               <p>
-                {step === 1 ? '待ち合わせの活動を選択' : '待ち合わせ場所を選択'}
+                {step === 1 ? "待ち合わせの活動を選択" : "待ち合わせ場所を選択"}
               </p>
             </div>
           </div>
 
           {/* Progress Indicator */}
           <div className="modal-progress-steps">
-            <div className={`progress-step ${step >= 1 ? 'active' : ''}`}>
+            <div className={`progress-step ${step >= 1 ? "active" : ""}`}>
               <span className="step-number">1</span>
               <span className="step-label">活動を選択</span>
             </div>
             <div className="progress-line" />
-            <div className={`progress-step ${step >= 2 ? 'active' : ''}`}>
+            <div className={`progress-step ${step >= 2 ? "active" : ""}`}>
               <span className="step-number">2</span>
               <span className="step-label">場所を選択</span>
             </div>
@@ -410,7 +439,9 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                     {MEETING_REASONS.map((reason, index) => (
                       <motion.div
                         key={reason.value}
-                        className={`reason-option ${selectedReason === reason.value ? 'selected' : ''}`}
+                        className={`reason-option ${
+                          selectedReason === reason.value ? "selected" : ""
+                        }`}
                         variants={reasonVariants}
                         initial="hidden"
                         animate="visible"
@@ -427,19 +458,23 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                           hidden
                         />
                         <span className="reason-emoji">{reason.emoji}</span>
-                        <span className="reason-label">{reason.label.replace(/^[^\s]+\s/, '')}</span>
+                        <span className="reason-label">
+                          {reason.label.replace(/^[^\s]+\s/, "")}
+                        </span>
                       </motion.div>
                     ))}
                   </div>
 
-                  {selectedReason === 'other' && (
+                  {selectedReason === "other" && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
+                      animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                       className="custom-reason-input"
                     >
-                      <label htmlFor="customReason">やりたいことを説明してください：</label>
+                      <label htmlFor="customReason">
+                        やりたいことを説明してください：
+                      </label>
                       <textarea
                         id="customReason"
                         value={customReason}
@@ -448,7 +483,9 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                         maxLength={200}
                         rows="3"
                       />
-                      <span className="char-count">{customReason.length}/200</span>
+                      <span className="char-count">
+                        {customReason.length}/200
+                      </span>
                     </motion.div>
                   )}
                 </motion.div>
@@ -493,84 +530,115 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                     </div>
                   ) : meetingPoints.length > 0 ? (
                     <>
-                      {meetingPoints.every(p => p.isFallback) && (
-                        <div style={{
-                          padding: '12px',
-                          marginBottom: '16px',
-                          backgroundColor: '#fff3cd',
-                          border: '1px solid #ffc107',
-                          borderRadius: '8px',
-                          fontSize: '14px',
-                          color: '#856404'
-                        }}>
-                          ⚠️ Google Placesからの実際の場所を取得できませんでした。提案された場所を表示しています。
+                      {meetingPoints.every((p) => p.isFallback) && (
+                        <div
+                          style={{
+                            padding: "12px",
+                            marginBottom: "16px",
+                            backgroundColor: "#fff3cd",
+                            border: "1px solid #ffc107",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            color: "#856404",
+                          }}
+                        >
+                          <AlertTriangle size={16} className="inline-icon" />
+                          Google
+                          Placesからの実際の場所を取得できませんでした。提案された場所を表示しています。
                         </div>
                       )}
-                    <div className="meeting-points-list">
-                      {meetingPoints.map((point, index) => (
-                        <motion.div
-                          key={point.id}
-                          className={`meeting-point-item ${selectedMeetingPoint?.id === point.id ? 'selected' : ''
+                      <div className="meeting-points-list">
+                        {meetingPoints.map((point, index) => (
+                          <motion.div
+                            key={point.id}
+                            className={`meeting-point-item ${
+                              selectedMeetingPoint?.id === point.id
+                                ? "selected"
+                                : ""
                             }`}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          onClick={() => setSelectedMeetingPoint(point)}
-                        >
-                          <div className="point-number">{index + 1}</div>
-
-                          <div className="point-info">
-                            <div className="point-name">
-                              {point.name}
-                              {point.rating && (
-                                <span className="point-rating">
-                                  ⭐ {point.rating}
-                                </span>
-                              )}
-                              {point.isReal && (
-                                <span className="verified-badge" style={{ marginLeft: '8px', fontSize: '12px', color: '#4CAF50' }}>
-                                  ✓ Google認証済み
-                                </span>
-                              )}
-                            </div>
-
-                            <div className="point-address">{point.address}</div>
-
-                            <div className="point-distances">
-                              <span className="distance-badge">
-                                あなた: {point.distanceToUser} km
-                                <span className="walking-time">
-                                  ({MeetingPointsService.formatWalkingTime(point.walkingTimeUser)})
-                                </span>
-                              </span>
-                              <span className="distance-badge">
-                                {targetUser.name}: {point.distanceToTarget} km
-                                <span className="walking-time">
-                                  ({MeetingPointsService.formatWalkingTime(point.walkingTimeTarget)})
-                                </span>
-                              </span>
-                            </div>
-
-                            {point.isOpen !== null && (
-                              <span className={`open-status ${point.isOpen ? 'open' : 'closed'}`}>
-                                {point.isOpen ? '🟢 営業中' : '🔴 閉店'}
-                              </span>
-                            )}
-                          </div>
-
-                          <button
-                            type="button"
-                            className="select-point-btn"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleSelectFromList(point);
-                            }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05 }}
+                            onClick={() => setSelectedMeetingPoint(point)}
                           >
-                            選択して表示
-                          </button>
-                        </motion.div>
-                      ))}
-                    </div>
+                            <div className="point-number">{index + 1}</div>
+
+                            <div className="point-info">
+                              <div className="point-name">
+                                {point.name}
+                                {point.rating && (
+                                  <span className="point-rating">
+                                    <Star size={14} className="inline-icon" />
+                                    {point.rating}
+                                  </span>
+                                )}
+                                {point.isReal && (
+                                  <span
+                                    className="verified-badge"
+                                    style={{
+                                      marginLeft: "8px",
+                                      fontSize: "12px",
+                                      color: "#4CAF50",
+                                    }}
+                                  >
+                                    <Check size={12} className="inline-icon" />
+                                    Google認証済み
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="point-address">
+                                {point.address}
+                              </div>
+
+                              <div className="point-distances">
+                                <span className="distance-badge">
+                                  あなた: {point.distanceToUser} km
+                                  <span className="walking-time">
+                                    (
+                                    {MeetingPointsService.formatWalkingTime(
+                                      point.walkingTimeUser
+                                    )}
+                                    )
+                                  </span>
+                                </span>
+                                <span className="distance-badge">
+                                  {targetUser.name}: {point.distanceToTarget} km
+                                  <span className="walking-time">
+                                    (
+                                    {MeetingPointsService.formatWalkingTime(
+                                      point.walkingTimeTarget
+                                    )}
+                                    )
+                                  </span>
+                                </span>
+                              </div>
+
+                              {point.isOpen !== null && (
+                                <span
+                                  className={`open-status ${
+                                    point.isOpen ? "open" : "closed"
+                                  }`}
+                                >
+                                  <Clock size={12} className="inline-icon" />
+                                  {point.isOpen ? "営業中" : "閉店"}
+                                </span>
+                              )}
+                            </div>
+
+                            <button
+                              type="button"
+                              className="select-point-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleSelectFromList(point);
+                              }}
+                            >
+                              選択して表示
+                            </button>
+                          </motion.div>
+                        ))}
+                      </div>
                     </>
                   ) : (
                     <div className="no-meeting-points">
@@ -606,7 +674,10 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   className="btn btn-primary"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  disabled={!selectedReason || (selectedReason === 'other' && !customReason.trim())}
+                  disabled={
+                    !selectedReason ||
+                    (selectedReason === "other" && !customReason.trim())
+                  }
                   onClick={() => {
                     if (selectedReason) {
                       setStep(2);
@@ -621,7 +692,10 @@ const MatchRequestModal = ({ targetUser, onClose }) => {
                   className="btn btn-primary"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  disabled={loading || (!selectedMeetingPoint && meetingPoints.length > 0)}
+                  disabled={
+                    loading ||
+                    (!selectedMeetingPoint && meetingPoints.length > 0)
+                  }
                 >
                   {loading ? (
                     <span className="btn-loading">

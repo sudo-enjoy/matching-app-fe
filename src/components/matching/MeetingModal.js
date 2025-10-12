@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { matchingAPI } from '../../services/api';
-import { useLocation } from '../../contexts/LocationContext';
-import GoogleMapsService from '../../services/googleMaps';
-import { toast } from 'react-toastify';
-import '../../styles/Modal.css';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  X,
+  Target,
+  MapPin,
+  Clock,
+  Lightbulb,
+  CheckCircle,
+  Circle,
+} from "lucide-react";
+import { matchingAPI } from "../../services/api";
+import { useLocation } from "../../contexts/LocationContext";
+import GoogleMapsService from "../../services/googleMaps";
+import { toast } from "react-toastify";
+import "../../styles/Modal.css";
 
 const MeetingModal = ({ meetingData, onClose }) => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +25,7 @@ const MeetingModal = ({ meetingData, onClose }) => {
     if (currentLocation && meetingData?.meetingPoint) {
       const meetingLocation = {
         lat: meetingData.meetingPoint.coordinates[1],
-        lng: meetingData.meetingPoint.coordinates[0]
+        lng: meetingData.meetingPoint.coordinates[0],
       };
 
       const directionsData = getDirections(meetingLocation);
@@ -32,10 +41,11 @@ const MeetingModal = ({ meetingData, onClose }) => {
     try {
       await matchingAPI.confirmMeeting(meetingData.meetingId);
       setConfirmed(true);
-      toast.success('✅ 待ち合わせを確認しました！相手の確認を待っています...');
+      toast.success("待ち合わせを確認しました！相手の確認を待っています...");
     } catch (error) {
-      console.error('Meeting confirmation error:', error);
-      const message = error.response?.data?.error || '待ち合わせの確認に失敗しました';
+      console.error("Meeting confirmation error:", error);
+      const message =
+        error.response?.data?.error || "待ち合わせの確認に失敗しました";
       toast.error(message);
     } finally {
       setLoading(false);
@@ -47,24 +57,27 @@ const MeetingModal = ({ meetingData, onClose }) => {
 
     const meetingLocation = {
       lat: meetingData.meetingPoint.coordinates[1],
-      lng: meetingData.meetingPoint.coordinates[0]
+      lng: meetingData.meetingPoint.coordinates[0],
     };
 
     try {
-      const result = await GoogleMapsService.calculateRoute(currentLocation, meetingLocation);
+      const result = await GoogleMapsService.calculateRoute(
+        currentLocation,
+        meetingLocation
+      );
       GoogleMapsService.displayRoute(result);
-      toast.success('📍 ルートをマップに表示しました');
+      toast.success("ルートをマップに表示しました");
       onClose();
     } catch (error) {
-      console.error('Directions error:', error);
-      toast.error('ルートの取得に失敗しました');
+      console.error("Directions error:", error);
+      toast.error("ルートの取得に失敗しました");
     }
   };
 
   const formatTime = (date) => {
     return new Date(date).toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit'
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -78,7 +91,9 @@ const MeetingModal = ({ meetingData, onClose }) => {
   };
 
   const getOtherPersonName = () => {
-    return meetingData?.targetUser?.name || meetingData?.requester?.name || '相手';
+    return (
+      meetingData?.targetUser?.name || meetingData?.requester?.name || "相手"
+    );
   };
 
   const modalVariants = {
@@ -87,14 +102,14 @@ const MeetingModal = ({ meetingData, onClose }) => {
       opacity: 1,
       scale: 1,
       y: 0,
-      transition: { type: "spring", damping: 25, stiffness: 300 }
+      transition: { type: "spring", damping: 25, stiffness: 300 },
     },
     exit: {
       opacity: 0,
       scale: 0.8,
       y: 50,
-      transition: { duration: 0.2 }
-    }
+      transition: { duration: 0.2 },
+    },
   };
 
   if (!meetingData) return null;
@@ -116,8 +131,10 @@ const MeetingModal = ({ meetingData, onClose }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="modal-header">
-          <h2>🎉 Match Confirmed!</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <h2>Match Confirmed!</h2>
+          <button className="close-btn" onClick={onClose}>
+            <X size={20} />
+          </button>
         </div>
 
         <div className="modal-content">
@@ -127,42 +144,51 @@ const MeetingModal = ({ meetingData, onClose }) => {
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", damping: 10 }}
           >
-            <div className="success-icon">🎯</div>
+            <div className="success-icon">
+              <Target size={48} />
+            </div>
             <h3>You're meeting {getOtherPersonName()}!</h3>
           </motion.div>
 
           <div className="meeting-info">
             <div className="meeting-detail">
-              <span className="detail-icon">📍</span>
+              <MapPin size={20} className="detail-icon" />
               <div className="detail-content">
                 <span className="detail-label">Meeting Point</span>
                 <span className="detail-value">
-                  {meetingData.meetingPoint?.address || 'Custom location'}
+                  {meetingData.meetingPoint?.address || "Custom location"}
                 </span>
                 {directions && (
                   <span className="detail-extra">
-                    {Math.round(directions.distance)}m away • {formatWalkingTime(directions.walkingTime)}
+                    {Math.round(directions.distance)}m away •{" "}
+                    {formatWalkingTime(directions.walkingTime)}
                   </span>
                 )}
               </div>
             </div>
 
             <div className="meeting-detail">
-              <span className="detail-icon">⏰</span>
+              <Clock size={20} className="detail-icon" />
               <div className="detail-content">
                 <span className="detail-label">Meeting Time</span>
                 <span className="detail-value">
-                  {meetingData.scheduledTime ? formatTime(meetingData.scheduledTime) : 'ASAP'}
+                  {meetingData.scheduledTime
+                    ? formatTime(meetingData.scheduledTime)
+                    : "ASAP"}
                 </span>
-                <span className="detail-extra">You have 30 minutes to meet up</span>
+                <span className="detail-extra">
+                  You have 30 minutes to meet up
+                </span>
               </div>
             </div>
 
             <div className="meeting-detail">
-              <span className="detail-icon">💡</span>
+              <Lightbulb size={20} className="detail-icon" />
               <div className="detail-content">
                 <span className="detail-label">Activity</span>
-                <span className="detail-value">{meetingData.meetingReason || 'Casual meetup'}</span>
+                <span className="detail-value">
+                  {meetingData.meetingReason || "Casual meetup"}
+                </span>
               </div>
             </div>
           </div>
@@ -174,12 +200,12 @@ const MeetingModal = ({ meetingData, onClose }) => {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              🗺️ Get Directions
+              Get Directions
             </motion.button>
 
             <motion.button
               onClick={handleConfirmMeeting}
-              className={`btn ${confirmed ? 'btn-success' : 'btn-secondary'}`}
+              className={`btn ${confirmed ? "btn-success" : "btn-secondary"}`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={loading || confirmed}
@@ -190,9 +216,9 @@ const MeetingModal = ({ meetingData, onClose }) => {
                   Confirming...
                 </span>
               ) : confirmed ? (
-                '✅ Confirmed!'
+                "Confirmed!"
               ) : (
-                '📍 I\'m Here'
+                "I'm Here"
               )}
             </motion.button>
           </div>
@@ -201,26 +227,32 @@ const MeetingModal = ({ meetingData, onClose }) => {
             <h4>Meeting Progress</h4>
             <div className="progress-steps">
               <div className="progress-step completed">
-                <div className="step-icon">✅</div>
+                <div className="step-icon"></div>
                 <span>Match Accepted</span>
               </div>
-              <div className={`progress-step ${confirmed ? 'completed' : 'current'}`}>
-                <div className="step-icon">{confirmed ? '✅' : '⏳'}</div>
+              <div
+                className={`progress-step ${
+                  confirmed ? "completed" : "current"
+                }`}
+              >
+                <div className="step-icon">
+                  {confirmed ? <CheckCircle size={20} /> : <Circle size={20} />}
+                </div>
                 <span>You Arrive</span>
               </div>
               <div className="progress-step">
-                <div className="step-icon">⏳</div>
+                <div className="step-icon"></div>
                 <span>{getOtherPersonName()} Arrives</span>
               </div>
               <div className="progress-step">
-                <div className="step-icon">🎉</div>
+                <div className="step-icon"></div>
                 <span>Meeting Complete!</span>
               </div>
             </div>
           </div>
 
           <div className="safety-reminders">
-            <h4>🛡️ Safety Reminders</h4>
+            <h4>Safety Reminders</h4>
             <ul>
               <li>Meet in a public, well-lit area</li>
               <li>Let someone know where you're going</li>
@@ -230,7 +262,10 @@ const MeetingModal = ({ meetingData, onClose }) => {
           </div>
 
           <div className="emergency-contact">
-            <p>Need help? Contact emergency services or use the report feature in the app.</p>
+            <p>
+              Need help? Contact emergency services or use the report feature in
+              the app.
+            </p>
           </div>
         </div>
       </motion.div>

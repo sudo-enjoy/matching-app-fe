@@ -1,72 +1,109 @@
+
 .auth-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: url('../../public/img/1.jpg') center center;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
 }
 
-.auth-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  padding: 30px;
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(1px);
+  z-index: 1;
+}
+
+.auth-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 480px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-width: 400px;
+  position: relative;
+  z-index: 2;
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 24px;
-}
-
-.auth-logo {
-  font-size: 48px;
-  margin-bottom: 12px;
-  display: inline-block;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  margin-bottom: 48px;
+  position: relative;
 }
 
 .auth-header h1 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+  text-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  text-transform: none;
+  line-height: 1.1;
 }
 
 .auth-header p {
-  color: #666;
-  font-size: 14px;
-  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 400;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
 }
 
 .auth-form {
-  margin-bottom: 20px;
+  margin-bottom: 32px;
+  width: 100%;
 }
 
 .auth-form .form-group {
+  margin-bottom: 100px;
+}
+
+/* Specific spacing for register page - reduce gap between name and phone inputs */
+.auth-form .form-group:first-of-type {
   margin-bottom: 16px;
 }
 
-.auth-form label {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+/* Increase spacing ONLY for login page - more distance between phone input and button */
+.login-page .auth-form .form-group {
+  margin-bottom: 140px;
+}
+
+.auth-form label,
+.auth-form .form-group label {
+  display: block;
+  margin-bottom: 12px;
   font-weight: 700;
-  color: #2d3748;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  padding-left: 2px;
+  color: #ffffff !important;
+  font-size: 16px;
+  text-align: left;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8),
+               0 4px 8px rgba(0, 0, 0, 0.6);
 }
 
 .auth-form label span {
@@ -90,99 +127,149 @@
 
 .auth-form input {
   width: 100%;
-  padding: 10px 8px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 12px;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
+  padding: 10px 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  font-weight: 500;
+  color: #1e293b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 1);
+  transform: none;
+}
+
+.auth-form input::placeholder {
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* Name input with user icon */
+.auth-form .name-input-container {
+  position: relative;
+}
+
+.auth-form .name-input-container .user-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5f6368;
+  font-size: 16px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-form .name-input-container input {
+  padding-left: 40px;
+}
+
+/* Input with icon container */
+.auth-form .input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-form .input-with-icon .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5f6368;
+  font-size: 18px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.auth-form .input-with-icon input,
+.auth-form .input-with-icon select {
+  width: 100%;
+  padding-left: 40px;
 }
 
 .auth-form select {
   width: 100%;
-  padding: 14px 20px;
-  border: 2.5px solid transparent;
-  border-radius: 16px;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
+  padding: 18px 24px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%23667eea" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
-    linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: right 18px center, 0 0, 0 0;
-  background-size: 14px 9px, 100% 100%, 100% 100%;
-  padding-right: 48px;
-  color: #4a5568;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.08),
-    0 1px 3px rgba(0, 0, 0, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="10" viewBox="0 0 16 10"><path fill="%2364748b" d="M8 10L0 2 2 0 8 6 14 0 16 2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 24px center;
+  background-size: 16px 10px;
+  padding-right: 56px;
+  color: #1e293b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
 }
 
 .auth-form textarea {
   width: 100%;
   padding: 8px 12px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 12px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
   font-size: 15px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
 }
 
-.auth-form input:focus,
 .auth-form textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #4AC1E0;
+  box-shadow: 0 0 0 2px rgba(74, 193, 224, 0.1);
 }
 
 .auth-form select:focus {
   outline: none;
-  border-color: transparent;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15),
-    0 10px 25px rgba(102, 126, 234, 0.15),
-    0 2px 5px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transform: translateY(-2px);
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%23764ba2" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
-    linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, #764ba2 0%, #667eea 100%) border-box;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: right 18px center, 0 0, 0 0;
-  background-size: 14px 9px, 100% 100%, 100% 100%;
+  border-color: #4AC1E0;
+  box-shadow: 0 0 0 2px rgba(74, 193, 224, 0.1);
 }
 
 .auth-form input.error,
 .auth-form textarea.error,
 .auth-form select.error {
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%) border-box;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1),
-    0 4px 15px rgba(255, 71, 87, 0.08);
+  border-color: #ea4335;
+  box-shadow: 0 0 0 2px rgba(234, 67, 53, 0.1);
   animation: shake 0.4s ease-in-out;
+}
+
+/* Error message styles */
+.error-message {
+  color: #ffffff !important;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* Select hover effect */
 .auth-form select:hover:not(:focus) {
-  border-color: transparent;
-  transform: translateY(-1px) scale(1.01);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.12),
-    0 2px 5px rgba(0, 0, 0, 0.03),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%23764ba2" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
-    linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(250, 251, 252, 1) 100%) padding-box,
-    linear-gradient(135deg, #764ba2 0%, #667eea 100%) border-box;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: right 18px center, 0 0, 0 0;
-  background-size: 14px 9px, 100% 100%, 100% 100%;
+  border-color: #4AC1E0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Select option styles */
@@ -197,15 +284,15 @@
   color: #a0aec0;
   font-style: italic;
   font-weight: 400;
-  background: linear-gradient(to right, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+  background: #f8f9fa;
 }
 
 .auth-form select option:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(74, 193, 224, 0.1);
 }
 
 .auth-form select option:checked {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #4AC1E0;
   color: white;
   font-weight: 500;
 }
@@ -219,335 +306,454 @@
 .auth-form select:not([value=""]):not(:placeholder-shown) {
   color: #1a202c;
   font-weight: 600;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9" viewBox="0 0 14 9"><path fill="%232d3748" d="M7 9L0 1.5 1.4 0 7 5.3 12.6 0 14 1.5z"/></svg>'),
-    linear-gradient(to bottom, rgba(252, 253, 255, 1) 0%, rgba(248, 250, 252, 1) 100%) padding-box,
-    linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: right 18px center, 0 0, 0 0;
-  background-size: 14px 9px, 100% 100%, 100% 100%;
 }
 
-/* Animated gradient border on select */
-@keyframes gradientShift {
-  0% {
-    background-position: right 18px center, 0% 50%, 0% 50%;
-  }
 
-  50% {
-    background-position: right 18px center, 100% 50%, 100% 50%;
-  }
 
-  100% {
-    background-position: right 18px center, 0% 50%, 0% 50%;
-  }
-}
 
-.auth-form select:focus {
-  animation: gradientShift 3s ease infinite;
-  background-size: 14px 9px, 200% 200%, 200% 200%;
-}
 
-/* Phone Input Styles */
-.phone-input-container {
-  margin-bottom: 8px;
-}
-
-.phone-input-container .react-tel-input .form-control {
+/* Custom Phone Input with Modal */
+.phone-input-wrapper {
+  position: relative;
   width: 100%;
-  padding: 10px 14px 10px 85px;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 12px;
-  font-size: 15px;
-  transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
-  height: 44px;
-}
-
-.phone-input-container .react-tel-input .form-control:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.phone-input-container .react-tel-input .form-control.error {
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
-}
-
-.phone-input-container .react-tel-input .flag-dropdown {
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 12px 0 0 12px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-  backdrop-filter: blur(10px);
-  height: 44px;
-  min-width: 75px;
-}
-
-.phone-input-container .react-tel-input .flag-dropdown:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-}
-
-.phone-input-container .react-tel-input .flag-dropdown.open {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-}
-
-.phone-input-container .react-tel-input .selected-flag {
-  padding: 0 8px;
-  height: 40px;
   display: flex;
   align-items: center;
-  gap: 4px;
 }
 
-.phone-input-container .react-tel-input .selected-flag .flag {
-  margin-right: 8px;
-  transform: scale(1.2);
-}
-
-.phone-input-container .react-tel-input .selected-flag .arrow {
-  border-top-color: #667eea;
-  margin-left: 4px;
-}
-
-.phone-input-container .react-tel-input .selected-flag .arrow.up {
-  border-bottom-color: #667eea;
-}
-
-.phone-input-container .react-tel-input .country-list {
+.phone-input {
+  flex: 1;
+  padding: 18px 24px 18px 50px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  box-shadow: 0 20px 50px rgba(102, 126, 234, 0.15),
-    0 8px 25px rgba(0, 0, 0, 0.08),
-    0 4px 10px rgba(0, 0, 0, 0.04);
-  border: 3px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-    linear-gradient(135deg, #667eea 0%, #764ba2 100%) border-box;
-  margin-top: 12px;
-  width: 340px;
-  max-height: 320px;
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-  position: relative;
-  z-index: 1000;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  font-weight: 500;
+  color: #1e293b;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  outline: none;
 }
 
-/* Redesigned search box with premium styling */
-.phone-input-container .react-tel-input .search-box {
-  position: relative;
-  padding: 18px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  margin: 0;
+.phone-input:focus {
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 1);
+  transform: none;
+}
+
+.phone-input.error {
+  border-color: #ea4335;
+  box-shadow: 0 0 0 2px rgba(234, 67, 53, 0.1);
+}
+
+.phone-input-button {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 30px;
+  padding: 0 4px;
+  border-radius: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-radius: 20px 20px 0 0;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
-.phone-input-container .react-tel-input .search-box::before {
-  content: '🔍' !important;
-  display: inline-flex !important;
+.phone-input-button:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.phone-input-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.phone-input-button .country-flag {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.phone-input-button .country-code {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.phone-input-button .chevron {
+  color: #64748b;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+/* Country Selection Modal */
+.country-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.country-modal {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 600px;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.country-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.country-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  color: #64748b;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1e293b;
+}
+
+.country-search-container {
+  position: relative;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.country-search-container .search-icon {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.country-search-input {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.country-search-input:focus {
+  border-color: #4AC1E0;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(74, 193, 224, 0.1);
+}
+
+.country-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.countries-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 8px 0;
+}
+
+.country-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.country-item:last-child {
+  border-bottom: none;
+}
+
+.country-item:hover {
+  background: rgba(74, 193, 224, 0.08);
+}
+
+.country-item.selected {
+  background: rgba(74, 193, 224, 0.15);
+  border-left: 3px solid #4AC1E0;
+}
+
+.country-item .country-flag {
+  font-size: 20px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.country-item .country-name {
+  flex: 1;
+  font-size: 15px;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.country-item .country-dial-code {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+  min-width: 60px;
+  text-align: right;
+}
+
+.no-results {
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.no-results p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Custom scrollbar for countries list */
+.countries-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.countries-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.countries-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.countries-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* React Phone Input 2 Custom Styling */
+.phone-container-custom {
+  position: relative;
+  width: 100%;
+}
+
+.phone-container-custom .react-tel-input {
+  width: 100%;
+}
+
+.phone-input-custom {
+  width: 100% !important;
+  height: 60px !important;
+  padding: 18px 24px 18px 80px !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 20px !important;
+  font-size: 16px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(15px) !important;
+  font-weight: 500 !important;
+  color: #1e293b !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+.phone-input-custom:focus {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 255, 255, 1) !important;
+}
+
+.phone-input-custom.error {
+  border-color: #ea4335 !important;
+  box-shadow: 0 0 0 2px rgba(234, 67, 53, 0.1) !important;
+}
+
+.phone-button-custom {
+  position: absolute !important;
+  left: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 60px !important;
+  height: 44px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 16px !important;
-  width: 36px !important;
-  height: 36px !important;
-  background: rgba(255, 255, 255, 0.2) !important;
-  border-radius: 10px !important;
-  margin-right: 0 !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  animation: searchGlow 3s ease-in-out infinite;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
-@keyframes searchGlow {
-
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-    transform: scale(1);
-  }
-
-  50% {
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 25px rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-  }
+.phone-button-custom:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Add country list scrollbar styling */
-.phone-input-container .react-tel-input .country-list {
-  overflow-y: auto;
+.phone-button-custom .flag {
+  margin: 0 !important;
+  transform: scale(1.2) !important;
 }
 
-.phone-input-container .react-tel-input .country-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.phone-input-container .react-tel-input .country-list::-webkit-scrollbar-track {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 10px;
-  margin: 20px 0;
-}
-
-.phone-input-container .react-tel-input .country-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.phone-input-container .react-tel-input .country-list::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
-}
-
-/* Hide default search emoji to use our custom icon */
-.phone-input-container .react-tel-input .search-emoji {
+.phone-button-custom .arrow {
   display: none !important;
 }
 
-.phone-input-container .react-tel-input .search {
-  padding-left: 12px !important;
-  background: rgba(249, 250, 251, 0.8);
-  border: 1px solid rgba(102, 126, 234, 0.15);
-  border-radius: 8px;
-  font-size: 14px;
-  height: 36px;
-  background-image: none !important;
-}
-
-/* Premium search input styling */
-.phone-input-container .react-tel-input .search {
-  flex: 1;
-  padding: 12px 16px !important;
-  background: rgba(255, 255, 255, 0.95) !important;
+.phone-dropdown-custom {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px) !important;
   border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 16px !important;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  max-height: 300px !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+}
+
+.phone-dropdown-custom .country-list {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+.phone-dropdown-custom .country-list .country {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.phone-dropdown-custom .country-list .country:hover {
+  background: rgba(74, 193, 224, 0.08) !important;
+}
+
+.phone-dropdown-custom .country-list .country.highlight {
+  background: rgba(74, 193, 224, 0.15) !important;
+}
+
+.phone-dropdown-custom .country-list .country .flag {
+  margin: 0 !important;
+  transform: scale(1.1) !important;
+}
+
+.phone-dropdown-custom .country-list .country .country-name {
+  color: #1e293b !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+.phone-dropdown-custom .country-list .country .dial-code {
+  color: #64748b !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin-left: auto !important;
+}
+
+.phone-dropdown-custom .search-box {
+  padding: 16px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.phone-dropdown-custom .search-box input {
+  width: 100% !important;
+  padding: 12px 16px 12px 44px !important;
+  border: 2px solid #e5e7eb !important;
   border-radius: 12px !important;
-  font-size: 15px !important;
-  font-weight: 500;
-  color: #2d3748 !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.phone-input-container .react-tel-input .search:focus {
+  font-size: 16px !important;
   outline: none !important;
-  background: white !important;
-  border-color: rgba(255, 255, 255, 0.8) !important;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.8) !important;
+  transition: all 0.3s ease !important;
 }
 
-.phone-input-container .react-tel-input .search::placeholder {
-  color: rgba(45, 55, 72, 0.6) !important;
-  font-style: normal;
-  font-weight: 400;
+.phone-dropdown-custom .search-box input:focus {
+  border-color: #4AC1E0 !important;
+  background: rgba(255, 255, 255, 1) !important;
+  box-shadow: 0 0 0 3px rgba(74, 193, 224, 0.1) !important;
 }
 
-/* Country list items with premium styling */
-.phone-input-container .react-tel-input .country-list .country {
-  padding: 16px 20px;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-bottom: 1px solid rgba(102, 126, 234, 0.08);
-  background: linear-gradient(90deg, transparent 0%, rgba(102, 126, 234, 0.01) 100%);
-  position: relative;
-  overflow: hidden;
+.phone-dropdown-custom .search-box input::placeholder {
+  color: #9ca3af !important;
 }
 
-.phone-input-container .react-tel-input .country-list .country::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.5s ease;
+/* Custom scrollbar for dropdown */
+.phone-dropdown-custom::-webkit-scrollbar {
+  width: 6px;
 }
 
-.phone-input-container .react-tel-input .country-list .country:last-child {
-  border-bottom: none;
-  border-radius: 0 0 20px 20px;
+.phone-dropdown-custom::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.phone-input-container .react-tel-input .country-list .country .flag {
-  transform: scale(1.4);
-  margin-right: 2px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15)) saturate(1.2);
-  border-radius: 2px;
+.phone-dropdown-custom::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
 }
 
-.phone-input-container .react-tel-input .country-list .country .country-name {
-  flex: 1;
-  font-weight: 600;
-  color: #1a202c;
-  letter-spacing: 0.3px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-}
-
-.phone-input-container .react-tel-input .country-list .country:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
-  padding-left: 24px;
-  transform: translateX(4px) translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-  border-radius: 0 12px 12px 0;
-}
-
-.phone-input-container .react-tel-input .country-list .country:hover::before {
-  left: 100%;
-}
-
-.phone-input-container .react-tel-input .country-list .country:hover .flag {
-  transform: scale(1.5);
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2)) saturate(1.3) brightness(1.1);
-}
-
-.phone-input-container .react-tel-input .country-list .country:hover .country-name {
-  color: #667eea;
-  font-weight: 700;
-}
-
-.phone-input-container .react-tel-input .country-list .country.highlight {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.18) 0%, rgba(118, 75, 162, 0.18) 100%);
-  border-left: 4px solid #667eea;
-  padding-left: 16px;
-  font-weight: 700;
-  box-shadow: inset 0 1px 3px rgba(102, 126, 234, 0.1), 0 2px 8px rgba(102, 126, 234, 0.12);
-  transform: translateX(2px);
-}
-
-.phone-input-container .react-tel-input .country-list .country.highlight .country-name {
-  color: #667eea;
-}
-
-.phone-input-container .react-tel-input .country-list .country.highlight .flag {
-  transform: scale(1.5);
-  filter: drop-shadow(0 2px 6px rgba(102, 126, 234, 0.3)) saturate(1.4);
-}
-
-.phone-input-container .react-tel-input .country-list .country .dial-code {
-  color: white;
-  font-weight: 700;
-  font-size: 13px;
-  padding: 6px 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  min-width: 60px;
-  text-align: center;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.phone-input-container .react-tel-input .selected-flag .selected-dial-code {
-  color: #667eea;
-  font-weight: 700;
-  font-size: 15px;
-  margin-left: 4px;
+.phone-dropdown-custom::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 /* Step Indicator */
@@ -576,18 +782,18 @@
   font-weight: 600;
   font-size: 15px;
   transition: all 0.3s ease;
-  background: rgba(102, 126, 234, 0.1);
-  color: #999;
+  background: #e8eaed;
+  color: #5f6368;
 }
 
 .step.active span {
-  background: #667eea;
+  background: #4AC1E0;
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .step.completed span {
-  background: #2ed573;
+  background: #34a853;
   color: white;
 }
 
@@ -602,7 +808,7 @@
 .step-line {
   flex: 1;
   height: 2px;
-  background: rgba(102, 126, 234, 0.2);
+  background: #e8eaed;
   border-radius: 1px;
 }
 
@@ -626,79 +832,57 @@
   justify-content: center;
   gap: 10px;
   cursor: pointer;
-  padding: 16px 20px;
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 14px 18px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   flex: 1;
   text-align: center;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.06) 100%);
-  border: 2px solid rgba(102, 126, 234, 0.15);
+  background: #f8f9fa;
+  border: 2px solid #dadce0;
   font-weight: 500;
   font-size: 15px;
-  color: #4a5568;
-  position: relative;
-  overflow: hidden;
-  min-height: 56px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+  color: #202124;
+  min-height: 52px;
 }
 
-.radio-label::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.5s ease;
-}
 
 .radio-label:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
-  border-color: rgba(102, 126, 234, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+  background: #f54d6a;
+  border-color: #f54d6a;
+  color: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 500ms ease;
 }
 
-.radio-label:hover::before {
-  left: 100%;
-}
 
-.radio-label:active {
-  transform: translateY(0);
-  transition-duration: 0.1s;
-}
 
 .radio-label input:checked+.radio-custom+span,
 .radio-label input:checked~span {
   color: #ffffff;
   font-weight: 600;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .radio-label input:checked {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+  background: #4AC1E0;
+  border-color: #4AC1E0;
   color: white;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  transition: all 500ms ease;
 }
 
 .radio-label.checked {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+  background: #4AC1E0;
+  border-color: #4AC1E0;
   color: white;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-  transform: translateY(-3px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 500ms ease;
 }
 
-.radio-label.checked::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-}
 
 .radio-label.checked:hover {
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-  transform: translateY(-3px);
+  background: #f54d6a;
+  border-color: #f54d6a;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  transition: all 500ms ease;
 }
 
 .radio-label input {
@@ -781,12 +965,12 @@
 
 /* Accessibility Focus States */
 .radio-label:focus-within {
-  outline: 3px solid rgba(102, 126, 234, 0.4);
+  outline: 2px solid rgba(74, 193, 224, 0.5);
   outline-offset: 2px;
 }
 
 .radio-label input:focus+.radio-custom {
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 0 0 2px rgba(74, 193, 224, 0.3);
 }
 
 /* Form Actions */
@@ -803,25 +987,49 @@
 /* Auth Footer */
 .auth-footer {
   text-align: center;
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  margin-top: 10px;
+  padding-top: 0;
+  border-top: none;
 }
 
 .auth-footer p {
-  color: #666;
-  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 400;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
 .auth-link {
-  color: #667eea;
-  text-decoration: none;
+  color: #4AC1E0;
+  text-decoration: underline;
   font-weight: 600;
-  transition: color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .auth-link:hover {
-  color: #5a6fd8;
+  color: #ffffff;
+  transform: translateY(-1px);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.auth-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  transition: width 0.3s ease;
+}
+
+.auth-link:hover::after {
+  width: 100%;
 }
 
 /* Auth Divider */
@@ -838,7 +1046,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(102, 126, 234, 0.2);
+  background: #e8eaed;
 }
 
 .auth-divider span {
@@ -847,24 +1055,30 @@
 
 /* Auth Info */
 .auth-info {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  margin-top: 32px;
+  padding-top: 0;
+  border-top: none;
 }
 
 .info-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   font-size: 14px;
-  color: #666;
+  color: #5f6368;
+  text-align: left;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
 }
 
 .info-icon {
   font-size: 16px;
   width: 20px;
   text-align: center;
+  color: #4AC1E0;
 }
 
 /* SMS Verification Styles */
@@ -880,69 +1094,73 @@
   display: flex;
   gap: 12px;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 100px;
 }
 
 .verification-input {
-  width: 48px;
-  height: 56px;
+  width: 36px;
+  height: 44px;
   text-align: center;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 12px;
-  font-size: 24px;
+  border: 2px solid #dadce0;
+  border-radius: 8px;
+  font-size: 20px;
   font-weight: 600;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
+  padding: 0;
 }
 
 .verification-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  border-color: #4AC1E0;
+  box-shadow: 0 0 0 2px rgba(74, 193, 224, 0.1);
   transform: scale(1.05);
 }
 
 .verification-input.filled {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: #667eea;
-  color: #667eea;
+  background: #e6f7ff;
+  border-color: #4AC1E0;
+  color: #4AC1E0;
+  transition: all 500ms ease;
 }
 
 .verification-input.error {
-  border-color: #ff4757;
-  background: rgba(255, 71, 87, 0.1);
+  border-color: #ea4335;
+  background: #fce8e6;
   animation: shake 0.5s ease-in-out;
 }
 
 .resend-container {
   text-align: center;
-  margin: 20px 0;
+  margin: 20px 0 0 0;
 }
 
 .resend-button {
   background: none;
   border: none;
-  color: #666;
+  color: #ffffff;
   cursor: pointer;
   font-size: 14px;
   transition: color 0.3s ease;
   padding: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .resend-button .resend-link {
-  color: #667eea;
+  color: #4AC1E0;
   font-weight: 600;
   text-decoration: underline;
 }
 
 .resend-button:hover .resend-link {
-  color: #5a6fd8;
+  color: #f54d6a;
+  transition: all 500ms ease;
 }
 
 .back-button {
   background: none;
   border: none;
-  color: #667eea;
+  color: #4AC1E0;
   cursor: pointer;
   font-size: 14px;
   display: inline-flex;
@@ -954,7 +1172,8 @@
 }
 
 .back-button:hover {
-  color: #5a6fd8;
+  color: #f54d6a;
+  transition: all 500ms ease;
 }
 
 .code-input-group {
@@ -968,30 +1187,31 @@
   width: 48px;
   height: 56px;
   text-align: center;
-  border: 2px solid rgba(102, 126, 234, 0.2);
-  border-radius: 12px;
+  border: 2px solid #dadce0;
+  border-radius: 8px;
   font-size: 24px;
   font-weight: 600;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
+  background: #ffffff;
 }
 
 .code-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  border-color: #4AC1E0;
+  box-shadow: 0 0 0 2px rgba(74, 193, 224, 0.1);
   transform: scale(1.05);
 }
 
 .code-input.filled {
-  background: rgba(102, 126, 234, 0.1);
-  border-color: #667eea;
-  color: #667eea;
+  background: #e6f7ff;
+  border-color: #4AC1E0;
+  color: #4AC1E0;
+  transition: all 500ms ease;
 }
 
 .code-input.error {
-  border-color: #ff4757;
-  background: rgba(255, 71, 87, 0.1);
+  border-color: #ea4335;
+  background: #fce8e6;
   animation: shake 0.5s ease-in-out;
 }
 
@@ -1020,7 +1240,7 @@
 .resend-btn {
   background: none;
   border: none;
-  color: #667eea;
+  color: #4AC1E0;
   font-weight: 600;
   cursor: pointer;
   font-size: 16px;
@@ -1029,29 +1249,32 @@
 }
 
 .resend-btn:hover {
-  color: #5a6fd8;
+  color: #f54d6a;
+  transition: all 500ms ease;
 }
 
 .resend-timer {
-  color: #666;
+  color: #ffffff;
   font-size: 14px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .timer-count {
-  color: #667eea;
+  color: #4AC1E0;
   font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* Verification Tips */
 .verification-tips {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
   padding: 20px;
   margin: 24px 0;
 }
 
 .verification-tips h4 {
-  color: #667eea;
+  color: #4AC1E0;
   margin-bottom: 12px;
   font-size: 16px;
 }
@@ -1071,7 +1294,7 @@
 
 .verification-tips li::before {
   content: '•';
-  color: #667eea;
+  color: #4AC1E0;
   position: absolute;
   left: 0;
 }
@@ -1080,19 +1303,19 @@
 .back-btn {
   background: none;
   border: none;
-  color: #667eea;
+  color: #4AC1E0;
   cursor: pointer;
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 0;
   transition: color 0.3s ease;
   margin-top: 24px;
 }
 
 .back-btn:hover {
-  color: #5a6fd8;
+  color: #f54d6a;
+  transition: all 500ms ease;
 }
 
 /* Mobile Responsive */
@@ -1102,8 +1325,18 @@
     margin: 16px;
   }
 
+  .auth-header {
+    margin-bottom: 32px;
+  }
+
   .auth-header h1 {
-    font-size: 22px;
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+  }
+
+  .auth-header p {
+    font-size: 1.2rem;
+    line-height: 1.5;
   }
 
   .auth-logo {
@@ -1146,11 +1379,35 @@
     height: 50px;
     font-size: 20px;
   }
+
+  .verification-inputs {
+    gap: 14px;
+  }
+
+  .verification-input {
+    width: 30px;
+    height: 50px;
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 480px) {
   .auth-card {
     padding: 18px;
+  }
+
+  .auth-header {
+    margin-bottom: 24px;
+  }
+
+  .auth-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+  }
+
+  .auth-header p {
+    font-size: 1rem;
+    line-height: 1.4;
   }
 
   .step-indicator {
@@ -1206,6 +1463,16 @@
 
   .radio-label.checked {
     transform: translateY(-2px);
+  }
+
+  .verification-inputs {
+    gap: 10px;
+  }
+
+  .verification-input {
+    width: 30px;
+    height: 50px;
+    font-size: 16px;
   }
 }
 
@@ -1266,6 +1533,87 @@
   }
 }
 
+/* Modern Button Styles */
+.btn {
+  padding: 18px 32px;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 56px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4AC1E0 0%, #36A5C1 100%);
+  color: #ffffff;
+  box-shadow: 0 12px 40px rgba(74, 193, 224, 0.3);
+  border: 2px solid #4AC1E0;
+  backdrop-filter: blur(15px);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0.3px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(74, 193, 224, 0.4);
+  background: linear-gradient(135deg, #36A5C1 0%, #2B8FA3 100%);
+  border-color: #36A5C1;
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(74, 193, 224, 0.2);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
 
@@ -1279,6 +1627,14 @@
 
   .radio-label:hover,
   .radio-label.checked {
+    transform: none !important;
+  }
+
+  .btn {
+    transition: none !important;
+  }
+
+  .btn:hover {
     transform: none !important;
   }
 }
